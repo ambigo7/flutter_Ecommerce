@@ -53,7 +53,7 @@ class Category extends StatelessWidget {
   final String img_loc;
   final String img_caption;
 
-// Constructor Category
+// CONSTRUCTOR CATEGORY
   Category({
     this.img_loc,
     this.img_caption
@@ -65,7 +65,7 @@ class Category extends StatelessWidget {
       child: InkWell(
         onTap: (){},
 
-//      =====use wrap container if u found a problem with infinite width=====
+//      =====USE WRAP CONTAINER IF U FOUND A PROBLEM WITH INFINITE WIDTH=====
         child: Container(
           width: 100.0,
           child: ListTile(

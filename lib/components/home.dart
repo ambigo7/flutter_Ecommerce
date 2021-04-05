@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-//package carousel a.k.a slider pict
-import 'package:carousel_pro/carousel_pro.dart';
-//package line icons for icons
-import 'package:line_icons/line_icons.dart';
 
-// my own package
+//PACKAGE CAROUSEL A.K.A SLIDER PICT
+import 'package:carousel_pro/carousel_pro.dart';
+
+// MY OWN PACKAGE
 import 'package:lets_shop/components/horizontal_listView.dart';
 import 'package:lets_shop/components/products.dart';
 
@@ -41,27 +40,24 @@ class _homeBodyState extends State<homeBody> {
       body: new ListView(
         children: <Widget>[
 
-//        ====this part to called img_carousel or slide pict=====
+//        ====THIS PART TO CALLED IMG_CAROUSEL OR SLIDE PICT=====
           img_carousel,
 
-//        =====padding widget Categories====
+//        =====PADDING WIDGET CATEGORIES====
           new Padding(padding: const EdgeInsets.all(8.0),
             child: new Text('Categories'),
           ),
 
-//        ====Horizontal list view====
+//        ====HORIZONTAL LIST VIEW====
           horizontalList(),
 
-//        ===padding textCategories===
+//        ===PADDING TEXT CATEGORIES===
           new Padding(padding: const EdgeInsets.only(top: 20.0, bottom: 0.0, left: 10.0, right: 20.0),
             child: new Text('Recent Product'),
           ),
 
-//      GridView Product
+//      ====GRIDVIEW PRODUCT====
           Container(
-            // =====bug!!!====
-            // ===280.0 for 5 inch display===
-            // ===350.0 for 6 or more inch display===
             height: 350.0,
             child: Products(),
           ),

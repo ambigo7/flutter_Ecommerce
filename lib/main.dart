@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-//package carousel a.k.a slider pict
-import 'package:carousel_pro/carousel_pro.dart';
-//package line icons for icons
+
+//PACKAGE LINE ICONS FOR ICONS
 import 'package:line_icons/line_icons.dart';
-//package bottom bar
+
+//PACKAGE BOTTOM BAR
 import 'package:google_nav_bar/google_nav_bar.dart';
 
-// my own package
+// MY OWN PACKAGE
 import 'package:lets_shop/components/home.dart';
 import 'package:lets_shop/pages/shopping_cart.dart';
-//Debugging
+//DEBUGGING
 import 'package:lets_shop/pages/test.dart';
 import 'package:lets_shop/pages/test2.dart';
 import 'package:lets_shop/pages/test3.dart';
@@ -29,12 +29,15 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-// For values selested item
+
+// FOR VALUES SELESTED ITEM
   int _selectedIndex = 0;
-// List Pages Bottom nav
+
+// LIST PAGES BOTTOM NAV
   final List<Widget> pages = [
     homeBody(),
-//  debugging just test itsn't work
+
+//  DEBUGGING JUST TEST ITSN'T WORK
     test_Pages(),
     test_Pages2(),
     test_Pages3()
@@ -59,12 +62,15 @@ class _HomePageState extends State<HomePage> {
                 Icons.shopping_cart_outlined,
                 color: Colors.white,
               ),
-//             ===Passing page no values with Navigator.push====
+
+//             ===PASSING PAGE NO VALUES WITH NAVIGATOR.PUSH====
               onPressed: (){
                 Navigator.push(context, MaterialPageRoute(builder: (context) => new shoppingCart()));
               })
         ],
       ),
+
+//    ====BOTTOM NAV=====
       bottomNavigationBar: Container(
         decoration: BoxDecoration(color: Colors.white, boxShadow: [
           BoxShadow(blurRadius: 20, color: Colors.black.withOpacity(.1))
@@ -72,6 +78,8 @@ class _HomePageState extends State<HomePage> {
         child: SafeArea(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
+
+//          ====IMPLEMENTATION OF GNAV BOTTOM PUB.DEV====
             child: GNav(
                 rippleColor: Colors.grey[300],
                 hoverColor: Colors.grey[100],
@@ -108,11 +116,12 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
+
       drawer: new Drawer(
         child : new ListView(
           children: <Widget>[
 
-//        =====header part of drawer a.k.a dashboard======
+//        =====HEADER PART OF DRAWER A.K.A DASHBOARD======
 
             new UserAccountsDrawerHeader(
                 accountName: Text('Dendi Rizka Poetra'),
@@ -128,7 +137,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
 
-//        ====body part of drawer a.k.a dashboard=====
+//        ====BODY PART OF DRAWER A.K.A DASHBOARD=====
 
           InkWell(
             onTap: (){},

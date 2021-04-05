@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
-//package money formatter
+//PACKAGE MONEY FORMATTER
 import 'package:flutter_money_formatter/flutter_money_formatter.dart';
+
+// MY OWN PACKAGE
+import 'package:lets_shop/components/cart_product.dart';
 
 class shoppingCart extends StatefulWidget {
   @override
@@ -30,6 +33,9 @@ class _shoppingCartState extends State<shoppingCart> {
         ],
       ),
 
+      body: new cartProduct(),
+
+//    ===BOTTOM NAV FOR TOTAL PRICE & BUTTON CHECK OUT===
       bottomNavigationBar: new Container(
         color: Colors.white,
         child: Row(

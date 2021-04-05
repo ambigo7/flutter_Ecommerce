@@ -92,13 +92,14 @@ class _productDetailsState extends State<productDetails> {
             child: GridTile(
               child: Container(
                 color: Colors.white,
-//              ====give a 'widget' cz the class is different to eachother===
+
+//              ====GIVE A 'WIDGET' CZ THE CLASS IS DIFFERENT TO EACHOTHER A.K.A THE VALUES IS PASS FROM ANOTHER CLASS===
                 child: Image.asset(widget.product_detail_picture),
               ),
               footer: new Container(
                 color: Colors.white70,
                 child: ListTile(
-//                ===give a 'widget' cz the class is different to eachother===
+//                ===GIVE A 'WIDGET' CZ THE CLASS IS DIFFERENT TO EACHOTHER===
                   leading: new Text(
                     widget.product_detail_name,
                     style:
@@ -109,13 +110,13 @@ class _productDetailsState extends State<productDetails> {
             ),
           ),
 
-//        ====Row of Price====
+//        ====ROW OF PRICE====
           new Container(
             color: Colors.white,
             child: new Row(
               children: <Widget>[
                 Container(
-//                      ====give a "${}" cz this part only approve string====
+//                      ====GIVE A "${}" CZ THIS PART ONLY APPROVE STRING====
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 12.0),
                       child: new Text("${fmf.copyWith(
@@ -147,10 +148,12 @@ class _productDetailsState extends State<productDetails> {
               ],
             ),
           ),
+
 //        =======FIRST BUTTON=======
           Row(
             children: <Widget>[
-//          =======Size Button======
+
+//          =======SIZE BUTTON======
               Expanded(
                 child: MaterialButton(
                   onPressed: () {
@@ -183,7 +186,7 @@ class _productDetailsState extends State<productDetails> {
                 ),
               ),
 
-//          =======Color Button======
+//          =======COLOR BUTTOn======
               Expanded(
                 child: MaterialButton(
                   onPressed: () {
@@ -216,7 +219,7 @@ class _productDetailsState extends State<productDetails> {
                 ),
               ),
 
-//          =======Quantity Button======
+//          =======QUANTITY BUTTON======
               Expanded(
                 child: MaterialButton(
                   onPressed: () {
@@ -252,7 +255,7 @@ class _productDetailsState extends State<productDetails> {
           ),
 
           Divider(),
-//        ======Product description====
+//        ======PRODUCT DESCRIPTION====
           new ListTile(
             title: new Text('Product description'),
             subtitle: new Text(
@@ -331,6 +334,7 @@ class _productDetailsState extends State<productDetails> {
           ),
           Divider(),
 
+//      =====SIMILIAR PRODUCT====
           Padding(
             padding: EdgeInsets.all(8.0),
               child: new Text('Similiar Product'),

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-//my own packages
+//MY OWN PACKAGES
 import 'package:lets_shop/pages/product_details.dart';
 
-//package money formatter
+//PACKAGE MONEY FORMATTER
 import 'package:flutter_money_formatter/flutter_money_formatter.dart';
 
 
@@ -73,7 +73,7 @@ class single_Product extends StatelessWidget {
   final product_old_price;
   final product_price;
 
-// Constructure Product
+// CONSTRUCTURE PRODUCT
   single_Product({
     this.product_name,
     this.product_pict,
@@ -84,7 +84,7 @@ class single_Product extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-//  ====New Object pub money formatter====
+//  ====NEW OBJECT PUB MONEY FORMATTER====
     FlutterMoneyFormatter fmf = FlutterMoneyFormatter(amount: 12345678.9012345);
     MoneyFormatterOutput fo = fmf.output;
 
@@ -93,7 +93,8 @@ class single_Product extends StatelessWidget {
           tag: product_name,
           child: Material(
             child: InkWell(
-//            ======Passing the values with constructure and Navigator.of(context).push=====
+
+//            ======PASSING THE VALUES WITH CONSTRUCTURE AND NAVIGATOR.OF(CONTEXT).PUSH=====
               onTap: ()=> Navigator.of(context).push(
                   new MaterialPageRoute(
                       builder: (context) => new productDetails(
