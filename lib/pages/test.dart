@@ -11,7 +11,7 @@ class _test_PagesState extends State<test_Pages> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: new Center(
-        child: new Text('Error 404'),
+        child: new Text('Error 404 ya'),
       ),
     );
   }
