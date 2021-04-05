@@ -7,7 +7,6 @@ import 'package:line_icons/line_icons.dart';
 // my own package
 import 'package:lets_shop/components/horizontal_listView.dart';
 import 'package:lets_shop/components/products.dart';
-import 'package:lets_shop/pages/test.dart';
 
 
 class homeBody extends StatefulWidget {
