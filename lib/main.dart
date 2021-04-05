@@ -7,7 +7,7 @@ import 'package:line_icons/line_icons.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 
 // my own package
-import 'package:lets_shop/pages/home.dart';
+import 'package:lets_shop/components/home.dart';
 import 'package:lets_shop/pages/shopping_cart.dart';
 //Debugging
 import 'package:lets_shop/pages/test.dart';
