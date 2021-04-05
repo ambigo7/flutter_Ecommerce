@@ -9,7 +9,10 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 // my own package
 import 'package:lets_shop/components/horizontal_listView.dart';
 import 'package:lets_shop/components/products.dart';
+import 'package:lets_shop/pages/home.dart';
 import 'package:lets_shop/pages/test.dart';
+import 'package:lets_shop/pages/test2.dart';
+import 'package:lets_shop/pages/test3.dart';
 
 void main(){
   runApp(
@@ -26,51 +29,19 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+// For values selested item
   int _selectedIndex = 0;
-  static const TextStyle optionStyle =
-  TextStyle(fontSize: 30, fontWeight: FontWeight.w600);
-  static const List<Widget> _widgetOptions = <Widget>[
-    Text(
-      'Home',
-      style: optionStyle,
-    ),
-    Text(
-      'Likes',
-      style: optionStyle,
-    ),
-    Text(
-      'Search',
-      style: optionStyle,
-    ),
-    Text(
-      'Profile',
-      style: optionStyle,
-    ),
+// List Pages Bottom nav
+  final List<Widget> pages = [
+    homeBody(),
+//  debugging just test itsn't work
+    test_Pages(),
+    test_Pages2(),
+    test_Pages3()
   ];
 
   @override
   Widget build(BuildContext context) {
-
-//  ====Implementation of pub carousel a.k.a slider pict====
-    Widget img_carousel = new Container(
-      height: 200.0,
-      child: new Carousel(
-        boxFit: BoxFit.cover,
-        images: [
-          AssetImage('images/c1.jpg'),
-          AssetImage('images/m1.jpeg'),
-          AssetImage('images/w1.jpeg'),
-          AssetImage('images/w3.jpeg'),
-          AssetImage('images/w4.jpeg'),
-        ],
-        autoplay: false,
-        /*animationCurve: Curves.fastOutSlowIn,
-        animationDuration: Duration(milliseconds: 1000),*/
-        dotSize: 4.0,
-        indicatorBgPadding: 2.0,
-        dotBgColor: Colors.transparent,
-      ),
-    );
     return Scaffold(
       appBar: new AppBar(
 
@@ -103,11 +74,11 @@ class _HomePageState extends State<HomePage> {
                 rippleColor: Colors.grey[300],
                 hoverColor: Colors.grey[100],
                 gap: 8,
-                activeColor: Colors.black,
+                activeColor: Colors.red,
                 iconSize: 24,
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 duration: Duration(milliseconds: 400),
-                tabBackgroundColor: Colors.grey[100],
+                tabBackgroundColor: Colors.white,
                 tabs: [
                   GButton(
                     icon: LineIcons.home,
@@ -130,9 +101,6 @@ class _HomePageState extends State<HomePage> {
                 onTabChange: (index) {
                   setState(() {
                     _selectedIndex = index;
-                    switch(_selectedIndex){
-                      case 4: Navigator.push(context, MaterialPageRoute(builder: (context) => new test_Pages()));
-                    }
                   });
                 }),
           ),
@@ -228,35 +196,7 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-      body: new ListView(
-        children: <Widget>[
-
-//        ====this part to called img_carousel or slide pict=====
-          img_carousel,
-
-//        =====padding widget Categories====
-          new Padding(padding: const EdgeInsets.all(8.0),
-            child: new Text('Categories'),
-          ),
-
-//        ====Horizontal list view====
-          horizontalList(),
-
-//        ===padding textCategories===
-          new Padding(padding: const EdgeInsets.only(top: 20.0, bottom: 0.0, left: 10.0, right: 20.0),
-            child: new Text('Recent Product'),
-          ),
-
-//      GridView Product
-          Container(
-            // =====bug!!!====
-            // ===280.0 for 5 inch display===
-            // ===350.0 for 6 or more inch display===
-            height: 350.0,
-            child: Products(),
-          ),
-        ],
-      ),
+      body: pages[_selectedIndex],
     );
   }
 }
