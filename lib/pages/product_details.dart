@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 //MY OWN PACKAGES
-import 'package:lets_shop/main.dart';
+import 'package:lets_shop/pages/home.dart';
 
 //PACKAGE MONEY FORMATTER
 import 'package:intl/intl.dart';
