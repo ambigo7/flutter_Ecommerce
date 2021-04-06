@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 //PACKAGE MONEY FORMATTER
-import 'package:flutter_money_formatter/flutter_money_formatter.dart';
+import 'package:intl/intl.dart';
 
 // MY OWN PACKAGE
 import 'package:lets_shop/components/cart_product.dart';
@@ -12,12 +12,12 @@ class shoppingCart extends StatefulWidget {
 }
 
 class _shoppingCartState extends State<shoppingCart> {
+
+  final formatCurrency = new NumberFormat.simpleCurrency(locale: 'id_ID');
+  double moneyValue = 229000.0;
+
   @override
   Widget build(BuildContext context) {
-//  ====New Object pub money formatter====
-    FlutterMoneyFormatter fmf = FlutterMoneyFormatter(amount: 12345678.9012345);
-    MoneyFormatterOutput fo = fmf.output;
-
     return Scaffold(
       appBar: new AppBar(
         elevation: 0.1,
@@ -43,16 +43,8 @@ class _shoppingCartState extends State<shoppingCart> {
             Expanded(
                 child: ListTile(
                   title: new Text('Total:'),
-                  subtitle: new Text(fmf.copyWith(
-                    amount: 229000.0,
-                    compactFormatType: CompactFormatType.short,
-                    symbol: 'IDR',
-                    thousandSeparator: ',',
-                    symbolAndNumberSeparator: '-',
-                    fractionDigits: 0,
-                  )
-                      .output
-                      .symbolOnLeft),
+                  subtitle: new Text('${formatCurrency.format(moneyValue)}',
+                  style: TextStyle(color: Colors.red, fontSize: 15,fontWeight: FontWeight.bold))
                 )
             ),
 

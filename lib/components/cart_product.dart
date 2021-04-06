@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:lets_shop/pages/test.dart';
 
 //PACKAGE MONEY FORMATTER
-import 'package:flutter_money_formatter/flutter_money_formatter.dart';
+import 'package:intl/intl.dart';
 
 
 class cartProduct extends StatefulWidget {
@@ -65,12 +65,14 @@ class singleCart_Product extends StatelessWidget {
     this.cart_prod_color,
     this.cart_prod_qty
   });
+
+//  ====CREATE MONEY CURRENCY FORMATTER====
+  final formatCurrency = new NumberFormat.simpleCurrency(locale: 'id_ID');
+
   @override
   Widget build(BuildContext context) {
 
-//  ====NEW OBJECT PUB MONEY FORMATTER====
-    FlutterMoneyFormatter fmf = FlutterMoneyFormatter(amount: 12345678.9012345);
-    MoneyFormatterOutput fo = fmf.output;
+
 
     return Card(
         child: ListTile(
@@ -117,20 +119,8 @@ class singleCart_Product extends StatelessWidget {
 //            ====THIS PART IS FOR PRODUCT PRICE===
               Container(
                 alignment: Alignment.topLeft,
-                child: new Text(fmf.copyWith(
-                  amount: cart_prod_price,
-                  compactFormatType: CompactFormatType.short,
-                  symbol: 'IDR',
-                  thousandSeparator: ',',
-                  symbolAndNumberSeparator: '-',
-                  fractionDigits: 0,
-                )
-                    .output
-                    .symbolOnLeft,
-                    style: TextStyle(
-                        color: Colors.red,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15.0)),
+                child: new Text('${formatCurrency.format(cart_prod_price)}',
+                style: TextStyle(color: Colors.red, fontSize: 15,fontWeight: FontWeight.bold))
               )
             ]
           ),

@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:lets_shop/pages/product_details.dart';
 
 //PACKAGE MONEY FORMATTER
-import 'package:flutter_money_formatter/flutter_money_formatter.dart';
-
+import 'package:intl/intl.dart';
 
 class Products extends StatefulWidget {
   @override
@@ -84,13 +83,11 @@ class single_Product extends StatelessWidget {
     this.product_price
 });
 
+//  ====CREATE MONEY CURRENCY FORMATTER====
+  final formatCurrency = new NumberFormat.simpleCurrency(locale: 'id_ID');
+
   @override
   Widget build(BuildContext context) {
-
-//  ====NEW OBJECT PUB MONEY FORMATTER====
-    FlutterMoneyFormatter fmf = FlutterMoneyFormatter(amount: 12345678.9012345);
-    MoneyFormatterOutput fo = fmf.output;
-
     return Card(
       child: Hero(
           tag: product_name,
@@ -114,18 +111,8 @@ class single_Product extends StatelessWidget {
                       Expanded(
                           child: Text(product_name,
                               style: TextStyle(fontWeight: FontWeight.bold))),
-                      new Text(fmf.copyWith(
-                        amount: product_price,
-                        compactFormatType: CompactFormatType.short,
-                        symbol: 'IDR',
-                        thousandSeparator: ',',
-                        symbolAndNumberSeparator: '-',
-                        fractionDigits: 0,
-                      )
-                          .output
-                          .symbolOnLeft,
-                          style: TextStyle(
-                              color: Colors.red, fontSize: 15,fontWeight: FontWeight.bold))
+                      new Text('${formatCurrency.format(product_price)}',
+                      style: TextStyle(color: Colors.red, fontSize: 15,fontWeight: FontWeight.bold))
                     ],
                   )
                 ),
