@@ -77,8 +77,8 @@ class singleCart_Product extends StatelessWidget {
 
 //      ===THIS PART IS FOR PUT THE PICTURE===
           leading: Image.asset(cart_prod_pict,
-            height: 80.0,
-            width: 80.0,
+            height: 50.0,
+            width: 50.0,
           ),
 
 //      ====THIS TITLE FOR PRODUCT NAME====
@@ -104,13 +104,13 @@ class singleCart_Product extends StatelessWidget {
 
 //              ====THIS PART IS FOR THE COLOR OF THE PRODUCT====
                   Padding(
-                      padding: const EdgeInsets.fromLTRB(20.0, 8.0, 8.0, 8.0),
+                      padding: const EdgeInsets.fromLTRB(20.0, 8.0, 3.0, 8.0),
                       child: new Text('Color:')
                   ),
                   Padding(
                       padding: const EdgeInsets.all(4.0),
                       child: new Text(cart_prod_color, style: TextStyle(color: Colors.black))
-                  )
+                  ),
                 ],
               ),
 
@@ -138,9 +138,12 @@ class singleCart_Product extends StatelessWidget {
 //      ===TRAILING IS FOR ADDING OR REDUCING PRODUCT QTY====
           trailing: Wrap(
                   children: <Widget>[
-                    new IconButton(icon: Icon(Icons.add, size: 20.0), onPressed: (){}),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(8.0, 0.0, 3.0, 8.0),
+                      child: new IconButton(icon: Icon(Icons.add, size: 20.0), onPressed: (){}),
+                    ),
                   Padding(
-                    padding: const EdgeInsets.only(top: 15.0),
+                    padding: const EdgeInsets.fromLTRB(0.0, 15.0, 1.7, 0.0),
                     child: new Text("${cart_prod_qty}")
                   ),
                     new IconButton(icon: Icon(Icons.remove, size: 20.0), onPressed: (){})

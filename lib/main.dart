@@ -96,7 +96,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                   GButton(
                     icon: LineIcons.shoppingBasket,
-                    text: 'Orders History',
+                    text: 'History',
                   ),
                   GButton(
                     icon: LineIcons.heart,

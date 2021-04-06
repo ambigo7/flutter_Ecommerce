@@ -37,28 +37,31 @@ class _homeBodyState extends State<homeBody> {
       ),
     );
     return Scaffold(
-      body: new ListView(
+      body: new Column(
         children: <Widget>[
 
 //        ====THIS PART TO CALLED IMG_CAROUSEL OR SLIDE PICT=====
-          img_carousel,
+          /*img_carousel,*/
 
 //        =====PADDING WIDGET CATEGORIES====
-          new Padding(padding: const EdgeInsets.all(8.0),
-            child: new Text('Categories'),
+          new Padding(padding: const EdgeInsets.all(4.0),
+            child: Container(
+                alignment: Alignment.centerLeft,
+                child: new Text('Categories', style: TextStyle(fontSize: 15.0))),
           ),
 
 //        ====HORIZONTAL LIST VIEW====
           horizontalList(),
 
 //        ===PADDING TEXT CATEGORIES===
-          new Padding(padding: const EdgeInsets.only(top: 20.0, bottom: 0.0, left: 10.0, right: 20.0),
-            child: new Text('Recent Product'),
+          new Padding(padding: const EdgeInsets.all(8.0),
+            child: Container(
+                alignment: Alignment.centerLeft,
+                child: new Text('Recent Product', style: TextStyle(fontSize: 15.0))),
           ),
 
 //      ====GRIDVIEW PRODUCT====
-          Container(
-            height: 350.0,
+          Flexible(
             child: Products(),
           ),
         ],
