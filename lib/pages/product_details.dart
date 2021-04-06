@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-//my own packages
+//MY OWN PACKAGES
 import 'package:lets_shop/main.dart';
 
-//package money formatter
-import 'package:flutter_money_formatter/flutter_money_formatter.dart';
+//PACKAGE MONEY FORMATTER
+import 'package:intl/intl.dart';
 
 class productDetails extends StatefulWidget {
   final product_detail_name;
@@ -24,12 +24,12 @@ class productDetails extends StatefulWidget {
 }
 
 class _productDetailsState extends State<productDetails> {
+
+  //  ====CREATE MONEY CURRENCY FORMATTER====
+  final formatCurrency = new NumberFormat.simpleCurrency(locale: 'id_ID');
+
   @override
   Widget build(BuildContext context) {
-//  ====New Object pub money formatter====
-    FlutterMoneyFormatter fmf = FlutterMoneyFormatter(amount: 12345678.9012345);
-    MoneyFormatterOutput fo = fmf.output;
-
     return Scaffold(
       appBar: new AppBar(
         elevation: 0.1,
@@ -119,31 +119,15 @@ class _productDetailsState extends State<productDetails> {
 //                      ====GIVE A "${}" CZ THIS PART ONLY APPROVE STRING====
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 12.0),
-                      child: new Text("${fmf.copyWith(
-                          amount: widget.product_detail_price,
-                          compactFormatType: CompactFormatType.short,
-                          symbol: 'IDR',
-                          thousandSeparator: ',',
-                          symbolAndNumberSeparator: '-',
-                          fractionDigits: 0,
-                        ).output.symbolOnLeft}",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17.0, color: Colors.red),
-                  ),
+                      child: new Text('${formatCurrency.format(widget.product_detail_price)}',
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17.0, color: Colors.red)),
                 )),
                 Container(
                     child: Padding(
                             padding: const EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 12.0),
-                          child: new Text(
-                            "${fmf.copyWith(
-                              amount: widget.product_detail_old_price,
-                              compactFormatType: CompactFormatType.short,
-                              symbol: 'IDR',
-                              thousandSeparator: ',',
-                              symbolAndNumberSeparator: '-',
-                              fractionDigits: 0,
-                            ).output.symbolOnLeft}",
-                            style: TextStyle(fontSize: 17.0, color: Colors.grey, decoration: TextDecoration.lineThrough),
-                          )),
+                          child: new Text('${formatCurrency.format(widget.product_detail_old_price)}',
+                          style: TextStyle(fontSize: 17.0, color: Colors.grey, decoration: TextDecoration.lineThrough))
+                    ),
                 ),
               ],
             ),
@@ -412,13 +396,11 @@ class similiar_single_Product extends StatelessWidget {
     this.product_price
   });
 
+//  ====CREATE MONEY CURRENCY FORMATTER====
+  final formatCurrency = new NumberFormat.simpleCurrency(locale: 'id_ID');
+
   @override
   Widget build(BuildContext context) {
-
-//  ====New Object pub money formatter====
-    FlutterMoneyFormatter fmf = FlutterMoneyFormatter(amount: 12345678.9012345);
-    MoneyFormatterOutput fo = fmf.output;
-
     return Card(
       child: Hero(
         tag: product_name,
@@ -441,18 +423,8 @@ class similiar_single_Product extends StatelessWidget {
                       Expanded(
                           child: Text(product_name,
                               style: TextStyle(fontWeight: FontWeight.bold))),
-                      new Text(fmf.copyWith(
-                        amount: product_price,
-                        compactFormatType: CompactFormatType.short,
-                        symbol: 'IDR',
-                        thousandSeparator: ',',
-                        symbolAndNumberSeparator: '-',
-                        fractionDigits: 0,
-                      )
-                          .output
-                          .symbolOnLeft,
-                          style: TextStyle(
-                              color: Colors.red, fontSize: 15,fontWeight: FontWeight.bold))
+                      new Text('${formatCurrency.format(product_price)}',
+                      style: TextStyle(color: Colors.red, fontSize: 15,fontWeight: FontWeight.bold))
                     ],
                   )
               ),
