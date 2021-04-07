@@ -45,7 +45,7 @@ class _LoginState extends State<Login> {
       loading = true;
     });
 
-//  ==AWAIT FOR WATING A VALUE UNTIL GET THE VALUE====
+//  ==AWAIT FOR sharePeferences getTnstance a.k.a NEW OBJECT====
     preferences = await SharedPreferences.getInstance();
 
 /*  ==FOR RETURN A VARIABEL BOOL(isLogedin)
@@ -67,7 +67,7 @@ class _LoginState extends State<Login> {
 //FOR http://www.udacoding.com/mengenal-stream-async-yield-dan-yield-pada-flutter/
   Future handleSignIn() async{
 
-//  ==AWAIT FOR WATING A VALUE UNTIL GET THE VALUE====
+//  ==AWAIT FOR sharePeferences getTnstance a.k.a NEW OBJECT====
     preferences = await SharedPreferences.getInstance();
 
 //  ==LOADING PROCCESS START===
@@ -75,6 +75,7 @@ class _LoginState extends State<Login> {
       loading = true;
     });
 
+//  ===THIS PART FOR GOOGLE USER AUTH but use await so after===
 //  ===GOOGLE USER SIGNIN===
     GoogleSignInAccount googleUser = await googleSignIn.signIn();
 //  ===GOOGLE SIGN IN AUTHENTICATION===
@@ -91,18 +92,18 @@ class _LoginState extends State<Login> {
         credential);
     final User user = authresult.user;
 
-//  ===IF USER EXIST===
+//  ===IF USER EXIST & await GOOGLE AUTH USER===
     if(user != null){
-//    ==RESULT WITH QUERYSNAPSHOT = GET COLLECTION NAME 'USER' DOCUMENT 'ID' == GOOGLE USER ID===
+//    ==GET COLLECTION NAME 'USER' DOCUMENT 'ID' == GOOGLE USER,ID===
       final QuerySnapshot result = await FirebaseFirestore.instance
           .collection('users')
           .where('id', isEqualTo: user.uid).get();
 //    ===TAKING THE result IN LIST 'documents'==
       final List<DocumentSnapshot> documents = result.docs;
 
-//    ===IF THE USER DOESN'T EXIST ON YOUR 'documents' COLLECTION===
+//    ===IF THE USER DOESN'T EXIST ON YOUR 'documents' COLLECTION(AUTHENTICATION USER)===
       if(documents.length == 0){
-//     ===INSERT THE USER ON YOUR COLECTION(DB) A.K.A SIGNUP===
+//     ===INPUT THE USER ON YOUR COLECTION(AUTHENTICATION USER firebase)===
         FirebaseFirestore.instance
             .collection("users")
             .doc(user.uid).set({
@@ -129,7 +130,7 @@ class _LoginState extends State<Login> {
       Navigator.pushReplacement(context,
           MaterialPageRoute(builder: (BuildContext context) => new HomePage()));
     }else{
-
+      Fluttertoast.showToast(msg: 'Login Failed');
     }
   }
   @override
@@ -144,6 +145,13 @@ class _LoginState extends State<Login> {
       
       body: new Stack(
         children: <Widget>[
+          Center(
+            child: new FlatButton(
+                color: Colors.red.shade900,
+                onPressed: () {handleSignIn();},
+                child: new Text('Sign in / Sign Up with Google', style: TextStyle(color: Colors.white))
+            ),
+          ),
           Visibility(
             visible: loading ?? true,
             child: new Center(
@@ -158,7 +166,7 @@ class _LoginState extends State<Login> {
           )
         ],
       ),
-      bottomNavigationBar: new Container(
+/*      bottomNavigationBar: new Container(
         child: new Padding(
             padding: const EdgeInsets.fromLTRB(12.0, 8.0, 12.0, 8.0),
           child: RaisedButton(onPressed: () {handleSignIn();},
@@ -166,7 +174,7 @@ class _LoginState extends State<Login> {
                   style: TextStyle(color: Colors.black))
           ),
         ),
-      ),
+      ),*/
     );
   }
 }
