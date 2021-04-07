@@ -75,6 +75,10 @@ class _LoginState extends State<Login> {
       loading = true;
     });
 
+//  ==SEMENTARA PAKE INI KARNA BELUM KETEMU CARA BUAT SIGN OUT
+//  atau Uninstall App/Clear data App
+//  ===
+    /*googleSignIn.disconnect();*/
 //  ===THIS PART FOR GOOGLE USER AUTH but use await so after===
 //  ===GOOGLE USER SIGNIN===
     GoogleSignInAccount googleUser = await googleSignIn.signIn();
@@ -101,38 +105,45 @@ class _LoginState extends State<Login> {
 //    ===TAKING THE result IN LIST 'documents'==
       final List<DocumentSnapshot> documents = result.docs;
 
-//    ===IF THE USER DOESN'T EXIST ON YOUR 'documents' COLLECTION(AUTHENTICATION USER)===
-      if(documents.length == 0){
-//     ===INPUT THE USER ON YOUR COLECTION(AUTHENTICATION USER firebase)===
-        FirebaseFirestore.instance
-            .collection("users")
-            .doc(user.uid).set({
-          "id": user.uid,
-          "username": user.displayName,
-          "profilePicture": user.photoURL
-        });
+//    ===IF THE USER DOESN'T EXIST ON YOUR 'documents' COLLECTION(FIRESTORER)===
+        if(documents.length == 0){
+//     ===INSERT INTO THE USER ON YOUR COLECTION(AUTHENTICATION And USER firestore)===
+          FirebaseFirestore.instance
+              .collection("users")
+              .doc(user.uid).set({
+            "id": user.uid,
+            "username": user.displayName,
+            "profilePicture": user.photoURL
+          });
 //      ==PUT DATA USER ID,DISPLAYNAME,PHOTOURL ON PREFERENCE==
-        await preferences.setString("id", user.uid);
-        await preferences.setString("username", user.displayName);
-        await preferences.setString("photoUrl", user.photoURL);
-//      ELSE IF THE USER DOES EXIST ON YOUR 'documents' COLLECTION
-      }else{
+          await preferences.setString("id", user.uid);
+          await preferences.setString("username", user.displayName);
+          await preferences.setString("photoUrl", user.photoURL);
+//    ELSE IF THE USER DOES EXIST ON YOUR 'documents' COLLECTION FireStore
+        }else{
 //      ==PUT DATA USER ID,DISPLAYNAME,PHOTOURL ON PREFERENCE==
-        await preferences.setString("id", documents[0]["id"]);
-        await preferences.setString("username", documents[0]["username"]);
-        await preferences.setString("photoUrl", documents[0]["photoURL"]);
-      }
+          await preferences.setString("id", documents[0]["id"]);
+          await preferences.setString("username", documents[0]["username"]);
+          await preferences.setString("photoUrl", documents[0]["photoURL"]);
+        }
 //    IF SUCCESSFULLY DONE
-      Fluttertoast.showToast(msg: "Login Successfull");
-      setState(() {
-        loading = false;
-      });
-      Navigator.pushReplacement(context,
-          MaterialPageRoute(builder: (BuildContext context) => new HomePage()));
-    }else{
-      Fluttertoast.showToast(msg: 'Login Failed');
-    }
+        Fluttertoast.showToast(msg: "Login Successfull");
+        setState(() {
+          loading = false;
+        });
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (BuildContext context) => new HomePage()));
+      }else{
+        Fluttertoast.showToast(msg: 'Login Failed');
+      }
   }
+//===FOR LOGOUT===
+  Future handleSignOut() async{
+    await firebaseAuth.signOut();
+/*    await googleSignIn.disconnect();*/
+    Fluttertoast.showToast(msg: 'Logout Successfull');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
