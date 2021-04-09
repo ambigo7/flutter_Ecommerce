@@ -20,14 +20,14 @@ class _shoppingCartState extends State<shoppingCart> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: new AppBar(
+        iconTheme: IconThemeData(color: Colors.red),
         elevation: 0.1,
-        backgroundColor: Colors.red,
-        title: Text('Shopping cart'),
+        backgroundColor: Colors.white,
+        title: Text('Shopping cart', style: TextStyle(color: Colors.red)),
         actions: <Widget> [
           new IconButton(
               icon: Icon(
                 Icons.search_outlined,
-                color: Colors.white,
               ),
               onPressed: (){}),
         ],

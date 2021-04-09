@@ -1,58 +1,51 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
-//PACKAGE LINE ICONS FOR ICONS
-import 'package:line_icons/line_icons.dart';
-
-//PACKAGE BOTTOM BAR
-import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:lets_shop/pages/login.dart';
+import 'package:lets_shop/service/auth.dart';
 
 // MY OWN PACKAGE
 import 'package:lets_shop/components/homeContent.dart';
 import 'package:lets_shop/pages/shopping_cart.dart';
-//DEBUGGING
-import 'package:lets_shop/pages/test.dart';
-import 'package:lets_shop/pages/test2.dart';
-import 'package:lets_shop/pages/test3.dart';
-
 
 class HomePage extends StatefulWidget {
+/*  //KONTRUKTOR BUAT GET VALUES YANG DIKIRIM DARI CLASS LOGIN
+  const HomePage({Key key, User user})
+      : _user = user,
+        super(key: key);
+  //TAMPUNG VALUESNYA DISINI
+  final User _user;*/
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
+  User _user = FirebaseAuth.instance.currentUser;
+  bool _isSigningOut = false;
 
-// FOR VALUES SELESTED ITEM
-  int _selectedIndex = 0;
-
-// LIST PAGES BOTTOM NAV
-  final List<Widget> pages = [
-    homeBody(),
-
-//  DEBUGGING JUST TEST ITSN'T WORK
-    test_Pages(),
-    test_Pages2(),
-    test_Pages3()
-  ];
+  //FUNGSINYA BUAT MANGGIL NAMA USER, EMAIL, DAN PHOTONYA
+/*  @override
+  void initState() {
+    _user = widget._user;
+    super.initState();
+  }*/
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: new AppBar(
+        iconTheme: IconThemeData(color: Colors.red),
         elevation: 0.1,
-        backgroundColor: Colors.red,
-        title: Text('Lets Shop'),
+        backgroundColor: Colors.white,
+        title: Text('Lets Shop', style: TextStyle(color: Colors.red)),
         actions: <Widget> [
           new IconButton(
               icon: Icon(
                 Icons.search_outlined,
-                color: Colors.white,
               ),
               onPressed: (){}),
           new IconButton(
               icon: Icon(
                 Icons.shopping_cart_outlined,
-                color: Colors.white,
               ),
 
 //             ===PASSING PAGE NO VALUES WITH NAVIGATOR.PUSH====
@@ -62,53 +55,6 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
 
-//    ====BOTTOM NAV=====
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(color: Colors.white, boxShadow: [
-          BoxShadow(blurRadius: 20, color: Colors.black.withOpacity(.1))
-        ]),
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
-
-//          ====IMPLEMENTATION OF GNAV BOTTOM PUB.DEV====
-            child: GNav(
-                rippleColor: Colors.grey[300],
-                hoverColor: Colors.grey[100],
-                gap: 8,
-                activeColor: Colors.red,
-                iconSize: 24,
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                duration: Duration(milliseconds: 400),
-                tabBackgroundColor: Colors.white,
-                tabs: [
-                  GButton(
-                    icon: LineIcons.home,
-                    text: 'Home',
-                  ),
-                  GButton(
-                    icon: LineIcons.shoppingBasket,
-                    text: 'History',
-                  ),
-                  GButton(
-                    icon: LineIcons.heart,
-                    text: 'Favorites',
-                  ),
-                  GButton(
-                    icon: LineIcons.user,
-                    text: 'Account',
-                  ),
-                ],
-                selectedIndex: _selectedIndex,
-                onTabChange: (index) {
-                  setState(() {
-                    _selectedIndex = index;
-                  });
-                }),
-          ),
-        ),
-      ),
-
       drawer: new Drawer(
         child : new ListView(
           children: <Widget>[
@@ -116,12 +62,18 @@ class _HomePageState extends State<HomePage> {
 //        =====HEADER PART OF DRAWER A.K.A DASHBOARD======
 
             new UserAccountsDrawerHeader(
-              accountName: Text('Dendi Rizka Poetra'),
-              accountEmail: Text('dendirizkapoetra@gmail.com'),
+              //_user.photoURL != null ? VALIDASI HARUSNYA TAPI MASIH BINGUNG NTAR AJA
+              accountName: Text(_user.displayName),
+              accountEmail: Text(_user.email),
               currentAccountPicture: GestureDetector(
-                child: new CircleAvatar(
-                  backgroundColor: Colors.grey,
-                  child: Icon(Icons.person, color: Colors.white,),
+                child: new ClipOval(
+                  child: Material(
+                    color: Colors.grey,
+                    child: Image.network(
+                      _user.photoURL,
+                      fit: BoxFit.fitHeight,
+                    ),
+                  ),
                 ),
               ),
               decoration: new BoxDecoration(
@@ -165,7 +117,18 @@ class _HomePageState extends State<HomePage> {
 
             Divider(),
             InkWell(
-              onTap: (){},
+              onTap: () async {
+/*                setState(() {
+                  _isSigningOut = true;
+                });
+                await Authentication.signOut(context: context);
+                setState(() {
+                  _isSigningOut = false;
+                });
+                *//*Navigator.of(context)
+                    .pushReplacement(_routeToLogin());*//*
+                Navigator.push(context, MaterialPageRoute(builder: (context) => new Login()));*/
+              },
               child: ListTile(
                 title: Text('My Account'),
                 leading: Icon(Icons.person),
@@ -199,7 +162,8 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-      body: pages[_selectedIndex],
+      body: homeBody(),
+/*      pages[_selectedIndex]*/
     );
   }
 }

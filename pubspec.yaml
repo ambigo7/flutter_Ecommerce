@@ -59,6 +59,7 @@ flutter:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
   assets:
+    - images/google_logo.png
     - images/c1.jpg
     - images/m1.jpeg
     - images/w1.jpeg
