@@ -15,7 +15,7 @@ class _myAccountState extends State<myAccount> {
   User user = FirebaseAuth.instance.currentUser;
   bool _isSigningOut = false;
   //ANIMASI SLIDE TRANSISI
-  Route _routeToLogin() {
+  Route _routeToSignIn() {
     return PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) => Login(),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
@@ -126,7 +126,7 @@ class _myAccountState extends State<myAccount> {
                       _isSigningOut = false;
                     });
                     Navigator.of(context)
-                        .pushReplacement(_routeToLogin());
+                        .pushReplacement(_routeToSignIn());
                   }, child: Padding(
                         padding: EdgeInsets.only(top:8.0, bottom: 8.0),
                         child: Text('Sign Out',
