@@ -17,6 +17,7 @@ class _signUpState extends State<signUp> {
   TextEditingController _confirmPasswordTextController = TextEditingController();
   String gender;
   String groupValue = "male";
+  bool hidePass = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,6 +33,7 @@ class _signUpState extends State<signUp> {
               fit: BoxFit.fill,
             ),
           ),
+
 //        All of Widget
           Container(
             child: Center(
@@ -53,6 +55,7 @@ class _signUpState extends State<signUp> {
                             decoration: InputDecoration(
                               hintText: 'Full Name',
                               icon: Icon(Icons.person_outline),
+                              border: InputBorder.none
                             ),
                             validator: (value){
                               if(value.isEmpty){
@@ -64,49 +67,7 @@ class _signUpState extends State<signUp> {
                         ),
                       ),
                     ),
-//                  RADIO BUTTON GENDER
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(14.0, 8.0, 14.0, 8.0),
-                      child: Material(
-                        borderRadius: BorderRadius.circular(10.0),
-                        color: Colors.black.withOpacity(0.1),
-                        elevation: 0.0,
-                        child: Row(
-                          children: <Widget>[
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(14.0, 8.0, 0.0, 8.0),
-                              child: Icon(Icons.people_outline, color: Colors.grey[600]),
-                            ),
-                            Expanded(
-                                child: ListTile(
-                                  title: Text('male',
-                                    textAlign: TextAlign.end,
-                                    style: TextStyle(color: Colors.black)
-                                  ) ,
-                                  trailing: Radio(
-                                      value: 'male',
-                                      groupValue: groupValue,
-                                      onChanged: (e) => valueChanged(e)
-                                  ),
-                                )
-                            ),
-                            Expanded(
-                                child: ListTile(
-                                  title: Text('female',
-                                    textAlign: TextAlign.end,
-                                    style: TextStyle(color: Colors.black)
-                                  ),
-                                  trailing: Radio(
-                                      value: 'female',
-                                      groupValue: groupValue,
-                                      onChanged: (e) => valueChanged(e)
-                                  ),
-                                )
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
+
 //                  TEXTBOX EMAIL
                     Padding(
                       padding: const EdgeInsets.fromLTRB(14.0, 8.0, 14.0, 8.0),
@@ -121,6 +82,7 @@ class _signUpState extends State<signUp> {
                             decoration: InputDecoration(
                               hintText: 'Email',
                               icon: Icon(Icons.email_outlined),
+                              border: InputBorder.none
                             ),
                             keyboardType: TextInputType.emailAddress,
 //                              VALIDASI REGEX
@@ -140,6 +102,52 @@ class _signUpState extends State<signUp> {
                         ),
                       ),
                     ),
+
+//                  RADIO BUTTON GENDER
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(14.0, 8.0, 14.0, 8.0),
+                      child: Material(
+                        borderRadius: BorderRadius.circular(10.0),
+                        color: Colors.black.withOpacity(0.1),
+                        elevation: 0.0,
+                        child: Row(
+                          children: <Widget>[
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(14.0, 8.0, 0.0, 8.0),
+                              child: Icon(Icons.people_outline, color: Colors.grey[600]),
+                            ),
+                            Expanded(
+                                child: ListTile(
+                                  title: Text('Male',
+                                    textAlign: TextAlign.end,
+                                    style: TextStyle(color: Colors.grey[600])
+                                  ) ,
+                                  trailing: Radio(
+                                      activeColor: Colors.deepOrangeAccent[700],
+                                      value: 'male',
+                                      groupValue: groupValue,
+                                      onChanged: (e) => valueChanged(e)
+                                  ),
+                                )
+                            ),
+                            Expanded(
+                                child: ListTile(
+                                  title: Text('Female',
+                                    textAlign: TextAlign.end,
+                                    style: TextStyle(color: Colors.grey[600])
+                                  ),
+                                  trailing: Radio(
+                                      activeColor: Colors.deepOrangeAccent[700],
+                                      value: 'female',
+                                      groupValue: groupValue,
+                                      onChanged: (e) => valueChanged(e)
+                                  ),
+                                )
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
 //                  TEXTBOX PASSWORD
                     Padding(
                       padding: const EdgeInsets.fromLTRB(14.0, 8.0, 14.0, 8.0),
@@ -147,13 +155,14 @@ class _signUpState extends State<signUp> {
                         borderRadius: BorderRadius.circular(10.0),
                         color: Colors.black.withOpacity(0.1),
                         elevation: 0.0,
-                        child: Padding(
-                          padding: const EdgeInsets.only(left:12.0),
-                          child: TextFormField(
+                        child: ListTile(
+                          title: TextFormField(
                             controller: _passwordTextController,
+                            obscureText: hidePass,
                             decoration: InputDecoration(
-                              hintText: 'password',
+                              hintText: 'Password',
                               icon: Icon(Icons.lock_outline),
+                              border: InputBorder.none
                             ),
                             validator: (value){
                               if(value.isEmpty){
@@ -164,9 +173,18 @@ class _signUpState extends State<signUp> {
                               return value;
                             },
                           ),
+                          trailing: IconButton(
+                              icon: Icon(Icons.remove_red_eye_outlined,),
+                              onPressed: (){
+                                setState(() {
+                                  hidePass = false;
+                                });
+                              }
+                             ),
+                          ),
                         ),
                       ),
-                    ),
+
 //                  TEXTBOX CONFIRM PASSWORD
                     Padding(
                       padding: const EdgeInsets.fromLTRB(14.0, 8.0, 14.0, 8.0),
@@ -174,22 +192,33 @@ class _signUpState extends State<signUp> {
                         borderRadius: BorderRadius.circular(10.0),
                         color: Colors.black.withOpacity(0.1),
                         elevation: 0.0,
-                        child: Padding(
-                          padding: const EdgeInsets.only(left:12.0),
-                          child: TextFormField(
+                        child: ListTile(
+                          title: TextFormField(
                             controller: _confirmPasswordTextController,
+                            obscureText: hidePass,
                             decoration: InputDecoration(
                               hintText: 'Confirm  Password',
                               icon: Icon(Icons.lock_outline),
+                              border: InputBorder.none
                             ),
                             validator: (value){
                               if(value.isEmpty){
                                 return 'The password field cannot be empty';
                               }else if(value.length < 6){
                                 return'The Password has tobe at leat 6 character';
+                              }else if(_passwordTextController.text != value){
+                                return 'The password do not match';
                               }
                               return value;
                             },
+                          ),
+                          trailing: IconButton(
+                              icon: Icon(Icons.remove_red_eye_outlined,),
+                              onPressed: (){
+                                setState(() {
+                                  hidePass = false;
+                                });
+                              }
                           ),
                         ),
                       ),
@@ -199,7 +228,7 @@ class _signUpState extends State<signUp> {
                       padding: const EdgeInsets.fromLTRB(14.0, 8.0, 14.0, 8.0),
                       child: Material(
                         borderRadius: BorderRadius.circular(10.0),
-                        color: Colors.red,
+                        color: Colors.deepOrangeAccent[700],
                         elevation: 0.0,
                         child: MaterialButton(
                           onPressed: (){},
@@ -226,7 +255,7 @@ class _signUpState extends State<signUp> {
                             Navigator.of(context).push(MaterialPageRoute(builder: (context) => Login()));
                           },
                               child: new Text(' Sign in',
-                                  style: TextStyle(fontSize: 16, color: Colors.red)
+                                  style: TextStyle(fontSize: 16, color: Colors.deepOrangeAccent[700])
                               )
                           )
                         ],
@@ -240,7 +269,7 @@ class _signUpState extends State<signUp> {
                             alignment: Alignment.center,
                             color: Colors.white.withOpacity(0.9),
                             child: new CircularProgressIndicator(
-                              valueColor: AlwaysStoppedAnimation<Color>(Colors.red),
+                              valueColor: AlwaysStoppedAnimation<Color>(Colors.deepOrangeAccent[700]),
                             ),
                           ),
                         )
@@ -259,8 +288,10 @@ class _signUpState extends State<signUp> {
     setState(() {
       if(e == 'male'){
         groupValue = e;
+        gender = e;
       }else if(e == 'female'){
         groupValue = e;
+        gender = e;
       }
     });
   }

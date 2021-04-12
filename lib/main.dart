@@ -12,6 +12,9 @@ void main() async{
   runApp(
     MaterialApp(
       debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        primaryColor: Colors.deepOrangeAccent[700]
+      ),
       home : Login(),
     )
   );

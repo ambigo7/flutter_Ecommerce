@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lets_shop/components/homeContent.dart';
+import 'package:lets_shop/components/home_body.dart';
 import 'package:lets_shop/pages/home.dart';
 import 'package:lets_shop/pages/test.dart';
 import 'package:lets_shop/pages/test2.dart';
@@ -46,7 +46,7 @@ class _controller_PageState extends State<controller_Page> {
                 rippleColor: Colors.grey[300],
                 hoverColor: Colors.grey[100],
                 gap: 8,
-                activeColor: Colors.red,
+                activeColor: Colors.deepOrangeAccent[700],
                 iconSize: 24,
                 padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 duration: Duration(milliseconds: 400),

@@ -112,7 +112,7 @@ class single_Product extends StatelessWidget {
                           child: Text(product_name,
                               style: TextStyle(fontWeight: FontWeight.bold))),
                       new Text('${formatCurrency.format(product_price)}',
-                      style: TextStyle(color: Colors.red, fontSize: 15,fontWeight: FontWeight.bold))
+                      style: TextStyle(color: Colors.deepOrangeAccent[700], fontSize: 15,fontWeight: FontWeight.bold))
                     ],
                   )
                 ),

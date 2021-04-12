@@ -60,7 +60,24 @@ flutter:
   #   - images/a_dot_ham.jpeg
   assets:
   # input semua asset yang ada di direktori
-    - images/
+    - images/c1.jpg
+    - images/google_logo.png
+    - images/lets_SHopLogo.png
+    - images/m1.jpeg
+    - images/w3.jpeg
+    - images/cats/accessories.png
+    - images/cats/dress.png
+    - images/cats/formal.png
+    - images/cats/informal.png
+    - images/cats/jeans.png
+    - images/cats/shoe.png
+    - images/cats/tshirt.png
+    - images/products/blazer1.jpeg
+    - images/products/dress1.jpeg
+    - images/products/hills1.jpeg
+    - images/products/pants1.jpg
+    - images/products/shoe1.jpg
+    - images/products/skt1.jpeg
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

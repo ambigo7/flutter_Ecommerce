@@ -39,10 +39,10 @@ class _myAccountState extends State<myAccount> {
       appBar: new AppBar(
         //REMOVE BUTTON BACK
         automaticallyImplyLeading: false,
-        iconTheme: IconThemeData(color: Colors.red),
+        iconTheme: IconThemeData(color: Colors.deepOrangeAccent[700]),
         elevation: 0.1,
         backgroundColor: Colors.white,
-        title: Text('My Account', style: TextStyle(color: Colors.red)),
+        title: Text('My Account', style: TextStyle(color: Colors.deepOrangeAccent[700])),
         actions: <Widget>[
           new IconButton(
             icon: Icon(Icons.settings),
@@ -99,7 +99,7 @@ class _myAccountState extends State<myAccount> {
               Text('You are now signed in using your Google account. '
                   'To sign out of your account, click the "Sign Out" button below.',
                   style: TextStyle(
-                      color: Colors.red.withOpacity(0.8),
+                      color: Colors.deepOrangeAccent[700].withOpacity(0.8),
                       fontSize: 14,
                       letterSpacing: 0.2
                   )
@@ -107,11 +107,11 @@ class _myAccountState extends State<myAccount> {
               SizedBox(height: 16.0),
               _isSigningOut
               ? CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(Colors.red),
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.deepOrangeAccent[700]),
               )
                : ElevatedButton(
                   style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(Colors.red),
+                    backgroundColor: MaterialStateProperty.all(Colors.deepOrangeAccent[700]),
                     shape: MaterialStateProperty.all(RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10)
                       )

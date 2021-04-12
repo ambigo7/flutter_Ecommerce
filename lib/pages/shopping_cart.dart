@@ -20,10 +20,10 @@ class _shoppingCartState extends State<shoppingCart> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: new AppBar(
-        iconTheme: IconThemeData(color: Colors.red),
+        iconTheme: IconThemeData(color: Colors.deepOrangeAccent[700]),
         elevation: 0.1,
         backgroundColor: Colors.white,
-        title: Text('Shopping cart', style: TextStyle(color: Colors.red)),
+        title: Text('Shopping cart', style: TextStyle(color: Colors.deepOrangeAccent[700])),
         actions: <Widget> [
           new IconButton(
               icon: Icon(
@@ -44,7 +44,7 @@ class _shoppingCartState extends State<shoppingCart> {
                 child: ListTile(
                   title: new Text('Total:'),
                   subtitle: new Text('${formatCurrency.format(moneyValue)}',
-                  style: TextStyle(color: Colors.red, fontSize: 15,fontWeight: FontWeight.bold))
+                  style: TextStyle(color: Colors.deepOrangeAccent[700], fontSize: 15,fontWeight: FontWeight.bold))
                 )
             ),
 
@@ -52,7 +52,7 @@ class _shoppingCartState extends State<shoppingCart> {
               child: new MaterialButton(
                 onPressed: (){},
                 child: new Text('Check out', style: TextStyle(color: Colors.white)),
-                color: Colors.red,
+                color: Colors.deepOrangeAccent[700],
               ),
             )
           ],

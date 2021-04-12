@@ -42,7 +42,7 @@ class _productDetailsState extends State<productDetails> {
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => new controller_Page()));
             },
-            child: Text('Lets Shop', style: TextStyle(color: Colors.red))),
+            child: Text('Lets Shop', style: TextStyle(color: Colors.deepOrangeAccent[700]))),
         actions: <Widget>[
           new IconButton(
               icon: Icon(
@@ -66,19 +66,19 @@ class _productDetailsState extends State<productDetails> {
             Expanded(
               child: MaterialButton(
                   onPressed: () {},
-                  color: Colors.red,
+                  color: Colors.deepOrangeAccent[700],
                   textColor: Colors.white,
                   elevation: 0.2,
                   child: new Text('Buy now')),
             ),
 
             new IconButton(
-                icon: Icon(Icons.add_shopping_cart_outlined, color: Colors.red),
+                icon: Icon(Icons.add_shopping_cart_outlined, color: Colors.deepOrangeAccent[700]),
                 onPressed: () {}),
             new IconButton(
                 icon: Icon(
                   Icons.favorite_outline,
-                  color: Colors.red,
+                  color: Colors.deepOrangeAccent[700],
                 ),
                 onPressed: () {})
           ],
@@ -120,7 +120,7 @@ class _productDetailsState extends State<productDetails> {
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 12.0),
                       child: new Text('${formatCurrency.format(widget.product_detail_price)}',
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17.0, color: Colors.red)),
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17.0, color: Colors.deepOrangeAccent[700])),
                 )),
                 Container(
                     child: Padding(

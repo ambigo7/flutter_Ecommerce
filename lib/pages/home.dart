@@ -4,7 +4,7 @@ import 'package:lets_shop/pages/login.dart';
 import 'package:lets_shop/service/auth.dart';
 
 // MY OWN PACKAGE
-import 'package:lets_shop/components/homeContent.dart';
+import 'package:lets_shop/components/home_body.dart';
 import 'package:lets_shop/pages/shopping_cart.dart';
 
 class HomePage extends StatefulWidget {
@@ -33,10 +33,10 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: new AppBar(
-        iconTheme: IconThemeData(color: Colors.red),
+        iconTheme: IconThemeData(color: Colors.deepOrangeAccent[700]),
         elevation: 0.1,
         backgroundColor: Colors.white,
-        title: Text('Lets Shop', style: TextStyle(color: Colors.red)),
+        title: Text('Lets Shop', style: TextStyle(color: Colors.deepOrangeAccent[700])),
         actions: <Widget> [
           new IconButton(
               icon: Icon(
@@ -77,7 +77,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               decoration: new BoxDecoration(
-                  color: Colors.red
+                  color: Colors.deepOrangeAccent[700]
               ),
             ),
 
