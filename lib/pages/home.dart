@@ -63,16 +63,20 @@ class _HomePageState extends State<HomePage> {
 
             new UserAccountsDrawerHeader(
               //_user.photoURL != null ? VALIDASI HARUSNYA TAPI MASIH BINGUNG NTAR AJA
-              accountName: Text(_user.displayName),
-              accountEmail: Text(_user.email),
+              accountName: Text('debugging'), //_user.displayName
+              accountEmail: Text('debugging'), //_user.email
               currentAccountPicture: GestureDetector(
                 child: new ClipOval(
                   child: Material(
                     color: Colors.grey,
-                    child: Image.network(
+                    child: new CircleAvatar(
+                      backgroundColor: Colors.grey,
+                      child: Icon(Icons.person, color: Colors.white,),
+                    ),
+                    /*Image.network(
                       _user.photoURL,
                       fit: BoxFit.fitHeight,
-                    ),
+                    ),*/
                   ),
                 ),
               ),

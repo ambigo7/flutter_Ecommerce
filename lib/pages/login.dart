@@ -15,6 +15,7 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   bool loading = false;
+  bool  _passwordVisible = true;
   final _formKey = GlobalKey<FormState>();
 
   TextEditingController _emailTextController = TextEditingController();
@@ -70,7 +71,7 @@ class _LoginState extends State<Login> {
                                     else
                                       return null;
                                   }
-                                  return value;
+                                  return null;
                                 },
                               ),
                             ),
@@ -87,11 +88,26 @@ class _LoginState extends State<Login> {
                           padding: const EdgeInsets.only(left:12.0),
                           child: TextFormField(
                             controller: _passwordTextController,
-                            obscureText: true,
+                            obscureText: _passwordVisible,
                             decoration: InputDecoration(
                               hintText: 'Password',
                               icon: Icon(Icons.lock_outline),
-                              border: InputBorder.none
+                              border: InputBorder.none,
+//                            SHOW/HIDE PASSWORD
+                              suffixIcon: Padding(
+                                  padding: const EdgeInsets.only(right:16.0),
+                                  child: IconButton(
+                                      icon: Icon(
+                                        _passwordVisible
+                                            ? Icons.visibility_off_outlined
+                                            : Icons.visibility_outlined,
+                                      ),
+                                      onPressed: (){
+                                        setState(() {
+                                          _passwordVisible = !_passwordVisible;
+                                        });
+                                      }),
+                                )
                             ),
                             validator: (value){
                               if(value.isEmpty){
@@ -99,7 +115,7 @@ class _LoginState extends State<Login> {
                               }else if(value.length < 6){
                                 return'The Password has tobe at leat 6 character';
                               }
-                              return value;
+                              return null;
                             },
                           ),
                         ),
