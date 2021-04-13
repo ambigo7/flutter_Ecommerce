@@ -41,12 +41,6 @@ class Authentication {
 //  METHOD SIGN UP USER
     signUp_user(fullname, email, pass, gender, {BuildContext context}) async {
     final FirebaseAuth auth = FirebaseAuth.instance;
-/*    try {
-      UserCredential result = await auth
-          .createUserWithEmailAndPassword(email: email, password: pass);
-    } catch (e) {
-
-    }*/
     User user =
     await auth.currentUser;
     if (user == null) {
@@ -60,16 +54,7 @@ class Authentication {
                 "gender": gender,
               })
            }).catchError((err) => {print(err.toString())});
-       /*user = result.user; */
     }
-
-    /*else{
-      ScaffoldMessenger.of(context).showSnackBar(
-        Authentication.customSnackBar(
-          content: 'The email already exists with a different credential.',
-        ),
-      );
-    }*/
   }
 
 // METHOD SIGN IN GOOGLE
@@ -113,48 +98,6 @@ class Authentication {
             content: 'Sign-In Successful',
           ),
         );
-/*        if (user != null) {
-          //    ==GET COLLECTION NAME 'USER' DOCUMENT 'ID' == GOOGLE USER,ID===
-          final QuerySnapshot result = await FirebaseFirestore.instance
-              .collection('users')
-              .where('id', isEqualTo: user.uid)
-              .get();
-          //    ===TAKING THE result IN LIST 'documents'==
-          final List<DocumentSnapshot> documents = result.docs;
-
-          //    ===IF THE USER DOESN'T EXIST ON YOUR 'documents' COLLECTION(FIRESTORER)===
-          if (documents.length == 0) {
-            //     ===INSERT INTO THE USER ON YOUR COLECTION(AUTHENTICATION And USER firestore)===
-            FirebaseFirestore.instance.collection("users").doc(user.uid).set({
-              "id": user.uid,
-              "username": user.displayName,
-              "profilePicture": user.photoURL
-            });
-            //      ==PUT DATA USER ID,DISPLAYNAME,PHOTOURL ON PREFERENCE== GUA NGERTI BUAT APA FUNGSINYA
-            await preferences.setString("id", user.uid);
-            await preferences.setString("username", user.displayName);
-            await preferences.setString("photoUrl", user.photoURL);
-            //    ELSE IF THE USER DOES EXIST ON YOUR 'documents' COLLECTION FireStore
-          } else {
-            //      ==PUT DATA USER ID,DISPLAYNAME,PHOTOURL ON PREFERENCE== GUA NGERTI BUAT APA FUNGSINYA
-            await preferences.setString("id", documents[0]["id"]);
-            await preferences.setString("username", documents[0]["username"]);
-            await preferences.setString("photoUrl", documents[0]["photoURL"]);
-          }
-          *//*Fluttertoast.showToast(msg: "Login Successfull");*//*
-          ScaffoldMessenger.of(context).showSnackBar(
-            Authentication.customSnackBar(
-              content: 'Sign-In Successful',
-            ),
-          );
-        } else {
-          *//*Fluttertoast.showToast(msg: 'Login Failed');*//*
-          ScaffoldMessenger.of(context).showSnackBar(
-            Authentication.customSnackBar(
-              content: 'Sign-In Failed',
-            ),
-          );
-        }*/
       } on FirebaseAuthException catch (e) {
         if (e.code == 'account-exists-with-different-credential') {
           ScaffoldMessenger.of(context).showSnackBar(
