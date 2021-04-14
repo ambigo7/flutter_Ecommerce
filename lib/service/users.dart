@@ -9,7 +9,7 @@ class UserServices{
   String coll = "users";*/
   CollectionReference users = FirebaseFirestore.instance.collection('users');
 
-  Future<void> createUser(String uid, Map<String, dynamic> data) async {
+  createUser(String uid, Map<String, dynamic> data) async {
     try {
       await users.doc(uid).set(data);
       print("User Was Created");

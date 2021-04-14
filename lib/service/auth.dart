@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:lets_shop/pages/controller.dart';
+import 'package:lets_shop/pages/signup.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'users.dart';
@@ -39,22 +40,22 @@ class Authentication {
   }
 
 //  METHOD SIGN UP USER
-    signUp_user(fullname, email, pass, gender, {BuildContext context}) async {
-    final FirebaseAuth auth = FirebaseAuth.instance;
-    User user =
-    await auth.currentUser;
-    if (user == null) {
-       auth
-          .createUserWithEmailAndPassword(email: email, password: pass)
+    signUpUser(fullname, email, pass, gender, {BuildContext context}) async {
+      final FirebaseAuth auth = FirebaseAuth.instance;
+        auth.createUserWithEmailAndPassword(email: email, password: pass)
           .then((user) => {_userServices.createUser(user.user.uid,
-              {
-                "username": fullname,
-                "email": email,
-                "userId": user.user.uid,
-                "gender": gender,
-              })
-           }).catchError((err) => {print(err.toString())});
-    }
+          {
+            "username": fullname,
+            "email": email,
+            "userId": user.user.uid,
+            "gender": gender,
+          })
+      }).catchError((err) => {print(err.toString())});
+      ScaffoldMessenger.of(context).showSnackBar(
+        Authentication.customSnackBar(
+          content: 'User was Created',
+        ),
+      );
   }
 
 // METHOD SIGN IN GOOGLE

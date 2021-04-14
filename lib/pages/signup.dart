@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lets_shop/service/auth.dart';
 
 import 'controller.dart';
@@ -125,10 +126,10 @@ class _signUpState extends State<signUp> {
                             ),
                             Expanded(
                                 child: ListTile(
-                              title: Text('Male',
+                                  title: Text('Male',
                                   textAlign: TextAlign.end,
                                   style: TextStyle(color: Colors.grey[600])),
-                              trailing: Radio(
+                                  trailing: Radio(
                                   activeColor: Colors.deepOrangeAccent[700],
                                   value: 'male',
                                   groupValue: groupValue,
@@ -136,10 +137,10 @@ class _signUpState extends State<signUp> {
                             )),
                             Expanded(
                                 child: ListTile(
-                              title: Text('Female',
+                                  title: Text('Female',
                                   textAlign: TextAlign.end,
                                   style: TextStyle(color: Colors.grey[600])),
-                              trailing: Radio(
+                                  trailing: Radio(
                                   activeColor: Colors.deepOrangeAccent[700],
                                   value: 'female',
                                   groupValue: groupValue,
@@ -248,7 +249,23 @@ class _signUpState extends State<signUp> {
                         elevation: 0.0,
                         child: MaterialButton(
                           onPressed: () async {
-                            validationForm();
+                            setState(() {
+                              loading = true;
+                            });
+                            await validationForm();
+                            setState(() {
+                              loading = false;
+                            });
+                              Navigator.pushReplacement(context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                    controller_Page(),
+                                  )
+                              );
+/*                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => controller_Page()));*/
                           },
                           minWidth: MediaQuery.of(context).size.width,
                           child: Text(
@@ -317,19 +334,14 @@ class _signUpState extends State<signUp> {
     });
   }
 
-  Future validationForm() {
+  Future validationForm() async {
     FormState formState = _formKey.currentState;
+/*    User user = await firebaseAuth.currentUser;*/
     if (formState.validate()) {
       formState.reset();
-      _authentication.signUp_user(
-          _nameTextController.text,
-          _emailTextController.text,
-          _passwordTextController.text, gender);
-      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => controller_Page()));
+      await _authentication.signUpUser(_nameTextController.text,
+          _emailTextController.text, _passwordTextController.text, gender, context: context);
+      }
+      /*Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => controller_Page()));*/
     }
   }
-}
-
-/*      await _authentication.signUp_user(
-          _emailTextController.text,
-          _passwordTextController.text, gender);*/
