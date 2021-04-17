@@ -87,6 +87,7 @@ class _myAccountState extends State<myAccount> {
                 SizedBox(height: 16.0),
                 Text('Hi,', style: TextStyle(color: Colors.red, fontSize: 26)),
                 SizedBox(height: 8.0),
+                //Get data user from doc user.uid
                 FutureBuilder<DocumentSnapshot>(
                   future: users.doc(user.uid).get(),
                   builder: (BuildContext context,
@@ -103,6 +104,7 @@ class _myAccountState extends State<myAccount> {
                   },
                 ),
                 SizedBox(height: 8.0),
+                //Get data user from doc user.uid
                 FutureBuilder<DocumentSnapshot>(
                   future: users.doc(user.uid).get(),
                   builder: (BuildContext context,

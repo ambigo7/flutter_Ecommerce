@@ -20,8 +20,7 @@ class _signUpState extends State<signUp> {
   TextEditingController _emailTextController = TextEditingController();
   TextEditingController _nameTextController = TextEditingController();
   TextEditingController _passwordTextController = TextEditingController();
-  TextEditingController _confirmPasswordTextController =
-      TextEditingController();
+  TextEditingController _confirmPasswordTextController = TextEditingController();
   String gender;
   String groupValue = "male";
   bool _passwordVisible = true;
