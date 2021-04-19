@@ -1,14 +1,13 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 //FIREBASE CORE
 import 'package:firebase_core/firebase_core.dart';
-import 'package:lets_shop/pages/controller.dart';
-import 'package:lets_shop/pages/splash.dart';
-import 'package:lets_shop/provider/user_provider.dart';
 import 'package:provider/provider.dart';
 
 // MY OWN PACKAGE
+import 'package:lets_shop/pages/controller.dart';
+import 'package:lets_shop/pages/splash.dart';
+import 'package:lets_shop/provider/user_provider.dart';
 import 'package:lets_shop/pages/login.dart';
 import 'package:lets_shop/commons/common.dart';
 
