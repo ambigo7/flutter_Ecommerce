@@ -41,7 +41,7 @@ class _homeBodyState extends State<homeBody> {
         children: <Widget>[
 
 //        ====THIS PART TO CALLED IMG_CAROUSEL OR SLIDE PICT=====
-          /*img_carousel,*/
+          img_carousel,
 
 //        =====PADDING WIDGET CATEGORIES====
           new Padding(padding: const EdgeInsets.all(4.0),

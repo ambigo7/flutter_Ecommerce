@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lets_shop/main.dart';
-import 'package:lets_shop/service/auth.dart';
+import 'package:lets_shop/service/authentication.dart';
 
 import 'login.dart';
 

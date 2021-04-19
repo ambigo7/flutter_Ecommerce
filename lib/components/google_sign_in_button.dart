@@ -1,7 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:lets_shop/commons/common.dart';
 import 'package:lets_shop/pages/controller.dart';
+import 'package:lets_shop/service/authentication.dart';
 import 'package:lets_shop/service/auth.dart';
+import 'package:lets_shop/service/users.dart';
 
 class GoogleSignInButton extends StatefulWidget {
   @override
@@ -9,6 +12,10 @@ class GoogleSignInButton extends StatefulWidget {
 }
 
 class _GoogleSignInButtonState extends State<GoogleSignInButton> {
+
+  Auth auth = Auth();
+  UserServices _userServices = UserServices();
+
   bool _isSigningIn = false;
 
   @override
@@ -40,20 +47,29 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
                   _isSigningIn = true;
                 });
 
-                User user = await Authentication.signInWithGoogle(context: context);
+                /*User user = await Authentication.signInWithGoogle(context: context);*/
+                User user = await auth.googleSignIn();
 
                 setState(() {
                   _isSigningIn = false;
                 });
 
                 if (user != null) {
-                  Navigator.of(context).pushReplacement(
+                  _userServices.createUser(
+                  {
+                        "username": user.displayName,
+                        "photo": user.photoURL,
+                        "email": user.email,
+                        "userId": user.uid,
+                  });
+                  changeScreenReplacement(context, controller_Page());
+/*                  Navigator.of(context).pushReplacement(
                     MaterialPageRoute(
                       builder: (context) =>
                           //ROUTE KE HOMEPAGE PARAMETER USER
                           controller_Page(), //user: user
                     ),
-                  );
+                  );*/
                 }
               },
               child: Padding(
@@ -76,7 +92,7 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
                     Padding(
                       padding: const EdgeInsets.only(left: 10),
                       child: Text(
-                        'Sign in with Google',
+                        'Sign in / Sign up with Google',
                         style: TextStyle(
                           fontSize: 18,
                           color: Colors.white,

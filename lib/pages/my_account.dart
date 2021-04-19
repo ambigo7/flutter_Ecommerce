@@ -2,7 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:lets_shop/service/auth.dart';
+import 'package:lets_shop/provider/user_provider.dart';
+import 'package:lets_shop/service/authentication.dart';
+import 'package:provider/provider.dart';
 
 //MY OWN PACKAGE
 import 'login.dart';
@@ -40,6 +42,7 @@ class _myAccountState extends State<myAccount> {
 
   @override
   Widget build(BuildContext context) {
+    final _user = Provider.of<UserProvider>(context);
     return Scaffold(
       appBar: new AppBar(
         //REMOVE BUTTON BACK
@@ -97,7 +100,7 @@ class _myAccountState extends State<myAccount> {
                     }
                     if (snapshot.connectionState == ConnectionState.done) {
                       Map<String, dynamic> data = snapshot.data.data();
-                      return Text("${data['username']}",
+                      return Text("${data['name']}",
                           style: TextStyle(color: Colors.red, fontSize: 26));
                     }
                     return Text("loading");
@@ -139,14 +142,15 @@ class _myAccountState extends State<myAccount> {
                               borderRadius: BorderRadius.circular(10))),
                         ),
                         onPressed: () async {
-                          setState(() {
+                          await _user.signOut();
+/*                          setState(() {
                             _isSigningOut = true;
                           });
                           await Authentication.signOut(context: context);
                           setState(() {
                             _isSigningOut = false;
                           });
-                          Navigator.of(context).pushReplacement(_routeToSignIn());
+                          Navigator.of(context).pushReplacement(_routeToSignIn());*/
                         },
                         child: Padding(
                           padding: EdgeInsets.only(top: 8.0, bottom: 8.0),
