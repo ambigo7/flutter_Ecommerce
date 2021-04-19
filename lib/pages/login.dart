@@ -172,7 +172,10 @@ class _LoginState extends State<Login> {
                             onPressed: () async {
                               if (_formKey.currentState.validate()) {
                                 if (!await user.signIn(_email.text, _password.text)) {
-                                  _key.currentState.showSnackBar(SnackBar(content: Text('Sign in Failed')));
+                                  _key.currentState.showSnackBar(SnackBar(content: Text('Sign in Failed',
+                                      style: TextStyle(color: redAccent)),
+                                    backgroundColor: white,
+                                  ));
                                 }
                               }
                             },
