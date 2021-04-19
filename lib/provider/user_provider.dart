@@ -3,8 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:lets_shop/commons/common.dart';
-import 'package:lets_shop/pages/controller.dart';
 import 'package:lets_shop/service/users.dart';
 
 enum Status { Unitialized, Authenticated, Authenticating, Unauthenticated }

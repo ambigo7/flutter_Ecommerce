@@ -1,15 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:lets_shop/components/horizontal_listView.dart';
-import 'package:lets_shop/components/products.dart';
-import 'package:lets_shop/pages/login.dart';
-import 'package:lets_shop/service/authentication.dart';
+
 
 //PACKAGE CAROUSEL A.K.A SLIDER PICT
 import 'package:carousel_pro/carousel_pro.dart';
 
 // MY OWN PACKAGE
-import 'file:///D:/App%20Flutter%20build/lets_shop/lib/tidak_terpakai/home_body.dart';
+import 'package:lets_shop/components/horizontal_listView.dart';
+import 'package:lets_shop/components/products.dart';
 import 'package:lets_shop/pages/shopping_cart.dart';
 
 class HomePage extends StatefulWidget {

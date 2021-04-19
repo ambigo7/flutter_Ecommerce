@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:lets_shop/provider/user_provider.dart';
-import 'package:lets_shop/service/authentication.dart';
 import 'package:provider/provider.dart';
 
 //MY OWN PACKAGE

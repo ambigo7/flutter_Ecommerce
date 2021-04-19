@@ -6,10 +6,8 @@ import 'package:lets_shop/commons/loading.dart';
 import 'package:lets_shop/provider/user_provider.dart';
 
 // MY OWN PACKAGE *use this if the class is the same directory
-import 'package:lets_shop/components/google_sign_in_button.dart';
 import 'package:lets_shop/pages/signup.dart';
 import 'package:lets_shop/service/auth.dart';
-import 'package:lets_shop/service/authentication.dart';
 import 'package:lets_shop/service/users.dart';
 import 'package:provider/provider.dart';
 
