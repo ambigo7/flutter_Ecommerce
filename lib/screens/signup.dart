@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lets_shop/commons/common.dart';
 import 'package:lets_shop/commons/loading.dart';
-import 'package:lets_shop/pages/controller.dart';
+import 'file:///D:/App%20Flutter%20build/lets_shop/lib/tidak_terpakai/controller.dart';
 import 'package:lets_shop/provider/user_provider.dart';
 import 'package:lets_shop/service/auth.dart';
 import 'package:lets_shop/service/users.dart';
@@ -281,6 +281,7 @@ class _signUpState extends State<signUp> {
                                       }
 /*                                      changeScreenReplacement(
                                           context, controller_Page());*/
+                                      print(user.status);
                                     }
                                   },
                                   minWidth: MediaQuery.of(context).size.width,

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lets_shop/commons/common.dart';
 
 //MY OWN PACKAGES
-import 'package:lets_shop/pages/product_details.dart';
+import 'package:lets_shop/screens/product_details.dart';
 
 //PACKAGE MONEY FORMATTER
 import 'package:intl/intl.dart';

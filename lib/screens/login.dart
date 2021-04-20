@@ -6,7 +6,7 @@ import 'package:lets_shop/commons/loading.dart';
 import 'package:lets_shop/provider/user_provider.dart';
 
 // MY OWN PACKAGE *use this if the class is the same directory
-import 'package:lets_shop/pages/signup.dart';
+import 'package:lets_shop/screens/signup.dart';
 import 'package:lets_shop/service/auth.dart';
 import 'package:lets_shop/service/users.dart';
 import 'package:provider/provider.dart';
@@ -177,6 +177,7 @@ class _LoginState extends State<Login> {
                                     backgroundColor: white,
                                   ));
                                 }
+                                print(user.status);
                               }
                             },
                             minWidth: MediaQuery.of(context).size.width,

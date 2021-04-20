@@ -1,18 +1,21 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:lets_shop/commons/common.dart';
+import 'file:///D:/App%20Flutter%20build/lets_shop/lib/tidak_terpakai/controller.dart';
 import 'package:lets_shop/service/users.dart';
 
-enum Status { Unitialized, Authenticated, Authenticating, Unauthenticated }
+enum Status { Uninitialized, Authenticated, Authenticating, Unauthenticated }
 
 class UserProvider with ChangeNotifier {
   UserServices _userServices = UserServices();
 
   FirebaseAuth _auth;
   User _user;
-  Status _status = Status.Unitialized;
+  Status _status = Status.Uninitialized;
 
   Status get status => _status;
   User get user => _user;

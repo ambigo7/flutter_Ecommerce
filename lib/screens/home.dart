@@ -8,7 +8,9 @@ import 'package:carousel_pro/carousel_pro.dart';
 // MY OWN PACKAGE
 import 'package:lets_shop/components/horizontal_listView.dart';
 import 'package:lets_shop/components/products.dart';
-import 'package:lets_shop/pages/shopping_cart.dart';
+import 'package:lets_shop/provider/user_provider.dart';
+import 'package:lets_shop/screens/shopping_cart.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
 /*  //KONTRUKTOR BUAT GET VALUES YANG DIKIRIM DARI CLASS LOGIN
@@ -36,6 +38,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final _user = Provider.of<UserProvider>(context);
     //  ====Implementation of pub carousel a.k.a slider pict====
     Widget img_carousel = new Container(
       height: 200.0,
@@ -167,6 +170,8 @@ class _HomePageState extends State<HomePage> {
             Divider(),
             InkWell(
               onTap: () async {
+                await _user.signOut();
+                print(_user.status);
 /*                setState(() {
                   _isSigningOut = true;
                 });
@@ -179,7 +184,7 @@ class _HomePageState extends State<HomePage> {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => new Login()));*/
               },
               child: ListTile(
-                title: Text('My Account'),
+                title: Text('Sign Out'),
                 leading: Icon(Icons.person),
               ),
             ),

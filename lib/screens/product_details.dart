@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:lets_shop/pages/controller.dart';
+import 'file:///D:/App%20Flutter%20build/lets_shop/lib/tidak_terpakai/controller.dart';
 
 //MY OWN PACKAGES
-import 'package:lets_shop/pages/home.dart';
+import 'package:lets_shop/screens/home.dart';
 
 //PACKAGE MONEY FORMATTER
 import 'package:intl/intl.dart';
@@ -40,7 +40,7 @@ class _productDetailsState extends State<productDetails> {
             onTap: () {
 //          ===Passing page no values with Navigator.push====
               Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => new controller_Page()));
+                  MaterialPageRoute(builder: (context) => new HomePage()));
             },
             child: Text('Lets Shop', style: TextStyle(color: Colors.deepOrangeAccent[700]))),
         actions: <Widget>[
