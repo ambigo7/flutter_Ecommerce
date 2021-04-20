@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 
 // MY OWN PACKAGE
-import 'package:lets_shop/components/horizontal_listView.dart';
-import 'package:lets_shop/components/products.dart';
+import 'package:lets_shop/components/featured_product.dart';
+import 'file:///D:/App%20Flutter%20build/lets_shop/lib/tidak_terpakai/products.dart';
 
 
 class homeBody extends StatefulWidget {
@@ -51,7 +51,7 @@ class _homeBodyState extends State<homeBody> {
           ),
 
 //        ====HORIZONTAL LIST VIEW====
-          horizontalList(),
+          /*horizontalList(),*/
 
 //        ===PADDING TEXT CATEGORIES===
           new Padding(padding: const EdgeInsets.all(8.0),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lets_shop/commons/color.dart';
 import 'package:lets_shop/commons/common.dart';
 
 //MY OWN PACKAGES
@@ -94,13 +95,13 @@ class single_Product extends StatelessWidget {
       child: Material(
         child: InkWell(
 //            ======PASSING THE VALUES WITH CONSTRUCTURE AND NAVIGATOR.OF(CONTEXT).PUSH=====
-          onTap: () => Navigator.of(context).push(new MaterialPageRoute(
-              builder: (context) => new productDetails(
+          onTap: () {}/*=> Navigator.of(context).push(new MaterialPageRoute(
+              builder: (context) => new ProductDetails(
                     product_detail_name: product_name,
                     product_detail_price: product_price,
                     product_detail_old_price: product_old_price,
                     product_detail_picture: product_pict,
-                  ))),
+                  )))*/,
           child: GridTile(
             footer: Container(
               color: white,

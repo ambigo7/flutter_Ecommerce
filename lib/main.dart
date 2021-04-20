@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 //FIREBASE CORE
 import 'package:firebase_core/firebase_core.dart';
+import 'package:lets_shop/commons/color.dart';
 import 'package:lets_shop/screens/home.dart';
 import 'package:provider/provider.dart';
 

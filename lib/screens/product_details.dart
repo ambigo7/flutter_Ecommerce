@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:lets_shop/commons/color.dart';
+import 'package:lets_shop/commons/common.dart';
 import 'file:///D:/App%20Flutter%20build/lets_shop/lib/tidak_terpakai/controller.dart';
 
 //MY OWN PACKAGES
@@ -7,85 +9,369 @@ import 'package:lets_shop/screens/home.dart';
 //PACKAGE MONEY FORMATTER
 import 'package:intl/intl.dart';
 
-class productDetails extends StatefulWidget {
-  final product_detail_name;
-  final product_detail_price;
-  final product_detail_old_price;
-  final product_detail_picture;
+class ProductDetails extends StatefulWidget {
+  final String productName;
+  final double productPrice;
+  final String productPicture;
 
 //Constructor product details
-  productDetails(
-      {this.product_detail_name,
-      this.product_detail_price,
-      this.product_detail_old_price,
-      this.product_detail_picture});
+  ProductDetails({@required this.productName, @required this.productPrice, @required this.productPicture});
 
   @override
-  _productDetailsState createState() => _productDetailsState();
+  _ProductDetailsState createState() => _ProductDetailsState();
 }
 
-class _productDetailsState extends State<productDetails> {
-
+class _ProductDetailsState extends State<ProductDetails> {
   //  ====CREATE MONEY CURRENCY FORMATTER====
   final formatCurrency = new NumberFormat.simpleCurrency(locale: 'id_ID');
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: new AppBar(
-        iconTheme: IconThemeData(color: Colors.red),
-        elevation: 0.1,
-        backgroundColor: Colors.white,
-        title: InkWell(
-            onTap: () {
-//          ===Passing page no values with Navigator.push====
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => new HomePage()));
-            },
-            child: Text('Lets Shop', style: TextStyle(color: Colors.deepOrangeAccent[700]))),
-        actions: <Widget>[
-          new IconButton(
-              icon: Icon(
-                Icons.search_outlined,
-              ),
-              onPressed: () {}),
-          new IconButton(
-              icon: Icon(
-                Icons.shopping_cart_outlined,
-              ),
-              onPressed: () {})
-        ],
-      ),
-
-//        =======SECOND BUTTON BELOW=======
-      bottomNavigationBar: new Padding(
-        padding: const EdgeInsets.only(left: 15.0),
-        child: Row(
-          children: <Widget>[
-//          =======Size Button======
-            Expanded(
-              child: MaterialButton(
-                  onPressed: () {},
-                  color: Colors.deepOrangeAccent[700],
-                  textColor: Colors.white,
-                  elevation: 0.2,
-                  child: new Text('Buy now')),
-            ),
-
-            new IconButton(
-                icon: Icon(Icons.add_shopping_cart_outlined, color: Colors.deepOrangeAccent[700]),
-                onPressed: () {}),
-            new IconButton(
-                icon: Icon(
-                  Icons.favorite_outline,
-                  color: Colors.deepOrangeAccent[700],
+      body: SafeArea(
+        child: Container(
+          color: black.withOpacity(0.9),
+          child: Column(children: <Widget>[
+            Stack(
+              children: <Widget>[
+                Image.asset(
+                  widget.productPicture,
+                  height: 350,
+                  fit: BoxFit.cover,
                 ),
-                onPressed: () {})
-          ],
+                Align(
+                  alignment: Alignment.topCenter,
+                  child: Container(
+                      height: 100,
+                      decoration: BoxDecoration(
+                        // Box decoration takes a gradient
+                        gradient: LinearGradient(
+                          // Where the linear gradient begins and ends
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          // Add one stop for each color. Stops should increase from 0 to 1
+                          colors: [
+                            // Colors are easy thanks to Flutter's Colors class.
+                            Colors.black.withOpacity(0.7),
+                            Colors.black.withOpacity(0.5),
+                            Colors.black.withOpacity(0.07),
+                            Colors.black.withOpacity(0.05),
+                            Colors.black.withOpacity(0.025),
+                          ],
+                        ),
+                      ),
+                      child: Padding(
+                          padding: const EdgeInsets.only(top: 8.0),
+                          child: Container())),
+                ),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Container(
+                      height: 350,
+                      decoration: BoxDecoration(
+                        // Box decoration takes a gradient
+                        gradient: LinearGradient(
+                          // Where the linear gradient begins and ends
+                          begin: Alignment.bottomCenter,
+                          end: Alignment.topCenter,
+                          // Add one stop for each color. Stops should increase from 0 to 1
+                          colors: [
+                            // Colors are easy thanks to Flutter's Colors class.
+                            Colors.black.withOpacity(0.8),
+                            Colors.black.withOpacity(0.6),
+                            Colors.black.withOpacity(0.6),
+                            Colors.black.withOpacity(0.4),
+                            Colors.black.withOpacity(0.07),
+                            Colors.black.withOpacity(0.05),
+                            Colors.black.withOpacity(0.025),
+                          ],
+                        ),
+                      ),
+                      child: Padding(
+                          padding: const EdgeInsets.only(top: 8.0),
+                          child: Container())),
+                ),
+                Positioned(
+                    bottom: 0,
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Text(
+                              widget.productName,
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w300,
+                                  fontSize: 20),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Text(
+                              '${formatCurrency.format(widget.productPrice)}',
+                              textAlign: TextAlign.end,
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 26,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )),
+                Positioned(
+                  top: 10,
+                  right: 10,
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: InkWell(
+                      onTap: () {
+                        /*changeScreen(context, CartScreen());*/
+                      },
+                      child: Padding(
+                          padding: const EdgeInsets.all(4),
+                          child: Card(
+                            color: white,
+                            elevation: 10,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20)),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Icon(Icons.shopping_cart_outlined, color: redAccent,),
+                            ),
+                          )),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  top: 7,
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: InkWell(
+                      onTap: () {
+                        print("CLICKED");
+                        Navigator.pop(context);
+                      },
+                      child: Container(
+                        child: Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: Padding(
+                              padding: const EdgeInsets.all(12),
+                              child: Icon(
+                                Icons.arrow_back_ios,
+                                color: Colors.white,
+                              ),
+                            )),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Expanded(
+              child: Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20),
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: white,
+                        offset: Offset(2, 2),
+                        /*blurRadius: 10*/
+                      )
+                    ]),
+                child: Column(
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: Row(
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: Text(
+                              'Select Color: ',
+                              style: TextStyle(color: black),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              width: 24,
+                              height: 24,
+                              decoration: BoxDecoration(
+                                  color: white,
+                                  borderRadius: BorderRadius.circular(15)),
+                              child: Padding(
+                                padding: const EdgeInsets.all(2),
+                                child: CircleAvatar(
+                                  backgroundColor: Colors.red,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              width: 24,
+                              height: 24,
+                              decoration: BoxDecoration(
+                                  color: white,
+                                  borderRadius: BorderRadius.circular(15)),
+                              child: Padding(
+                                padding: const EdgeInsets.all(2),
+                                child: CircleAvatar(
+                                  backgroundColor: Colors.green,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              width: 24,
+                              height: 24,
+                              decoration: BoxDecoration(
+                                  color: white,
+                                  borderRadius: BorderRadius.circular(15)),
+                              child: Padding(
+                                padding: const EdgeInsets.all(2),
+                                child: CircleAvatar(
+                                  backgroundColor: Colors.orange,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: Text('Select Size: ',
+                                style: TextStyle(color: black)),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              width: 24,
+                              height: 24,
+                              decoration: BoxDecoration(
+                                  color: white.withOpacity(0.8),
+                                  borderRadius: BorderRadius.circular(7)),
+                              child: Padding(
+                                padding: const EdgeInsets.all(2),
+                                child: Text(
+                                  'S',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: black, fontSize: 17),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              width: 24,
+                              height: 24,
+                              decoration: BoxDecoration(
+                                  color: white.withOpacity(0.8),
+                                  borderRadius: BorderRadius.circular(7)),
+                              child: Padding(
+                                padding: const EdgeInsets.all(2),
+                                child: Text(
+                                  'M',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: black, fontSize: 17),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              width: 24,
+                              height: 24,
+                              decoration: BoxDecoration(
+                                  color: white.withOpacity(0.8),
+                                  borderRadius: BorderRadius.circular(7)),
+                              child: Padding(
+                                padding: const EdgeInsets.all(2),
+                                child: Text(
+                                  'L',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: black, fontSize: 17),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              height: 24,
+                              decoration: BoxDecoration(
+                                  color: white.withOpacity(0.8),
+                                  borderRadius: BorderRadius.circular(7)),
+                              child: Padding(
+                                padding: const EdgeInsets.all(2),
+                                child: Text(
+                                  'XL',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: black, fontSize: 17),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                            'Description:\nLorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry standard dummy text ever since the 1500s  Lorem Ipsum has been the industry standard dummy text ever since the 1500s ',
+                            style: TextStyle(color: black)),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(9),
+                      child: Material(
+                          borderRadius: BorderRadius.circular(15.0),
+                          color: redAccent,
+                          elevation: 0.0,
+                          child: MaterialButton(
+                            onPressed: () {},
+                            minWidth: MediaQuery.of(context).size.width,
+                            child: Text(
+                              "Buy now",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20.0),
+                            ),
+                          )),
+                    ),
+                  ],
+                ),
+              ),
+            )
+          ]),
         ),
       ),
-
-      body: new ListView(
+    );
+/*      body: new ListView(
         children: <Widget>[
           new Container(
             height: 300.0,
@@ -409,7 +695,7 @@ class similiar_single_Product extends StatelessWidget {
 //            ======Passing the values with constructure and Navigator.of(context).push=====
             onTap: ()=> Navigator.of(context).push(
                 new MaterialPageRoute(
-                    builder: (context) => new productDetails(
+                    builder: (context) => new ProductDetails(
                       product_detail_name: product_name,
                       product_detail_price: product_price,
                       product_detail_old_price: product_old_price,
@@ -436,5 +722,6 @@ class similiar_single_Product extends StatelessWidget {
       ),
     );
   }
+}*/
+  }
 }
-

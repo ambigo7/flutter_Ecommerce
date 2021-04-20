@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
 
-Color redAccent = Colors.deepOrangeAccent[700];
-Color black = Colors.black;
-Color white = Colors.white;
-
 //methods
 
 void changeScreen(BuildContext context, Widget widget){

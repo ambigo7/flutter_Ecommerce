@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:lets_shop/commons/common.dart';
+import 'package:lets_shop/commons/color.dart';
 import 'package:lets_shop/commons/loading.dart';
 import 'package:lets_shop/provider/user_provider.dart';
 
