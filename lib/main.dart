@@ -7,11 +7,9 @@ import 'package:lets_shop/screens/home.dart';
 import 'package:provider/provider.dart';
 
 // MY OWN PACKAGE
-import 'file:///D:/App%20Flutter%20build/lets_shop/lib/tidak_terpakai/controller.dart';
 import 'package:lets_shop/screens/splash.dart';
 import 'package:lets_shop/provider/user_provider.dart';
 import 'package:lets_shop/screens/login.dart';
-import 'package:lets_shop/commons/common.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

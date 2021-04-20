@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lets_shop/commons/color.dart';
-import 'package:lets_shop/commons/common.dart';
-import 'file:///D:/App%20Flutter%20build/lets_shop/lib/tidak_terpakai/controller.dart';
 
-//MY OWN PACKAGES
-import 'package:lets_shop/screens/home.dart';
 
 //PACKAGE MONEY FORMATTER
 import 'package:intl/intl.dart';
