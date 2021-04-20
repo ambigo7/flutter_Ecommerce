@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 
 //FIREBASE CORE
 import 'package:firebase_core/firebase_core.dart';
-import 'package:lets_shop/commons/color.dart';
-import 'package:lets_shop/screens/home.dart';
 import 'package:provider/provider.dart';
 
 // MY OWN PACKAGE
 import 'package:lets_shop/screens/splash.dart';
+import 'package:lets_shop/commons/color.dart';
+import 'package:lets_shop/screens/home.dart';
 import 'package:lets_shop/provider/user_provider.dart';
 import 'package:lets_shop/screens/login.dart';
 
