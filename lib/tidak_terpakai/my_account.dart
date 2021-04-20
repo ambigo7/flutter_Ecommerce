@@ -2,11 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:lets_shop/commons/common.dart';
 import 'package:lets_shop/provider/user_provider.dart';
 import 'package:provider/provider.dart';
 
 //MY OWN PACKAGE
-import 'login.dart';
+import '../screens/login.dart';
 
 class myAccount extends StatefulWidget {
   @override
@@ -142,6 +143,8 @@ class _myAccountState extends State<myAccount> {
                         ),
                         onPressed: () async {
                           await _user.signOut();
+                          print(_user.status);
+/*                          changeScreenReplacement(context, Login());*/
 /*                          setState(() {
                             _isSigningOut = true;
                           });
