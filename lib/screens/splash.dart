@@ -1,9 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:lets_shop/commons/color.dart';
+import 'package:lets_shop/commons/loading.dart';
 
 class Splash extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(redAccent));
+    return Scaffold(
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children:<Widget>[
+              Loading()
+            ],
+          ),
+        ],
+      ),
+    );
   }
 }

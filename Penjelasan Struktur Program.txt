@@ -1,0 +1,18 @@
+Keterangan Struktur Program :
+
+Service => komunikasi langsungg dari/ke database
+
+provider => yang menyediakan pemeberitahun ke aplikasi kalo ada perubahan data
+		dan merecord data dari models dan DB seperti session untuk product dan user(client-app)
+
+models => menammpung semua data dari services untuk dapat
+		disebarkan/dipanggil keseluruh object UI(peritem lewat getter diapnggilnya)
+
+FLOW DATA :
+
+Client-Side = Services -> Provider -> Model -> UI Oject || UI Oject -> Provider -> Services
+Admin-Side = (Services -> UI Oject)<-Provider hanya untuk membantu pergantian data warna di add product
+
+Metode :
+waterfall method untuk penyelesaian masalahnya yang diaplikasi,
+paralel buat bangun 2 aplikasi admin side, client-side

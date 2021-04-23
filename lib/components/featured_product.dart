@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:lets_shop/provider/product_provider.dart';
+import 'package:provider/provider.dart';
 
 import 'featured_card.dart';
 
@@ -10,17 +12,16 @@ class FeaturedProducts extends StatefulWidget {
 class _FeaturedProductsState extends State<FeaturedProducts> {
   @override
   Widget build(BuildContext context) {
+
+    final productProvider = Provider.of<ProductProvider>(context);
+
     return Container(
         height: 230,
         child: ListView.builder(
             scrollDirection: Axis.horizontal,
-            itemCount: 4,
+            itemCount: productProvider.products.length,
             itemBuilder: (_, index) {
-              return FeaturedCard(
-                name: 'Winter Blazer',
-                price: 50000.0,
-                picture: 'images/w4.jpeg',
-              );
+              return FeaturedCard(product: productProvider.products[index],);
             }));
   }
 }

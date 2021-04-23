@@ -36,7 +36,10 @@ dependencies:
   google_sign_in: ^5.0.2
   shared_preferences: ^2.0.5
   image_picker: ^0.7.4
+  transparent_image: ^2.0.0
   provider: ^5.0.0
+  flutter_spinkit: "^4.1.2"
+  uuid: ^3.0.4
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -64,8 +67,6 @@ flutter:
   assets:
   # input semua asset yang ada di direktori
     - images/
-    - images/cats
-    - images/products
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

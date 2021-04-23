@@ -172,9 +172,10 @@ class _LoginState extends State<Login> {
                             onPressed: () async {
                               if (_formKey.currentState.validate()) {
                                 if (!await user.signIn(_email.text, _password.text)) {
-                                  _key.currentState.showSnackBar(SnackBar(content: Text('Sign in Failed',
-                                      style: TextStyle(color: redAccent)),
+                                  _key.currentState.showSnackBar(SnackBar(
                                     backgroundColor: white,
+                                    content: Text('Sign in Failed',
+                                      style: TextStyle(color: redAccent)),
                                   ));
                                 }
                                 print(user.status);
@@ -239,13 +240,16 @@ class _LoginState extends State<Login> {
                                 });
                                 User user = await auth.googleSignIn();
                                 if(user != null){
+                                  print("Ready to Creating User..");
                                   _userServices.createUser(
                                   {
                                     "name": user.displayName,
                                     "photo": user.photoURL,
                                     "email": user.email,
-                                    "userId": user.uid,
+                                    "uid": user.uid,
+                                    "stripeId": '',
                                   });
+                                  print("User Was Created");
                                 }
                                 setState(() {
                                   loading = false;

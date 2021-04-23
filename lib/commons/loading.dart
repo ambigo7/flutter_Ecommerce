@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:lets_shop/commons/color.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class Loading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(redAccent)),
+    return Container(
+        color: white,
+        child: SpinKitFadingCircle(
+          color: redAccent,
+          size: 30,
+        )
     );
   }
 }

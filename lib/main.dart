@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 //FIREBASE CORE
 import 'package:firebase_core/firebase_core.dart';
+import 'package:lets_shop/provider/app_provider.dart';
+import 'package:lets_shop/provider/product_provider.dart';
 import 'package:provider/provider.dart';
 
 // MY OWN PACKAGE
@@ -14,8 +16,12 @@ import 'package:lets_shop/screens/login.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(ChangeNotifierProvider(
-      create: (_) => UserProvider.initialize(),
+  runApp(MultiProvider(
+      providers: [
+        ChangeNotifierProvider.value(value: UserProvider.initialize()),
+        ChangeNotifierProvider.value(value: ProductProvider.initialize()),
+        ChangeNotifierProvider.value(value: AppProvider()),
+      ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(primaryColor: redAccent),

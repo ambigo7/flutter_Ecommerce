@@ -331,12 +331,15 @@ class _signUpState extends State<signUp> {
                                             User user =
                                                 await auth.googleSignIn();
                                             if (user != null) {
+                                              print("Ready to Creating User..");
                                               _userServices.createUser({
                                                 "name": user.displayName,
                                                 "photo": user.photoURL,
                                                 "email": user.email,
-                                                "userId": user.uid,
+                                                "uid": user.uid,
+                                                "stripeId": '',
                                               });
+                                              print("User Was Created");
                                             }
                                           },
                                           child: Image.asset(

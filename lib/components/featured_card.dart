@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:lets_shop/commons/common.dart';
+import 'package:lets_shop/commons/loading.dart';
+import 'package:lets_shop/models/product.dart';
 import 'package:lets_shop/screens/product_details.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 //PACKAGE MONEY FORMATTER
 import 'package:intl/intl.dart';
 
 class FeaturedCard extends StatelessWidget {
-  final String name;
-  final double price;
-  final String picture;
+  final ProductModel product;
 
-  FeaturedCard({@required this.name,@required this.price,@required this.picture});
+  const FeaturedCard({Key key, this.product}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,16 +21,7 @@ class FeaturedCard extends StatelessWidget {
       padding: EdgeInsets.all(4),
       child: InkWell(
         onTap: (){
-          changeScreen(context, ProductDetails(
-            productName: name,
-            productPrice: price,
-            productPicture: picture,
-          ));
-/*          Navigator.push(context, MaterialPageRoute(builder: (_)=> ProductDetails(
-            productName: name,
-            productPrice: price,
-            productPicture: picture,
-          )));*/
+          changeScreen(context, ProductDetails(product: product,));
         },
         child: Container(
           decoration: BoxDecoration(
@@ -46,12 +38,27 @@ class FeaturedCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(10),
             child: Stack(
               children: <Widget>[
-                Image.asset(
-                  picture,
+                Positioned.fill(
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: Loading(),
+                    )),
+//              IMPLEMENTATION LOADING IMAGE TRANSPARENT WHEN PRODUCT IMAGE LOAD FROM DB
+                Center(
+                  child: FadeInImage.memoryNetwork(
+                    placeholder: kTransparentImage,
+                    image: product.imageUrl,
+                    fit: BoxFit.cover,
+                    height: 220,
+                    width: 200,
+                  ),
+                ),
+/*                Image.network(
+                  product.imageUrl,
                   height: 220,
                   width: 200,
                   fit: BoxFit.cover,
-                ),
+                ),*/
 
                 Align(
                   alignment: Alignment.bottomCenter,
@@ -90,8 +97,8 @@ class FeaturedCard extends StatelessWidget {
                   child: Padding(
                       padding: const EdgeInsets.only(left:8.0),
                       child: RichText(text: TextSpan(children: [
-                        TextSpan(text: '$name \n', style: TextStyle(fontSize: 18)),
-                        TextSpan(text: '${formatCurrency.format(price)}', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+                        TextSpan(text: '${product.name} \n', style: TextStyle(fontSize: 18)),
+                        TextSpan(text: '${formatCurrency.format(product.price)}', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
 
                       ]))
                   ),
