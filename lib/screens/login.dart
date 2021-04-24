@@ -5,7 +5,8 @@ import 'package:lets_shop/commons/color.dart';
 import 'package:lets_shop/commons/loading.dart';
 import 'package:lets_shop/provider/user_provider.dart';
 
-// MY OWN PACKAGE *use this if the class is the same directory
+
+// MY OWN PACKAGE
 import 'package:lets_shop/screens/signup.dart';
 import 'package:lets_shop/service/auth.dart';
 import 'package:lets_shop/service/users.dart';
@@ -36,10 +37,20 @@ class _LoginState extends State<Login> {
       body: user.status == Status.Authenticating ? Loading()
           : ListView(
         children: <Widget>[
+
+          //                LOGO
+          Container(
+            alignment: Alignment.topCenter,
+            height: 250,
+            child: Image.asset(
+              "images/lets_ShopLogo.png",
+              fit: BoxFit.fill,
+            ),
+          ),
 //        All of Widget
           Container(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 25, 20, 15),
+              padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
               child: Container(
                 decoration: BoxDecoration(
                     color: white,
@@ -54,15 +65,6 @@ class _LoginState extends State<Login> {
                   key: _formKey,
                   child: Column(
                     children: <Widget>[
-//                LOGO
-                      Container(
-                        alignment: Alignment.topCenter,
-                        width: 240.0,
-                        child: Image.asset(
-                          "images/lets_ShopLogo.png",
-                          fit: BoxFit.fill,
-                        ),
-                      ),
 //                      TEXTBOX EMAIL
                       Padding(
                         padding:
@@ -229,7 +231,63 @@ class _LoginState extends State<Login> {
                         child: CircularProgressIndicator(
                           valueColor: AlwaysStoppedAnimation<Color>(redAccent))
                         )
-                       : Padding(
+                       : Material(
+                        borderRadius: BorderRadius.circular(10.0),
+                        color: Colors.blueAccent,
+                        elevation: 0.0,
+                        child: MaterialButton(
+                          minWidth: 200,
+                          onPressed: () async{
+                            setState(() {
+                              loading = true;
+                            });
+                            User user = await auth.googleSignIn();
+                            if(user != null) {
+                              print("Ready to Creating User..");
+                              _userServices.createUser(
+                                  {
+                                    "name": user.displayName,
+                                    "photo": user.photoURL,
+                                    "email": user.email,
+                                    "uid": user.uid,
+                                    "stripeId": '',
+                                  });
+                            }
+                            print("User Was Created");
+                            setState(() {
+                              loading = false;
+                            });
+                          },
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Container(
+                                padding: EdgeInsets.only(left: 10,right: 10),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  color: white
+                                ),
+                                child: Image(
+                                  image: AssetImage("images/google_logo.png"),
+                                  height: 35.0,
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 10, right:10),
+                                child: Text(
+                                  'Sign in with Google',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),/*Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Material(
                           borderRadius: BorderRadius.circular(10.0),
@@ -258,29 +316,6 @@ class _LoginState extends State<Login> {
                               child: Image.asset("images/google_logo.png", width: 30,)
                           ),
                         ),
-                      ),
-/*                      Padding(
-                        padding:
-                            const EdgeInsets.fromLTRB(14.0, 8.0, 14.0, 8.0),
-                        child: FutureBuilder(
-                          future: Authentication.initializeFirebase(
-                              context: context),
-                          builder: (context, snapshot) {
-                            if (snapshot.hasError) {
-                              return Text(
-                                  'Error initializing Firebase, Check Your Connection');
-                            } else if (snapshot.connectionState ==
-                                ConnectionState.done) {
-                              //class button ada di component
-                              return GoogleSignInButton();
-                            }
-                            return CircularProgressIndicator(
-                              valueColor: AlwaysStoppedAnimation<Color>(
-                                Colors.red,
-                              ),
-                            );
-                          },
-                        ),
                       ),*/
 //                  INKWELL SIGN UP
                       Padding(
@@ -300,7 +335,9 @@ class _LoginState extends State<Login> {
                                 child: new Text(' Sign up',
                                     style: TextStyle(
                                         fontSize: 16,
-                                        color: Colors.deepOrangeAccent[700]))),
+                                        color: Colors.deepOrangeAccent[700])
+                                )
+                            ),
                           ],
                         ),
                       ),

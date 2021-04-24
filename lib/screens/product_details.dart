@@ -53,8 +53,8 @@ class _ProductDetailsState extends State<ProductDetails> {
               children: <Widget>[
                 Positioned.fill(
                     child: Align(
-                  alignment: Alignment.center,
-                  child: Loading(),
+                      alignment: Alignment.center,
+                      child: Loading(),
                 )),
 //              IMPLEMENTATION LOADING IMAGE TRANSPARENT WHEN PRODUCT IMAGE LOAD FROM DB
                 Center(

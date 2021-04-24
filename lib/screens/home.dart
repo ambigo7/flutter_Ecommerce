@@ -14,6 +14,7 @@ import 'package:lets_shop/provider/product_provider.dart';
 import 'package:lets_shop/provider/user_provider.dart';
 import 'package:lets_shop/screens/cart.dart';
 import 'package:lets_shop/screens/order.dart';
+import 'package:lets_shop/screens/search_product.dart';
 import 'package:provider/provider.dart';
 import 'package:transparent_image/transparent_image.dart';
 
@@ -293,8 +294,8 @@ class _HomePageState extends State<HomePage> {
                       title: TextField(
                         textInputAction: TextInputAction.search,
                         onSubmitted: (pattern) async {
-                      /*await productProvider.search(productName: pattern);
-                        changeScreen(context, ProductSearchScreen());*/
+                      await productProvider.search(productName: pattern);
+                        changeScreen(context, SearchProductScreen());
                         },
                     decoration: InputDecoration(
                       hintText: "Search...",

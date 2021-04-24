@@ -20,7 +20,8 @@ class OrdersScreen extends StatelessWidget {
         iconTheme: IconThemeData(color: redAccent),
         backgroundColor: white,
         elevation: 0.0,
-        title: CustomText(text: "Orders"),
+        title: CustomText(text: "Orders History", size: 20, color: redAccent, weigth: FontWeight.bold,),
+        centerTitle: true,
         leading: IconButton(
             icon: Icon(Icons.arrow_back_ios),
             onPressed: () {
