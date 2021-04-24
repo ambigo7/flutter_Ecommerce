@@ -134,7 +134,10 @@ class _CartScreenState extends State<CartScreen> {
                                       userProvider.reloadUserModel();
                                       print("Item removed from cart");
                                       _key.currentState.showSnackBar(SnackBar(
-                                          content: Text("Removed from Cart!")));
+                                          backgroundColor: white,
+                                          content: Text("Removed from Cart!",
+                                              style: TextStyle(
+                                                  color: redAccent))));
                                       appProvider.changeIsLoading();
                                       return;
                                     } else {
