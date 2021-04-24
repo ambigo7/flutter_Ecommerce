@@ -5,14 +5,21 @@ import 'package:lets_shop/models/product.dart';
 class ProductProvider with ChangeNotifier{
   ProductService _productService = ProductService();
   List<ProductModel> products = [];
+  List<ProductModel> featured = [];
   List<ProductModel> productsSearch = [];
 
   ProductProvider.initialize(){
     loadProducts();
+    loadFeatured();
   }
 
   loadProducts() async{
     products = await _productService.getProducts();
+    notifyListeners();
+  }
+
+  loadFeatured() async{
+    featured = await _productService.getFeatured();
     notifyListeners();
   }
 

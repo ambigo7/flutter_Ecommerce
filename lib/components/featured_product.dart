@@ -19,9 +19,9 @@ class _FeaturedProductsState extends State<FeaturedProducts> {
         height: 230,
         child: ListView.builder(
             scrollDirection: Axis.horizontal,
-            itemCount: productProvider.products.length,
+            itemCount: productProvider.featured.length,
             itemBuilder: (_, index) {
-              return FeaturedCard(product: productProvider.products[index],);
+              return FeaturedCard(product: productProvider.featured[index],);
             }));
   }
 }

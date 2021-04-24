@@ -19,6 +19,19 @@ class ProductService {
         return products;
       });
 
+  // Get data Products
+  Future<List<ProductModel>> getFeatured() async =>
+      _products
+          .where("featured", isEqualTo: true)
+          .get()
+          .then((result) {
+        List<ProductModel> _featured = [];
+        for (DocumentSnapshot featured  in result.docs) {
+          _featured.add(ProductModel.fromSnapshot(featured));
+        }
+        return _featured;
+      });
+
   Future<List<ProductModel>> searchProducts({String productName}) {
 // CONVERT THE FIRST CHARACTER TO UPPERCASE
     String searchKey = productName[0].toUpperCase() + productName.substring(1);

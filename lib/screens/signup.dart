@@ -409,7 +409,7 @@ class _signUpState extends State<signUp> {
                               ),
                             ),
 //                  LOADING
-                            Visibility(
+/*                            Visibility(
                                 visible: loading ?? true,
                                 child: new Center(
                                   child: new Container(
@@ -420,7 +420,7 @@ class _signUpState extends State<signUp> {
                                           Colors.deepOrangeAccent[700]),
                                     ),
                                   ),
-                                )),
+                                )),*/
                           ],
                         ),
                       ),
