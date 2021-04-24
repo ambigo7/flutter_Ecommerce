@@ -39,7 +39,7 @@ dependencies:
   transparent_image: ^2.0.0
   provider: ^5.0.0
   flutter_spinkit: "^4.1.2"
-  uuid: ^3.0.4
+  uuid: any
   auth_buttons: ^1.0.1
 
   # The following adds the Cupertino Icons font to your application.
@@ -50,6 +50,12 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
+  flutter_launcher_icons: "^0.8.0"
+
+flutter_icons:
+  image_path: "images/Logo.png"
+  android: true
+  ios: true
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
