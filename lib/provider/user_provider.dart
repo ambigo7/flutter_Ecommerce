@@ -63,7 +63,6 @@ class UserProvider with ChangeNotifier {
                 "name": name,
                 "email": email,
                 "uid" : user.user.uid,
-                "stripeId": '',
               }
             );
             print("User Was Created");

@@ -338,18 +338,7 @@ class _signUpState extends State<signUp> {
                                   setState(() {
                                     loading = true;
                                   });
-                                  User user = await auth.googleSignIn();
-                                  if(user != null) {
-                                    print("Ready to Creating User..");
-                                    _userServices.createUser(
-                                        {
-                                          "name": user.displayName,
-                                          "photo": user.photoURL,
-                                          "email": user.email,
-                                          "uid": user.uid,
-                                          "stripeId": '',
-                                        });
-                                  }
+                                  await auth.googleSignIn();
                                   print("User Was Created");
                                   setState(() {
                                     loading = false;

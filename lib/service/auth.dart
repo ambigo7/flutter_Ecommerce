@@ -9,6 +9,7 @@ abstract class BaseAuth {
 }
 
 class Auth implements BaseAuth {
+  UserServices _userServices = UserServices();
   FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
   @override
@@ -26,6 +27,16 @@ class Auth implements BaseAuth {
         UserCredential userCredential = await _firebaseAuth.signInWithCredential(
             credential);
         user = userCredential.user;
+        if(user != null) {
+          print("Ready to Creating User..");
+          _userServices.createUser(
+              {
+                "name": user.displayName,
+                "photo": user.photoURL,
+                "email": user.email,
+                "uid": user.uid,
+              });
+        }
       } catch (e) {
         print(e.toString());
         return null;

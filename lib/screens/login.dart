@@ -9,7 +9,6 @@ import 'package:lets_shop/provider/user_provider.dart';
 // MY OWN PACKAGE
 import 'package:lets_shop/screens/signup.dart';
 import 'package:lets_shop/service/auth.dart';
-import 'package:lets_shop/service/users.dart';
 import 'package:provider/provider.dart';
 
 class Login extends StatefulWidget {
@@ -19,7 +18,6 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   Auth auth = Auth();
-  UserServices _userServices = UserServices();
 
   bool loading = false;
   bool _passwordVisible = true;
@@ -241,18 +239,7 @@ class _LoginState extends State<Login> {
                             setState(() {
                               loading = true;
                             });
-                            User user = await auth.googleSignIn();
-                            if(user != null) {
-                              print("Ready to Creating User..");
-                              _userServices.createUser(
-                                  {
-                                    "name": user.displayName,
-                                    "photo": user.photoURL,
-                                    "email": user.email,
-                                    "uid": user.uid,
-                                    "stripeId": '',
-                                  });
-                            }
+                            await auth.googleSignIn();
                             print("User Was Created");
                             setState(() {
                               loading = false;
