@@ -1,12 +1,14 @@
-Keterangan Struktur Program :
 
-Service => komunikasi langsungg dari/ke database
+Keterangan Struktur Program (M-V-P):
+Model-View-Presenter
 
-provider => yang menyediakan pemeberitahun ke aplikasi kalo ada perubahan data
-		dan merecord data dari models dan DB seperti session untuk product dan user(client-app)
+Service(Query DB) 	=> komunikasi langsungg dari/ke database
 
-models => menammpung semua data dari services untuk dapat
-		disebarkan/dipanggil keseluruh object UI(peritem lewat getter diapnggilnya)
+provider(Presenter) 	=> yang menyediakan pemeberitahun ke aplikasi kalo ada perubahan data
+			dan merecord data dari models dan DB seperti session untuk product dan user(client-app)
+
+models(Model) 		=> menammpung semua data dari services untuk dapat
+			disebarkan/dipanggil keseluruh object UI(peritem lewat getter diapnggilnya)
 
 FLOW DATA :
 
