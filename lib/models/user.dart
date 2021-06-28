@@ -24,6 +24,7 @@ class UserModel{
 //Public variabel
   List<CartItemModel> cart;
   int totalCartPrice;
+  int countCart;
 
   //Contructure data from DB
   UserModel.fromSnapshot(DocumentSnapshot snapshot){
@@ -32,6 +33,7 @@ class UserModel{
     _name = snapshot.data()[NAME];
     _email = snapshot.data()[EMAIL];
     _stripeId = snapshot.data()[STRIPE_ID] ?? "";
+    countCart = snapshot.data()[CART] == null ? 0 : snapshot.data()[CART].length;
     cart = _convertCartItems(snapshot.data()[CART] ?? []);
     totalCartPrice = snapshot.data()[CART] == null ? 0 : getTotalPrice(cart: snapshot.data()[CART]);
   }

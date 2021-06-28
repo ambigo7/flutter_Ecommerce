@@ -250,8 +250,8 @@ class _CartScreenState extends State<CartScreen> {
                                                 userId: userProvider.user.uid,
                                                 id: id,
                                                 description:
-                                                    "Some random description",
-                                                status: "complete",
+                                                    "Some random description", //TODO:Cari cara biar bisa panggil product kesini
+                                                status: "Incomplete",
                                                 totalPrice: userProvider
                                                     .userModel.totalCartPrice,
                                                 cart: userProvider

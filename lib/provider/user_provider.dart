@@ -31,9 +31,8 @@ class UserProvider with ChangeNotifier {
   User get user => _user;
 
 
-
   UserProvider.initialize() : _auth = FirebaseAuth.instance {
-    _auth.authStateChanges().listen(_onStateChanged);
+    _auth.authStateChanges().listen(_onStateChanged,);
   }
 
   Future<bool> signIn(String email, String password) async {
@@ -108,6 +107,12 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  Future countCart(String currentUser) async{
+    _userModel = await _userServices.getUserById(currentUser);
+    print("My Cart Stream ${user.email}: ${userModel.cart.length}");
+    notifyListeners();
+  }
+
   Future<bool> addToCart({ProductModel product, String size, String color}) async {
     try {
       var uuid = Uuid();
@@ -161,6 +166,8 @@ class UserProvider with ChangeNotifier {
 //RELOAD USER FROM DB, CAN USE FOR PRODUCT TOO I GUESS
   Future<void> reloadUserModel()async{
     _userModel = await _userServices.getUserById(user.uid);
+    int _countCart = _userModel.countCart;
+    print('Update my Count Cart $_countCart');
     notifyListeners();
   }
 }

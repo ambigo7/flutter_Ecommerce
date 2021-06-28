@@ -18,17 +18,11 @@ class OrderModel {
 
 //  getters
   String get id => _id;
-
   String get description => _description;
-
   String get userId => _userId;
-
   String get status => _status;
-
   int get total => _total;
-
   int get createdAt => _createdAt;
-
   // public variable
   List cart;
 

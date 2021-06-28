@@ -19,7 +19,7 @@ class ProductService {
         return products;
       });
 
-  // Get data Products
+  // Get data Featured Products
   Future<List<ProductModel>> getFeatured() async =>
       _products
           .where("featured", isEqualTo: true)

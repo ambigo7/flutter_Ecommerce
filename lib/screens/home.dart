@@ -1,3 +1,5 @@
+import 'package:badges/badges.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -10,11 +12,14 @@ import 'package:lets_shop/components/custom_text.dart';
 // MY OWN PACKAGE
 import 'package:lets_shop/components/featured_product.dart';
 import 'package:lets_shop/components/product_card.dart';
+import 'package:lets_shop/models/user.dart';
+import 'package:lets_shop/provider/app_provider.dart';
 import 'package:lets_shop/provider/product_provider.dart';
 import 'package:lets_shop/provider/user_provider.dart';
 import 'package:lets_shop/screens/cart.dart';
 import 'package:lets_shop/screens/order.dart';
 import 'package:lets_shop/screens/search_product.dart';
+import 'package:lets_shop/service/users.dart';
 import 'package:provider/provider.dart';
 import 'package:transparent_image/transparent_image.dart';
 
@@ -35,12 +40,14 @@ class _HomePageState extends State<HomePage> {
 
   TextEditingController _searchController = TextEditingController();
 
-  //FUNGSINYA BUAT MANGGIL NAMA USER, EMAIL, DAN PHOTONYA
-/*  @override
+
+  //FUNGSINYA BUAT inisilalisasi nilai awal pas screen awal load
+/*
+  @override
   void initState() {
-    _user = widget._user;
-    super.initState();
-  }*/
+
+  }
+*/
 
   @override
   Widget build(BuildContext context) {
@@ -217,10 +224,17 @@ class _HomePageState extends State<HomePage> {
                         onTap: () {
                           changeScreen(context, CartScreen());
                         },
-                        child: Icon(
-                          Icons.shopping_cart_outlined,
-                          color: redAccent,
-                        ))),
+                        child: userProvider.userModel.countCart > 0
+                            ? Badge(
+                            position: BadgePosition.topEnd(top: -13, end: -8),
+/*                                animationDuration: Duration(milliseconds: 300),
+                                  animationType: BadgeAnimationType.slide,*/
+                            badgeContent: Text(
+                                userProvider.userModel.countCart.toString(),
+                                style: TextStyle(color: Colors.white)),
+                            child: Icon(Icons.shopping_cart_outlined, color: redAccent))
+                            : Icon(Icons.shopping_cart_outlined, color: redAccent))
+                  ),
               ),
                 Positioned(
                   top: 10,

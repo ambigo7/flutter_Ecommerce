@@ -10,6 +10,7 @@ class ProductModel{
   static const COLOR = 'color';
   static const FEATURED = 'featured';
   static const IMAGES = 'images';
+  static const IMAGESREF = 'imagesref';
   static const QUANTITY = 'quantity';
   static const SALE = 'sale';
   static const SIZES = 'sizes';
@@ -21,6 +22,7 @@ class ProductModel{
   String _name;
   String _description;
   String _imageUrl;
+  String _imageRef;
   int _price;
   int _quantity;
   List _color;
@@ -35,6 +37,7 @@ class ProductModel{
   String get category => _category;
   String get description => _description;
   String get imageUrl => _imageUrl;
+  String get imageRef => _imageRef;
   int get price => _price;
   int get quantity => _quantity;
   List get color => _color;
@@ -51,6 +54,7 @@ class ProductModel{
     _category = snapshot.data()[CATEGORY];
     _description = snapshot.data()[DESCRIPTION] ?? "";
     _imageUrl = snapshot.data()[IMAGES];
+    _imageRef = snapshot.data()[IMAGESREF];
     _price = snapshot.data()[PRICE].floor();
     _quantity = snapshot.data()[QUANTITY];
     _color = snapshot.data()[COLOR];

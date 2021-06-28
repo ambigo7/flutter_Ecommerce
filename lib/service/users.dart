@@ -15,10 +15,28 @@ class UserServices{
       print('ERROR: ${e.toString()}');
     }
   }
-  Future<UserModel> getUserById(String id) => users.doc(id).get().then((doc){
+  Future<UserModel> getUserById(String id) =>
+      users
+          .doc(id)
+          .get()
+          .then((doc){
       return UserModel.fromSnapshot(doc);
   });
-//Send data to database
+
+  Future<UserModel> getUserIdStream(String id){ //Belajar tarik data Stream tapi masih gagal
+     /*users.doc(id).get().then((querySnapshot) {
+       querySnapshot.docs.fore
+     });*/
+    users.get().then((snap){
+      snap.docs.forEach((result){
+        users.doc(id).get().then((doc){
+          return UserModel.fromSnapshot(doc);
+        });
+      });
+    });
+  }
+
+//write data to database
   void addToCart({String userId, CartItemModel cartItem}){
     users.doc(userId).update({'cart': FieldValue.arrayUnion([cartItem.toMap()])
     });

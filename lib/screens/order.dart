@@ -15,6 +15,8 @@ class OrdersScreen extends StatelessWidget {
     final formatCurrency = new NumberFormat.simpleCurrency(locale: 'id_ID');
 
     final userProvider = Provider.of<UserProvider>(context);
+    String _length = userProvider.orders.length.toString();
+
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(color: redAccent),
@@ -34,13 +36,27 @@ class OrdersScreen extends StatelessWidget {
           itemBuilder: (_, index){
             OrderModel _order = userProvider.orders[index];
             return ListTile(
-              leading: CustomText(
+              leading: Container(
+                color: redAccent,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    width: 80,
+                    child: Center(child: CustomText(text: "$_length""x", color: white, size: 20,))
+                  ),
+                ),
+              ),
+/*              CustomText(
                 text: "${formatCurrency.format(_order.total)}",
                 weigth: FontWeight.bold,
-              ),
+              ),*/
               title: Text(_order.description),
               subtitle: Text(DateTime.fromMillisecondsSinceEpoch(_order.createdAt).toString()),
-              trailing: CustomText(text: _order.status, color: Colors.green,),
+              trailing: _order.status == "Completed"
+                  ? CustomText(text: _order.status, color: Colors.green)
+                  : _order.status == "Incomplete"
+                ? CustomText(text: _order.status, color: Colors.redAccent)
+                  : CustomText(text: _order.status, color: Colors.yellow)
             );
           }),
     );

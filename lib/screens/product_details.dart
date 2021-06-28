@@ -1,3 +1,4 @@
+import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:lets_shop/commons/color.dart';
 import 'package:lets_shop/commons/common.dart';
@@ -27,6 +28,7 @@ class _ProductDetailsState extends State<ProductDetails> {
   final _key = GlobalKey<ScaffoldState>();
   String _selectedColor = "";
   String _selectedSize = "";
+
 
   @override
   void initState() {
@@ -169,10 +171,16 @@ class _ProductDetailsState extends State<ProductDetails> {
                           padding: const EdgeInsets.all(3.0),
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: Icon(
-                              Icons.shopping_cart_outlined,
-                              color: redAccent,
-                            ),
+                            child: userProvider.userModel.countCart > 0
+                                ? Badge(
+                                position: BadgePosition.topEnd(top: -13, end: -8),
+/*                                animationDuration: Duration(milliseconds: 300),
+                                  animationType: BadgeAnimationType.slide,*/
+                                badgeContent: Text(
+                                    userProvider.userModel.countCart.toString(),
+                                    style: TextStyle (color: Colors.white)),
+                                child: Icon(Icons.shopping_cart_outlined, color: redAccent))
+                                : Icon(Icons.shopping_cart_outlined, color: redAccent),
                           ),
                         ),
                       ),
@@ -187,6 +195,10 @@ class _ProductDetailsState extends State<ProductDetails> {
                       onTap: () {
                         print("CLICKED");
                         Navigator.pop(context);
+/*                        setState(() {
+                          _getCountCart(context);
+                        });*/
+                      userProvider.reloadUserModel();
                       },
                       child: Container(
                         decoration: BoxDecoration(
@@ -312,19 +324,21 @@ class _ProductDetailsState extends State<ProductDetails> {
                           child: MaterialButton(
                             onPressed: () async {
                               appProvider.changeIsLoading();
-
                               bool success = await userProvider.addToCart(
                                   product: widget.product,
                                   color: _selectedColor,
                                   size: _selectedSize);
                               if (success) {
+                                /*setState(() {
+                                  _getCountCart(context);
+                                }); *///TODO: masih gagal belum ketemu kenapa ga mau update datanya.
                                 _key.currentState.showSnackBar(SnackBar(
                                     backgroundColor: white,
                                     content: Text("Product has been Added to Cart",
                                         style: TextStyle(color: redAccent))));
                                 userProvider.reloadUserModel();
                                 appProvider.changeIsLoading();
-                                return null;
+                                /*return null;*/
                               } else {
                                 _key.currentState.showSnackBar(SnackBar(
                                     backgroundColor: white,
