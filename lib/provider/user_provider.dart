@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -7,6 +8,7 @@ import 'package:lets_shop/models/cart_item.dart';
 import 'package:lets_shop/models/order.dart';
 import 'package:lets_shop/models/product.dart';
 import 'package:lets_shop/models/user.dart';
+import 'package:lets_shop/service/auth.dart';
 import 'package:lets_shop/service/order.dart';
 import 'package:lets_shop/service/users.dart';
 import 'package:uuid/uuid.dart';
@@ -16,6 +18,8 @@ enum Status { Uninitialized, Authenticated, Authenticating, Unauthenticated }
 class UserProvider with ChangeNotifier {
   UserServices _userServices = UserServices();
   OrderServices _orderServices = OrderServices();
+
+  Auth authGoogleSign = Auth();
 
   FirebaseAuth _auth;
   User _user;
@@ -75,6 +79,20 @@ class UserProvider with ChangeNotifier {
       return false;
     }
   }
+
+/*  Future<bool> googleSign() async{
+    try{
+      _status = Status.Authenticating;
+      notifyListeners();
+      await authGoogleSign.googleSignIn();
+
+    }catch (e) {
+      _status = Status.Unauthenticated;
+      notifyListeners();
+      print(e.toString());
+      return false;
+    }
+  }*/
   
   Future signOut() async{
     _auth.signOut();
@@ -88,13 +106,30 @@ class UserProvider with ChangeNotifier {
       _status = Status.Unauthenticated;
     } else {
       _user = user;
-      _userModel = await _userServices.getUserById(user.uid);
+      String testUser = user.uid;
+      bool validateUser = await authGoogleSign.userExist(user.uid);
+      print('validateUser : $validateUser');
+      if(validateUser != false) {//TODO: ga bisa juga karna getUser ga ke eksekusi
+        print('User does not exist');
+        print("Ready to Creating User..");
+        _userServices.createUser(
+            {
+              "name": user.displayName,
+              "photo": user.photoURL,
+              "email": user.email,
+              "uid": user.uid,
+            });
+        print('User was Created');
+      }
+      print('cek login user uid blm getuser: $testUser');
+      _userModel = await _userServices.getUserById(user.uid); //TODO: cari tau kenapa ga ke eksekusi kalo pake fungsi userExist
+      print('cek login user uid sudah getuser: $testUser');
       //just For Debugging
       print("My Cart ${user.email}: ${userModel.cart.length}");
       print("My Cart ${user.email}: ${userModel.cart.length}");
       print("My Cart ${user.email}: ${userModel.cart.length}");
-      print("My Cart ${user.email}: ${userModel.cart.length}");
-      print("My Cart ${user.email}: ${userModel.cart.length}");
+/*      print("My Cart ${user.email}: ${userModel.cart.length}");
+      print("My Cart ${user.email}: ${userModel.cart.length}");*/
 
 /*      print("My Orders ${user.email} : ${orderModel.cart.length}");
       print("My Orders ${user.email} : ${orderModel.cart.length}");

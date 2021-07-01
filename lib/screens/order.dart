@@ -32,7 +32,7 @@ class OrdersScreen extends StatelessWidget {
       ),
       backgroundColor: white,
       body: ListView.builder(
-          itemCount: userProvider.orders.length,
+          itemCount: userProvider.orders.length, // TODO: masih salah, harusnya cart yg dihitung bukan doc orders
           itemBuilder: (_, index){
             OrderModel _order = userProvider.orders[index];
             return ListTile(

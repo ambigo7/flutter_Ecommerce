@@ -339,7 +339,7 @@ class _signUpState extends State<signUp> {
                                     loading = true;
                                   });
                                   await auth.googleSignIn();
-                                  print("User Was Created");
+
                                   setState(() {
                                     loading = false;
                                   });
