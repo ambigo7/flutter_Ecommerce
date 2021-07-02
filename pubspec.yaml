@@ -55,7 +55,7 @@ dev_dependencies:
   flutter_launcher_icons: "^0.8.0"
 
 flutter_icons:
-  image_path: "images/Logo.png"
+  image_path: "images/LogoOptik.png"
   android: true
   ios: true
 # For information on the generic Dart part of this file, see the
