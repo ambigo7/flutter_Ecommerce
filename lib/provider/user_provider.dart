@@ -109,7 +109,8 @@ class UserProvider with ChangeNotifier {
       String testUser = user.uid;
       bool validateUser = await authGoogleSign.userExist(user.uid);
       print('validateUser : $validateUser');
-      if(validateUser != false) {//TODO: ga bisa juga karna getUser ga ke eksekusi
+      //TODO: berhasil!!!! pake cara 3
+      if(validateUser != false) {
         print('User does not exist');
         print("Ready to Creating User..");
         _userServices.createUser(
@@ -122,7 +123,7 @@ class UserProvider with ChangeNotifier {
         print('User was Created');
       }
       print('cek login user uid blm getuser: $testUser');
-      _userModel = await _userServices.getUserById(user.uid); //TODO: cari tau kenapa ga ke eksekusi kalo pake fungsi userExist
+      _userModel = await _userServices.getUserById(user.uid);
       print('cek login user uid sudah getuser: $testUser');
       //just For Debugging
       print("My Cart ${user.email}: ${userModel.cart.length}");

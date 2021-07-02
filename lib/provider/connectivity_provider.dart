@@ -13,6 +13,7 @@ class ConnectivityProvider extends ChangeNotifier{
 
   startMonitoring() async{
     await initConnectivity();
+    //Stream check connection
     _connectivity.onConnectivityChanged.listen((result) async{
       if(result == ConnectionState.none){
         _isOnline = false;
@@ -28,6 +29,7 @@ class ConnectivityProvider extends ChangeNotifier{
 
   Future<void> initConnectivity() async{
     try{
+      // Future check connection
       var status = await _connectivity.checkConnectivity();
 
       //None itu berarti tidak ada koneksi internet
