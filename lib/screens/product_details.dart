@@ -179,8 +179,8 @@ class _ProductDetailsState extends State<ProductDetails> {
                                 badgeContent: Text(
                                     userProvider.userModel.countCart.toString(),
                                     style: TextStyle (color: Colors.white)),
-                                child: Icon(Icons.shopping_cart_outlined, color: redAccent))
-                                : Icon(Icons.shopping_cart_outlined, color: redAccent),
+                                child: Icon(Icons.shopping_cart_outlined, color: blue))
+                                : Icon(Icons.shopping_cart_outlined, color: blue),
                           ),
                         ),
                       ),
@@ -211,7 +211,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                               padding: const EdgeInsets.all(8.0),
                               child: Icon(
                                 Icons.arrow_back_ios,
-                                color: redAccent,
+                                color: blue,
                               ),
                             )),
                       ),
@@ -319,7 +319,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                       padding: const EdgeInsets.all(9),
                       child: Material(
                           borderRadius: BorderRadius.circular(15.0),
-                          color: redAccent,
+                          color: blue,
                           elevation: 0.0,
                           child: MaterialButton(
                             onPressed: () async {
@@ -335,7 +335,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                                 _key.currentState.showSnackBar(SnackBar(
                                     backgroundColor: white,
                                     content: Text("Product has been Added to Cart",
-                                        style: TextStyle(color: redAccent))));
+                                        style: TextStyle(color: blue))));
                                 userProvider.reloadUserModel();
                                 appProvider.changeIsLoading();
                                 /*return null;*/
@@ -343,7 +343,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                                 _key.currentState.showSnackBar(SnackBar(
                                     backgroundColor: white,
                                     content: Text("Sorry, No products added to Cart",
-                                        style: TextStyle(color: redAccent))));
+                                        style: TextStyle(color: blue))));
                                 appProvider.changeIsLoading();
                                 return null;
                               }

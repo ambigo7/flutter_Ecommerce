@@ -33,10 +33,10 @@ class _CartScreenState extends State<CartScreen> {
     return Scaffold(
       key: _key,
       appBar: new AppBar(
-        iconTheme: IconThemeData(color: redAccent),
+        iconTheme: IconThemeData(color: blue),
         elevation: 0.1,
         backgroundColor: white,
-        title: Text('Shopping cart', style: TextStyle(color: redAccent)),
+        title: Text('Shopping cart', style: TextStyle(color: blue)),
         leading: IconButton(
             icon: Icon(Icons.arrow_back_ios),
             onPressed: () {
@@ -59,7 +59,7 @@ class _CartScreenState extends State<CartScreen> {
                         color: white,
                         boxShadow: [
                           BoxShadow(
-                              color: redAccent.withOpacity(0.2),
+                              color: blue.withOpacity(0.2),
                               offset: Offset(3, 2),
                               blurRadius: 30)
                         ]),
@@ -122,7 +122,7 @@ class _CartScreenState extends State<CartScreen> {
                               IconButton(
                                   icon: Icon(
                                     Icons.delete_outline_rounded,
-                                    color: redAccent,
+                                    color: blue,
                                   ),
                                   onPressed: () async {
                                     appProvider.changeIsLoading();
@@ -137,7 +137,7 @@ class _CartScreenState extends State<CartScreen> {
                                           backgroundColor: white,
                                           content: Text("Removed from Cart!",
                                               style: TextStyle(
-                                                  color: redAccent))));
+                                                  color: blue))));
                                       appProvider.changeIsLoading();
                                       return;
                                     } else {
@@ -180,7 +180,7 @@ class _CartScreenState extends State<CartScreen> {
               ),
               Container(
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20), color: redAccent),
+                    borderRadius: BorderRadius.circular(20), color: blue),
                 child: FlatButton(
                     onPressed: () {
                       if (userProvider.userModel.totalCartPrice == 0) {
@@ -245,7 +245,6 @@ class _CartScreenState extends State<CartScreen> {
                                           onPressed: () async {
                                             var uuid = Uuid();
                                             String id = uuid.v4();
-
                                             _orderServices.createOrder(
                                                 userId: userProvider.user.uid,
                                                 id: id,
@@ -272,7 +271,7 @@ class _CartScreenState extends State<CartScreen> {
                                                         content: Text(
                                                             "Removed from Cart!",
                                                             style: TextStyle(
-                                                                color: redAccent))));
+                                                                color: blue))));
                                               } else {
                                                 print("ITEM WAS NOT REMOVED");
                                               }
@@ -283,7 +282,7 @@ class _CartScreenState extends State<CartScreen> {
                                                     content: Text(
                                                         "Order created!",
                                                         style: TextStyle(
-                                                            color: redAccent))));
+                                                            color: blue))));
                                             Navigator.pop(context);
                                           },
                                           child: Text(
@@ -306,7 +305,7 @@ class _CartScreenState extends State<CartScreen> {
                                               style: TextStyle(
                                                   color: Colors.white),
                                             ),
-                                            color: redAccent),
+                                            color: blue),
                                       )
                                     ],
                                   ),

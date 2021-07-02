@@ -103,7 +103,7 @@ class _HomePageState extends State<HomePage> {
                   child: ClipOval(
                     child: Material(
                       color: Colors.grey,
-                      child: _user.photoURL != null
+                      child: _user?.photoURL != null
                           ? CircleAvatar(
                               child: FadeInImage.memoryNetwork(
                                 placeholder: kTransparentImage,
@@ -127,7 +127,7 @@ class _HomePageState extends State<HomePage> {
                 ),
 
                 decoration:
-                    new BoxDecoration(color: Colors.deepOrangeAccent[700]),
+                    new BoxDecoration(color: blue),
               ),
 
 //        ====BODY PART OF DRAWER A.K.A DASHBOARD=====
@@ -136,7 +136,7 @@ class _HomePageState extends State<HomePage> {
                 onTap: () {},
                 child: ListTile(
                   title: Text('Home Page'),
-                  leading: Icon(Icons.home_outlined, color: Colors.red),
+                  leading: Icon(Icons.home_outlined, color: blue),
                 ),
               ),
 
@@ -148,7 +148,7 @@ class _HomePageState extends State<HomePage> {
                 child: ListTile(
                   title: Text('Orders History'),
                   leading:
-                      Icon(Icons.shopping_basket_outlined, color: Colors.red),
+                      Icon(Icons.shopping_basket_outlined, color: blue),
                 ),
               ),
 
@@ -212,7 +212,7 @@ class _HomePageState extends State<HomePage> {
                         },
                         child: Icon(
                           Icons.menu,
-                          color: redAccent,
+                          color: blue,
                         ))),
               ),
                 Positioned(
@@ -232,8 +232,8 @@ class _HomePageState extends State<HomePage> {
                             badgeContent: Text(
                                 userProvider.userModel.countCart.toString(),
                                 style: TextStyle(color: Colors.white)),
-                            child: Icon(Icons.shopping_cart_outlined, color: redAccent))
-                            : Icon(Icons.shopping_cart_outlined, color: redAccent))
+                            child: Icon(Icons.shopping_cart_outlined, color: blue))
+                            : Icon(Icons.shopping_cart_outlined, color: blue))
                   ),
               ),
                 Positioned(
@@ -244,13 +244,13 @@ class _HomePageState extends State<HomePage> {
                     child: GestureDetector(
                         onTap: () {
                           _key.currentState.showSnackBar(
-                              SnackBar(content: Text("User profile", style: TextStyle(color: redAccent)),
+                              SnackBar(content: Text("Notification", style: TextStyle(color: blue)),
                                   backgroundColor: white
                               ));
                         },
                         child: Icon(
-                          Icons.person_outline,
-                          color: redAccent,
+                          Icons.notifications_none_outlined,
+                          color: blue,
                         ))),
               ),
                 Padding(
@@ -260,7 +260,7 @@ class _HomePageState extends State<HomePage> {
                     child: Padding(
                       padding: const EdgeInsets.only(right: 300),
                       child: Image.asset(
-                        "images/Logo.png",
+                        "images/LogoOptik.png",
                         height: 40,
                         width: 40,
                         fit: BoxFit.fitWidth,
@@ -275,12 +275,12 @@ class _HomePageState extends State<HomePage> {
                         title: Text('Hi, ${userProvider.userModel.name}',
                             style: TextStyle(
                                 fontSize: 30,
-                                color: redAccent,
+                                color: blue,
                                 fontWeight: FontWeight.w400)),
                         subtitle: Text('What are you Looking for?',
                             style: TextStyle(
                                 fontSize: 20,
-                                color: redAccent)),
+                                color: blue)),
                       ),
                     ),
                   )

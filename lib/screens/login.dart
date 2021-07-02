@@ -40,13 +40,14 @@ class _LoginState extends State<Login> {
       body: user.status == Status.Authenticating ? Loading()
           : ListView(
         children: <Widget>[
-
+          SizedBox(height: 10),
           //                LOGO
           Container(
             alignment: Alignment.topCenter,
-            height: 250,
+            height: 240,
             child: Image.asset(
-              "images/lets_ShopLogo.png",
+              "images/AppLogoOptik.png",
+              height: 230,
               fit: BoxFit.fill,
             ),
           ),
@@ -171,7 +172,7 @@ class _LoginState extends State<Login> {
                             const EdgeInsets.fromLTRB(14.0, 8.0, 14.0, 8.0),
                         child: Material(
                           borderRadius: BorderRadius.circular(10.0),
-                          color: redAccent,
+                          color: blue,
                           elevation: 0.0,
                           child: MaterialButton(
                             onPressed: () async {
@@ -180,7 +181,7 @@ class _LoginState extends State<Login> {
                                   _key.currentState.showSnackBar(SnackBar(
                                     backgroundColor: white,
                                     content: Text('Sign in Failed',
-                                      style: TextStyle(color: redAccent)),
+                                      style: TextStyle(color: blue)),
                                   ));
                                 }
                                 print(user.status);
@@ -230,55 +231,52 @@ class _LoginState extends State<Login> {
                         ),
                       ),
 //                  BUTTON GOOGLE SIGN IN
-                      loading ? Center(
-                        child: CircularProgressIndicator(
-                          valueColor: AlwaysStoppedAnimation<Color>(redAccent))
-                        )
-                       : Material(
-                        borderRadius: BorderRadius.circular(10.0),
-                        color: Colors.blueAccent,
-                        elevation: 0.0,
-                        child: MaterialButton(
-                          minWidth: 200,
-                          onPressed: () async{
-                            setState(() {
-                              loading = true;
-                            });
-                            await auth.googleSignIn();
-                            setState(() {
-                              loading = false;
-                            });
-                          },
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Container(
-                                padding: EdgeInsets.only(left: 10,right: 10),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                  color: white
-                                ),
-                                child: Image(
-                                  image: AssetImage("images/google_logo.png"),
-                                  height: 35.0,
-                                ),
+                      loading 
+                          ? Loading()
+                          : Material(
+                                borderRadius: BorderRadius.circular(10.0),
+                                color: Colors.blueAccent,
+                                elevation: 0.0,
+                                child: MaterialButton(
+                                minWidth: 200,
+                                onPressed: () async{
+                                  setState(() {
+                                    loading = true;
+                                  });
+                                  await auth.googleSignIn();
+                                  setState(() {
+                                    loading = false;
+                                  });
+                                },
+                              child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    Container(
+                                        padding: EdgeInsets.only(left: 10,right: 10),
+                                        decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(10.0),
+                                            color: white),
+                                        child: Image(
+                                          image: AssetImage("images/google_logo.png"),
+                                          height: 35.0,
+                                      ),
+                                    ),
+                                    Padding(
+                                        padding: const EdgeInsets.only(left: 10, right:10),
+                                        child: Text(
+                                          'Sign in with Google',
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                    ),
+                                  ],
                               ),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 10, right:10),
-                                child: Text(
-                                  'Sign in with Google',
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ],
                           ),
-                        ),
-                      ),/*Padding(
+                       ),/*Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Material(
                           borderRadius: BorderRadius.circular(10.0),
@@ -326,7 +324,7 @@ class _LoginState extends State<Login> {
                                 child: new Text(' Sign up',
                                     style: TextStyle(
                                         fontSize: 16,
-                                        color: Colors.deepOrangeAccent[700])
+                                        color: blue)
                                 )
                             ),
                           ],

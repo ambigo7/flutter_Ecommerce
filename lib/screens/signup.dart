@@ -37,12 +37,14 @@ class _signUpState extends State<signUp> {
           ? Loading()
           : ListView(
               children: <Widget>[
+                SizedBox(height: 10),
                 //                LOGO
                 Container(
                   alignment: Alignment.topCenter,
-                  height: 250,
+                  height: 240,
                   child: Image.asset(
-                    "images/lets_ShopLogo.png",
+                    "images/AppLogoOptik.png",
+                    height: 230,
                     fit: BoxFit.fill,
                   ),
                 ),
@@ -266,7 +268,7 @@ class _signUpState extends State<signUp> {
                                   14.0, 8.0, 14.0, 8.0),
                               child: Material(
                                 borderRadius: BorderRadius.circular(10.0),
-                                color: redAccent,
+                                color: blue,
                                 elevation: 0.0,
                                 child: MaterialButton(
                                   onPressed: () async {
@@ -274,7 +276,7 @@ class _signUpState extends State<signUp> {
                                       if (!await user.signUp(_name.text, _email.text, _password.text)) {
                                         _key.currentState.showSnackBar(SnackBar(
                                             content: Text('Sign up Failed',
-                                          style: TextStyle(color: redAccent)),
+                                          style: TextStyle(color: blue)),
                                           backgroundColor: white,
                                         ));
                                         return null;
@@ -318,16 +320,7 @@ class _signUpState extends State<signUp> {
                             ),
 //                  BUTTON GOOGLE SIGN UP
                             loading
-                                ? Center(
-                                    child: CircularProgressIndicator(
-                                        valueColor:
-                                            AlwaysStoppedAnimation<Color>(
-                                                redAccent)))
-                                : //                  BUTTON GOOGLE SIGN IN
-                            loading ? Center(
-                                child: CircularProgressIndicator(
-                                    valueColor: AlwaysStoppedAnimation<Color>(redAccent))
-                            )
+                                ? Loading()
                                 : Material(
                               borderRadius: BorderRadius.circular(10.0),
                               color: Colors.blueAccent,
@@ -392,8 +385,7 @@ class _signUpState extends State<signUp> {
                                       child: new Text(' Sign in',
                                           style: TextStyle(
                                               fontSize: 16,
-                                              color: Colors
-                                                  .deepOrangeAccent[700])))
+                                              color: blue)))
                                 ],
                               ),
                             ),
