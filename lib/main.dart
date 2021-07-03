@@ -16,7 +16,7 @@ import 'package:lets_shop/screens/splash.dart';
 import 'package:lets_shop/commons/color.dart';
 import 'package:lets_shop/screens/home.dart';
 import 'package:lets_shop/provider/user_provider.dart';
-import 'package:lets_shop/screens/login.dart';
+import 'package:lets_shop/screens/login_regist.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,7 +33,7 @@ void main() async {
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(primaryColor: redAccent),
+        theme: ThemeData(primaryColor: blue),
         home: CheckConnection(),
       )));
 }

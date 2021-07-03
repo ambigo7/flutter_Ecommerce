@@ -7,7 +7,7 @@ import 'package:lets_shop/provider/user_provider.dart';
 import 'package:provider/provider.dart';
 
 //MY OWN PACKAGE
-import '../screens/login.dart';
+import '../screens/login_regist.dart';
 
 class myAccount extends StatefulWidget {
   @override
