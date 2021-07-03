@@ -73,16 +73,6 @@ class _CheckConnectionState extends State<CheckConnection> {
   @override
   Widget build(BuildContext context) {
     return PageUI();
-/*    return Consumer<ConnectivityProvider>(
-        builder: (context, model, child){
-          if(model.isOnline != null){
-            return model.isOnline
-                ? ScreensController()
-                : NoInternet();
-          }
-          return Center(child: Loading());
-        }
-    );*/
   }
 
   Widget PageUI(){
