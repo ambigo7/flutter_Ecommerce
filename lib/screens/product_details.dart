@@ -329,16 +329,13 @@ class _ProductDetailsState extends State<ProductDetails> {
                                   color: _selectedColor,
                                   size: _selectedSize);
                               if (success) {
-                                /*setState(() {
-                                  _getCountCart(context);
-                                }); *///TODO: masih gagal belum ketemu kenapa ga mau update datanya.
                                 _key.currentState.showSnackBar(SnackBar(
                                     backgroundColor: white,
                                     content: Text("Product has been Added to Cart",
                                         style: TextStyle(color: blue))));
                                 userProvider.reloadUserModel();
                                 appProvider.changeIsLoading();
-                                /*return null;*/
+                                return null;
                               } else {
                                 _key.currentState.showSnackBar(SnackBar(
                                     backgroundColor: white,
