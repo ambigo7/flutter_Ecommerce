@@ -775,8 +775,6 @@ class _LoginState extends State<Login> {
                       ),
                     ),
 
-/*                    loading ?
-                    Loading() :*/
                     Container(
                       child: Column(
                         children: <Widget>[
@@ -789,9 +787,6 @@ class _LoginState extends State<Login> {
                               elevation: 0.0,
                               child: MaterialButton(
                                 onPressed: () async {
-                                  setState(() {
-                                    loading = true;
-                                  });
                                   if (_formKey.currentState.validate()) {
                                     bool _createAccount = await user.signUp(_name.text, _emailSignUp.text,
                                         _passwordSignUp.text, double.parse(_phoneController.text), _addressController.text);
@@ -803,7 +798,6 @@ class _LoginState extends State<Login> {
                                             style: TextStyle(color: blue)),
                                       ));
                                       setState(() {
-                                        loading = false;
                                         _phoneController.clear();
                                         _addressController.clear();
                                         _selectedPage = Page.verify;
@@ -816,7 +810,6 @@ class _LoginState extends State<Login> {
                                       ));
                                       user.signOut();
                                       setState(() {
-                                        loading = false;
                                         _selectedPage = Page.login;
                                       });
                                     }
@@ -852,10 +845,6 @@ class _LoginState extends State<Login> {
                                 child: MaterialButton(
                                   onPressed: () async{
                                     setState(() {
-                                      loading = true;
-                                    });
-                                    setState(() {
-                                      loading = false;
                                       _name.clear();
                                       _passwordSignUp.clear();
                                       _phoneController.clear();
@@ -878,52 +867,6 @@ class _LoginState extends State<Login> {
                         ],
                       ),
                     ),
-
-/*//                  BUTTON SIGN IN
-                    Padding(
-                      padding:
-                      const EdgeInsets.fromLTRB(14.0, 8.0, 14.0, 8.0),
-                      child: Material(
-                        borderRadius: BorderRadius.circular(10.0),
-                        color: blue,
-                        elevation: 0.0,
-                        child: MaterialButton(
-                          onPressed: () async {
-                            if (_formKey.currentState.validate()) {
-                                  bool _createAccount = await user.signUp(_name.text, _emailSignUp.text,
-                                      _passwordSignUp.text, double.parse(_phoneController.text), _addressController.text);
-                                  print('user create account register : $_createAccount');
-                                  if (_createAccount != true) {
-                                    _key.currentState.showSnackBar(SnackBar(
-                                      backgroundColor: white,
-                                      content: Text('Email already registered',
-                                          style: TextStyle(color: blue)),
-                                    ));
-                                    return null;
-                                }
-                                  _key.currentState.showSnackBar(SnackBar(
-                                    backgroundColor: white,
-                                    content: Text('Please, check your email to active your account',
-                                        style: TextStyle(color: blue)),
-                                  ));
-*//*                                  setState(() {
-                                    _selectedPage = Page.login;
-                                  });*//*
-                              print(user.status);
-                            }
-                          },
-                          minWidth: MediaQuery.of(context).size.width,
-                          child: Text(
-                            'Sign Up',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18.0),
-                          ),
-                        ),
-                      ),
-                    ),*/
                   ],
                 ),
               ),
