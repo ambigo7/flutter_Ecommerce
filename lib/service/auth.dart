@@ -36,6 +36,7 @@ class Auth implements BaseAuth {
             .signInWithCredential(
             credential);
         user = userCredential.user;
+        print('user google sign in : $user');
       } catch (e) {
         print(e.toString());
         return null;
@@ -43,6 +44,24 @@ class Auth implements BaseAuth {
       }
       return user;
     }
+
+    Future<bool> checkEmail(String email)async{
+      final QuerySnapshot result = await FirebaseFirestore.instance
+          .collection('users')
+          .where('email', isEqualTo: email)
+          .get();
+
+      final List<DocumentSnapshot> data = result.docs;
+      String dataTo = data.toString();
+      print('data snapshot check email : $dataTo');
+
+      if(data.length > 0){
+        return false;
+      }else{
+        return true;
+      }
+    }
+    
 
     Future<bool> userExist(String uid)async{
       final snapShot = await FirebaseFirestore.instance

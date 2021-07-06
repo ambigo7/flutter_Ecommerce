@@ -12,7 +12,7 @@ import 'package:lets_shop/commons/color.dart';
 import 'package:lets_shop/commons/loading.dart';
 import 'package:lets_shop/provider/user_provider.dart';
 
-enum Page { login, register}
+enum Page { login, verify, register}
 
 class Login extends StatefulWidget {
   @override
@@ -24,10 +24,12 @@ class _LoginState extends State<Login> {
 
   Page _selectedPage = Page.login;
 
-  User user;
+  User _user;
 
+  bool loadingSignUp = false;
   bool loading = false;
   bool _passwordVisible = true;
+  bool _verifyEmail = false;
   final _formKey = GlobalKey<FormState>();
   final _key = GlobalKey<ScaffoldState>();
 
@@ -37,6 +39,8 @@ class _LoginState extends State<Login> {
   TextEditingController _emailSignUp = TextEditingController();
   TextEditingController _name = TextEditingController();
   TextEditingController _passwordSignUp = TextEditingController();
+  final _phoneController = TextEditingController();
+  TextEditingController _addressController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -192,15 +196,20 @@ class _LoginState extends State<Login> {
                         child: MaterialButton(
                           onPressed: () async {
                             if (_formKey.currentState.validate()) {
-                              if (!await user.signIn(_email.text, _password.text)) {
+                              /*bool _signIn =*/ await user.signIn(_email.text, _password.text);
+                              /*print('Sign IN Event : $_signIn');*/
+                              if (user.msg != null) {
                                 _key.currentState.showSnackBar(SnackBar(
                                   backgroundColor: white,
-                                  content: Text('Sign in Failed',
-                                      style: TextStyle(color: blue)),
+                                  content: user.msg,
                                 ));
                               }
-                              print(user.status);
+                              User x = user.user;
+                              Status y = user.status;
+                              print('user signIn : $x');
+                              print('user status signIn : $y');
                             }
+/*                            return user.user;*/
                           },
                           minWidth: MediaQuery.of(context).size.width,
                           child: Text(
@@ -308,7 +317,7 @@ class _LoginState extends State<Login> {
                                 /*Navigator.of(context).push(MaterialPageRoute(
                                     builder: (context) => signUp()));*/
                                 setState(() {
-                                  _selectedPage = Page.register;
+                                  _selectedPage = Page.verify;
                                 });
                               },
                               child: new Text(' Sign up',
@@ -327,7 +336,7 @@ class _LoginState extends State<Login> {
           ),
         );
       break;
-      case Page.register:
+      case Page.verify:
         return Container(
           child: Padding(
             padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
@@ -540,9 +549,9 @@ class _LoginState extends State<Login> {
                           ),
                         ),
                       ),*/
-
-//                  BUTTON SIGN UP
-                    Padding(
+                    loadingSignUp
+                        ? Loading()
+                        : Padding(
                       padding: const EdgeInsets.fromLTRB(
                           14.0, 8.0, 14.0, 8.0),
                       child: Material(
@@ -550,32 +559,24 @@ class _LoginState extends State<Login> {
                         color: blue,
                         elevation: 0.0,
                         child: MaterialButton(
-                          onPressed: () async {
-                            if (_formKey.currentState.validate()) {
-                              if (!await user.signUp(_name.text, _emailSignUp.text, _passwordSignUp.text)) {
-                                _key.currentState.showSnackBar(SnackBar(
-                                  content: Text('Sign up Failed',
-                                      style: TextStyle(color: blue)),
-                                  backgroundColor: white,
-                                ));
-                                return null;
-                              }
-/*                                      changeScreenReplacement(
-                                          context, controller_Page());*/
-                              print(user.status);
+                          onPressed: () {
+                            if(_formKey.currentState.validate()){
+                              setState(() {
+                                _selectedPage = Page.register;
+                              });
                             }
                           },
                           minWidth: MediaQuery.of(context).size.width,
                           child: Text(
-                            'Sign up',
+                            'Next',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 18.0),
                           ),
-                        ),
-                      ),
+                        )
+                      )
                     ),
                     //                  Divider OR
                     Padding(
@@ -684,6 +685,245 @@ class _LoginState extends State<Login> {
                                     ),
                                   ),
                                 )),*/
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+        break;
+      case Page.register:
+        return Container(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+            child: Container(
+              decoration: BoxDecoration(
+                  color: white,
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey[350],
+                      blurRadius: 20,
+                    )
+                  ]),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  children: <Widget>[
+//                      TEXTBOX EMAIL
+                    Padding(
+                      padding:
+                      const EdgeInsets.fromLTRB(14.0, 8.0, 14.0, 8.0),
+                      child: Material(
+                        borderRadius: BorderRadius.circular(10.0),
+                        color: Colors.black.withOpacity(0.1),
+                        elevation: 0.0,
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 12.0),
+                          child: ListTile(
+                            title: TextFormField(
+                              controller: _phoneController,
+                              decoration: InputDecoration(
+                                  hintText: 'Phone Number(ex: 08999992378)',
+                                  icon: Icon(Icons.local_phone_outlined),
+                                  border: InputBorder.none),
+                              keyboardType: TextInputType.phone,
+//                              VALIDASI REGEX
+                              validator: (value) {
+                                  if (value.isEmpty) {
+                                    return 'You must enter the quantity';
+                                  }
+                                  return null;
+                                },
+                            )
+                            ),
+                          ),
+                        ),
+                      ),
+//                  TEXTBOX PASSWORD
+                    Padding(
+                      padding:
+                      const EdgeInsets.fromLTRB(14.0, 8.0, 14.0, 8.0),
+                      child: Material(
+                        borderRadius: BorderRadius.circular(10.0),
+                        color: Colors.black.withOpacity(0.1),
+                        elevation: 0.0,
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 12.0),
+                          child: ListTile(
+                            title: TextFormField(
+                              keyboardType: TextInputType.multiline,
+                              maxLines: 5,
+                              controller: _addressController,
+                              decoration: InputDecoration(
+                                hintText: 'Address',
+                                icon: Padding(
+                                  padding: const EdgeInsets.only(bottom: 80),
+                                  child: Icon(Icons.home_outlined),
+                                ),
+                                border: InputBorder.none
+                              ),
+                              validator: (value) {
+                                if (value.isEmpty) {
+                                  return 'You must enter the address';
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+
+/*                    loading ?
+                    Loading() :*/
+                    Container(
+                      child: Column(
+                        children: <Widget>[
+                          Padding(
+                            padding:
+                            const EdgeInsets.fromLTRB(14.0, 8.0, 14.0, 8.0),
+                            child: Material(
+                              borderRadius: BorderRadius.circular(10.0),
+                              color: blue,
+                              elevation: 0.0,
+                              child: MaterialButton(
+                                onPressed: () async {
+                                  setState(() {
+                                    loading = true;
+                                  });
+                                  if (_formKey.currentState.validate()) {
+                                    bool _createAccount = await user.signUp(_name.text, _emailSignUp.text,
+                                        _passwordSignUp.text, double.parse(_phoneController.text), _addressController.text);
+                                    print('user create account register : $_createAccount');
+                                    if (_createAccount != true) {
+                                      _key.currentState.showSnackBar(SnackBar(
+                                        backgroundColor: white,
+                                        content: Text('Email already registered. Please, try again',
+                                            style: TextStyle(color: blue)),
+                                      ));
+                                      setState(() {
+                                        loading = false;
+                                        _phoneController.clear();
+                                        _addressController.clear();
+                                        _selectedPage = Page.verify;
+                                      });
+                                    }else{
+                                      _key.currentState.showSnackBar(SnackBar(
+                                        backgroundColor: white,
+                                        content: Text('Please, check your email to active your account',
+                                            style: TextStyle(color: blue)),
+                                      ));
+                                      user.signOut();
+                                      setState(() {
+                                        loading = false;
+                                        _selectedPage = Page.login;
+                                      });
+                                    }
+                                    _user = user.user;
+                                    Status statusSignUp = user.status;
+                                    print('user userSignUp : $_user');
+                                    print('user statusSignUp : $statusSignUp');
+                                  }
+                                  setState(() {
+                                    loading = false;
+                                  });
+                                },
+                                minWidth: MediaQuery.of(context).size.width,
+                                child: Text(
+                                  'Sign Up',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18.0),
+                                ),
+                              ),
+                            ),
+                          ),
+
+                          Padding(
+                              padding:
+                              const EdgeInsets.fromLTRB(14.0, 8.0, 14.0, 8.0),
+                              child: Material(
+                                borderRadius: BorderRadius.circular(10.0),
+                                color: blue,
+                                elevation: 0.0,
+                                child: MaterialButton(
+                                  onPressed: () async{
+                                    setState(() {
+                                      loading = true;
+                                    });
+                                    setState(() {
+                                      loading = false;
+                                      _name.clear();
+                                      _passwordSignUp.clear();
+                                      _phoneController.clear();
+                                      _addressController.clear();
+                                      _selectedPage = Page.login;
+                                    });
+                                  },
+                                  minWidth: MediaQuery.of(context).size.width,
+                                  child: Text(
+                                    'Cancel',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18.0),
+                                  ),
+                                ),
+                              )
+                          ),
+                        ],
+                      ),
+                    ),
+
+/*//                  BUTTON SIGN IN
+                    Padding(
+                      padding:
+                      const EdgeInsets.fromLTRB(14.0, 8.0, 14.0, 8.0),
+                      child: Material(
+                        borderRadius: BorderRadius.circular(10.0),
+                        color: blue,
+                        elevation: 0.0,
+                        child: MaterialButton(
+                          onPressed: () async {
+                            if (_formKey.currentState.validate()) {
+                                  bool _createAccount = await user.signUp(_name.text, _emailSignUp.text,
+                                      _passwordSignUp.text, double.parse(_phoneController.text), _addressController.text);
+                                  print('user create account register : $_createAccount');
+                                  if (_createAccount != true) {
+                                    _key.currentState.showSnackBar(SnackBar(
+                                      backgroundColor: white,
+                                      content: Text('Email already registered',
+                                          style: TextStyle(color: blue)),
+                                    ));
+                                    return null;
+                                }
+                                  _key.currentState.showSnackBar(SnackBar(
+                                    backgroundColor: white,
+                                    content: Text('Please, check your email to active your account',
+                                        style: TextStyle(color: blue)),
+                                  ));
+*//*                                  setState(() {
+                                    _selectedPage = Page.login;
+                                  });*//*
+                              print(user.status);
+                            }
+                          },
+                          minWidth: MediaQuery.of(context).size.width,
+                          child: Text(
+                            'Sign Up',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18.0),
+                          ),
+                        ),
+                      ),
+                    ),*/
                   ],
                 ),
               ),

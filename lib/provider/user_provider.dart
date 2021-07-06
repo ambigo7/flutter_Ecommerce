@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:lets_shop/commons/color.dart';
 import 'package:lets_shop/models/cart_item.dart';
 import 'package:lets_shop/models/order.dart';
 import 'package:lets_shop/models/product.dart';
@@ -19,7 +20,7 @@ class UserProvider with ChangeNotifier {
   UserServices _userServices = UserServices();
   OrderServices _orderServices = OrderServices();
 
-  Auth authGoogleSign = Auth();
+  Auth authService = Auth();
 
   FirebaseAuth _auth;
   User _user;
@@ -27,24 +28,36 @@ class UserProvider with ChangeNotifier {
 
   UserModel _userModel;
   OrderModel _orderModel;
+  Widget _msg;
 
 //GETTER read data
   UserModel get userModel => _userModel;
   OrderModel get orderModel => _orderModel;
   Status get status => _status;
   User get user => _user;
+  Widget get msg => _msg;
 
 
   UserProvider.initialize() : _auth = FirebaseAuth.instance {
-    _auth.authStateChanges().listen(_onStateChanged,);
+    _auth.authStateChanges().listen(_onStateChanged);
   }
 
   Future<bool> signIn(String email, String password) async {
+    User userSignIn;
     try {
       _status = Status.Authenticating;
       notifyListeners();
-      await _auth.signInWithEmailAndPassword(email: email, password: password);
-      print(_status);
+      UserCredential _userCred = await _auth.signInWithEmailAndPassword(email: email, password: password);
+      userSignIn = _userCred.user;
+      print('userprovider user : $userSignIn');
+      if(userSignIn.emailVerified != true){
+        _msg = Text('Sign In Failed\n Please, check your email to active your account',
+          style: TextStyle(color: blue),);
+        signOut(); //ngebugggggggg!!!!
+      }else{
+        _msg = Text('Sign In Success',
+          style: TextStyle(color: blue),);
+      }
       return true;
     } catch (e) {
       _status = Status.Unauthenticated;
@@ -54,46 +67,43 @@ class UserProvider with ChangeNotifier {
     }
   }
 
-  Future<bool> signUp(String name, String email, String password) async {
+  Future<bool> signUp(String name, String email, String password, double phone,String address) async {
     try {
       _status = Status.Authenticating;
       notifyListeners();
-      await _auth.createUserWithEmailAndPassword(email: email, password: password)
-          .then((user) async{
-            print("Ready to Creating User..");
-            _userServices.createUser(
+      bool _checkEmail = await authService.checkEmail(email);
+      print('check email : $_checkEmail');
+      if(_checkEmail != false) {
+         await _auth.createUserWithEmailAndPassword(
+            email: email, password: password)
+            .then((user) async {
+          print("Ready to send email");
+          await user.user.sendEmailVerification();
+          print("email already sended");
+          print("Ready to Creating User..");
+          _userServices.createUser(
               {
                 "name": name,
                 "email": email,
                 "uid" : user.user.uid,
-              }
-            );
-            print("User Was Created");
-      });
-      print(_status);
-      return true;
+                "phone": phone,
+                "address": address
+              });
+          print("user has been created from signUp method");
+        });
+        return true;
+      }else{
+        return false;
+      }
     } catch (e) {
       _status = Status.Unauthenticated;
       notifyListeners();
+      print("An error occured while trying to send email verification");
       print(e.toString());
       return false;
     }
   }
 
-/*  Future<bool> googleSign() async{
-    try{
-      _status = Status.Authenticating;
-      notifyListeners();
-      await authGoogleSign.googleSignIn();
-
-    }catch (e) {
-      _status = Status.Unauthenticated;
-      notifyListeners();
-      print(e.toString());
-      return false;
-    }
-  }*/
-  
   Future signOut() async{
     _auth.signOut();
     _status = Status.Unauthenticated;
@@ -102,12 +112,17 @@ class UserProvider with ChangeNotifier {
   }
 
   Future<void> _onStateChanged(User user) async {
-    if (user == null) {
+    print('user onstateChanged : $user');
+    bool verifyEmail = user?.emailVerified ?? false;
+    if (user == null || verifyEmail != true) {
+      print('user null onstate : '+ user.toString());
+        _msg = Text('Sign In Failed\n Email/Password incorrect',
+          style: TextStyle(color: blue),);
       _status = Status.Unauthenticated;
-    } else {
+    }else {
       _user = user;
       String testUser = user.uid;
-      bool validateUser = await authGoogleSign.userExist(user.uid);
+      bool validateUser = await authService.userExist(user.uid);
       print('validateUser : $validateUser');
       //TODO: berhasil!!!! pake cara 3
       if(validateUser != false) {
@@ -129,14 +144,6 @@ class UserProvider with ChangeNotifier {
       print("My Cart ${user.email}: ${userModel.cart.length}");
       print("My Cart ${user.email}: ${userModel.cart.length}");
       print("My Cart ${user.email}: ${userModel.cart.length}");
-/*      print("My Cart ${user.email}: ${userModel.cart.length}");
-      print("My Cart ${user.email}: ${userModel.cart.length}");*/
-
-/*      print("My Orders ${user.email} : ${orderModel.cart.length}");
-      print("My Orders ${user.email} : ${orderModel.cart.length}");
-      print("My Orders ${user.email} : ${orderModel.cart.length}");
-      print("My Orders ${user.email} : ${orderModel.cart.length}");
-      print("My Orders ${user.email} : ${orderModel.cart.length}");*/
 
       _status = Status.Authenticated;
     }
