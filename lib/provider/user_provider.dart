@@ -50,10 +50,10 @@ class UserProvider with ChangeNotifier {
       UserCredential _userCred = await _auth.signInWithEmailAndPassword(email: email, password: password);
       userSignIn = _userCred.user;
       print('userprovider user : $userSignIn');
-      if(userSignIn.emailVerified != true){
+      if(!userSignIn.emailVerified){
         _msg = Text('Sign In Failed\n Please, check your email to active your account',
           style: TextStyle(color: blue),);
-        signOut(); //ngebugggggggg!!!!
+        signOut();
       }else{
         _msg = Text('Sign In Success',
           style: TextStyle(color: blue),);
@@ -67,7 +67,7 @@ class UserProvider with ChangeNotifier {
     }
   }
 
-  Future<bool> signUp(String name, String email, String password, double phone,String address) async {
+  Future<bool> signUp(String name, String email, String password, int phone,String address) async {
     try {
       _status = Status.Authenticating;
       notifyListeners();
@@ -124,7 +124,6 @@ class UserProvider with ChangeNotifier {
       String testUser = user.uid;
       bool validateUser = await authService.userExist(user.uid);
       print('validateUser : $validateUser');
-      //TODO: berhasil!!!! pake cara 3
       if(validateUser != false) {
         print('User does not exist');
         print("Ready to Creating User..");
@@ -134,6 +133,8 @@ class UserProvider with ChangeNotifier {
               "photo": user.photoURL,
               "email": user.email,
               "uid": user.uid,
+              "phone":user.phoneNumber, //update belom commit
+              "address": "" //update belom commit
             });
         print('User was Created');
       }
@@ -142,8 +143,8 @@ class UserProvider with ChangeNotifier {
       print('cek login user uid sudah getuser: $testUser');
       //just For Debugging
       print("My Cart ${user.email}: ${userModel.cart.length}");
-      print("My Cart ${user.email}: ${userModel.cart.length}");
-      print("My Cart ${user.email}: ${userModel.cart.length}");
+      print("My address ${user.email}: ${userModel.address}");
+      print("My phone ${user.email}: ${userModel.phone}");
 
       _status = Status.Authenticated;
     }

@@ -5,21 +5,24 @@ class UserModel{
   static const ID = 'uid';
   static const NAME = 'name';
   static const EMAIL = 'email';
-  static const STRIPE_ID = 'stripeId';
+  static const ADDRESS = 'address';
+  static const PHONE = 'phone';
   static const CART = 'cart';
 
 // Private Variabel
   String _id;
   String _name;
   String _email;
-  String _stripeId;
+  String _address;
+  int _phone;
   int _priceSum = 0;
 
   //Getter read only, private variabel
   String get id => _id;
   String get name => _name;
   String get email => _email;
-  String get stripeId => _stripeId;
+  String get address => _address;
+  int get phone => _phone;
 
 //Public variabel
   List<CartItemModel> cart;
@@ -32,7 +35,8 @@ class UserModel{
     _id = snapshot.data()[ID];
     _name = snapshot.data()[NAME];
     _email = snapshot.data()[EMAIL];
-    _stripeId = snapshot.data()[STRIPE_ID] ?? "";
+    _address = snapshot.data()[ADDRESS] ?? "";
+    _phone = snapshot.data()[PHONE] ?? 0;
     countCart = snapshot.data()[CART] == null ? 0 : snapshot.data()[CART].length;
     cart = _convertCartItems(snapshot.data()[CART] ?? []);
     totalCartPrice = snapshot.data()[CART] == null ? 0 : getTotalPrice(cart: snapshot.data()[CART]);

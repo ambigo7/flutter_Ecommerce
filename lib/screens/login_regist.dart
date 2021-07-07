@@ -724,14 +724,14 @@ class _LoginState extends State<Login> {
                             title: TextFormField(
                               controller: _phoneController,
                               decoration: InputDecoration(
-                                  hintText: 'Phone Number(ex: 08999992378)',
+                                  hintText: 'Phone Number(ex: 628999992378)',
                                   icon: Icon(Icons.local_phone_outlined),
                                   border: InputBorder.none),
                               keyboardType: TextInputType.phone,
 //                              VALIDASI REGEX
                               validator: (value) {
                                   if (value.isEmpty) {
-                                    return 'You must enter the quantity';
+                                    return 'You must enter the phone number';
                                   }
                                   return null;
                                 },
@@ -789,7 +789,7 @@ class _LoginState extends State<Login> {
                                 onPressed: () async {
                                   if (_formKey.currentState.validate()) {
                                     bool _createAccount = await user.signUp(_name.text, _emailSignUp.text,
-                                        _passwordSignUp.text, double.parse(_phoneController.text), _addressController.text);
+                                        _passwordSignUp.text, int.parse(_phoneController.text), _addressController.text);
                                     print('user create account register : $_createAccount');
                                     if (_createAccount != true) {
                                       _key.currentState.showSnackBar(SnackBar(
@@ -810,6 +810,11 @@ class _LoginState extends State<Login> {
                                       ));
                                       user.signOut();
                                       setState(() {
+                                        _name.clear();
+                                        _emailSignUp.clear();
+                                        _passwordSignUp.clear();
+                                        _phoneController.clear();
+                                        _addressController.clear();
                                         _selectedPage = Page.login;
                                       });
                                     }
