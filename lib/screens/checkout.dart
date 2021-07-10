@@ -31,12 +31,12 @@ class _CheckOutState extends State<CheckOut> {
 
   TextEditingController _message = TextEditingController();
 
-  _getShippingCharge(int charges){
+  getShippingCharge(int charges){
     setState(() {
       _selectedShippingCharged = charges;
     });
   }
-  _getTotalPayment(int shipping, int product){
+  getTotalPayment(int shipping, int product){
     setState(() {
       _totalPayment = shipping+product;
     });
@@ -45,8 +45,8 @@ class _CheckOutState extends State<CheckOut> {
 
   @override
   void initState() {
-    _getShippingCharge(0);
-    _getTotalPayment(0, widget.total);
+    getShippingCharge(0);
+    getTotalPayment(0, widget.total);
     super.initState();
   }
 
@@ -135,10 +135,10 @@ class _CheckOutState extends State<CheckOut> {
                                   children: <Widget>[
                                     InkWell(
                                       onTap: (){
-                                        _getShippingCharge(10000);
+                                        getShippingCharge(10000);
                                         checkListExpress = true;
                                         checkListPick = false;
-                                        _getTotalPayment(_selectedShippingCharged, userProvider.userModel.totalCartPrice);
+                                        getTotalPayment(_selectedShippingCharged, userProvider.userModel.totalCartPrice);
                                         print('total payment : $_totalPayment');
                                         print('ceklist : $checkListExpress');
                                         print('shipping value : $_selectedShippingCharged');
@@ -158,10 +158,10 @@ class _CheckOutState extends State<CheckOut> {
                                     ),
                                     InkWell(
                                       onTap: (){
-                                        _getShippingCharge(2500);
+                                        getShippingCharge(2500);
                                         checkListExpress = false;
                                         checkListPick = true;
-                                        _getTotalPayment(_selectedShippingCharged, userProvider.userModel.totalCartPrice);
+                                        getTotalPayment(_selectedShippingCharged, userProvider.userModel.totalCartPrice);
                                         print('total payment : $_totalPayment');
                                         print('ceklist express : $checkListExpress');
                                         print('ceklist pick : $checkListPick');
