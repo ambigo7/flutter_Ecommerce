@@ -19,10 +19,10 @@ class OrdersScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        iconTheme: IconThemeData(color: redAccent),
+        iconTheme: IconThemeData(color: blue),
         backgroundColor: white,
         elevation: 0.0,
-        title: CustomText(text: "Orders History", size: 20, color: redAccent, weigth: FontWeight.bold,),
+        title: CustomText(text: "Orders History", size: 20, color: blue, weigth: FontWeight.bold,),
         centerTitle: true,
         leading: IconButton(
             icon: Icon(Icons.arrow_back_ios),
@@ -37,7 +37,7 @@ class OrdersScreen extends StatelessWidget {
             OrderModel _order = userProvider.orders[index];
             return ListTile(
               leading: Container(
-                color: redAccent,
+                color: blue,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Container(

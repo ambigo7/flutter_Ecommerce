@@ -118,10 +118,6 @@ class _HomePageState extends State<HomePage> {
                                 color: Colors.white,
                               ),
                             ),
-                      /*Image.network(
-                      _user.photoURL,
-                      fit: BoxFit.fitHeight,
-                    ),*/
                     ),
                   ),
                 ),

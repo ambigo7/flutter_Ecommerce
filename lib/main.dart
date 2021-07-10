@@ -35,7 +35,9 @@ void main() async {
         debugShowCheckedModeBanner: false,
         theme: ThemeData(primaryColor: blue),
         home: CheckConnection(),
-      )));
+      )
+    )
+  );
 }
 
 

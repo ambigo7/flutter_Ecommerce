@@ -37,7 +37,6 @@ class UserProvider with ChangeNotifier {
   User get user => _user;
   Widget get msg => _msg;
 
-
   UserProvider.initialize() : _auth = FirebaseAuth.instance {
     _auth.authStateChanges().listen(_onStateChanged);
   }

@@ -421,43 +421,6 @@ class _LoginState extends State<Login> {
                         ),
                       ),
                     ),
-
-/*//                  RADIO BUTTON GENDER
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(14.0, 8.0, 14.0, 8.0),
-                        child: Row(
-                          children: <Widget>[
-*/ /*                          Padding(
-                              padding: const EdgeInsets.fromLTRB(
-                                  14.0, 8.0, 0.0, 8.0),
-                              child: Icon(Icons.people_outline,
-                                  color: Colors.grey[600]),
-                            ),*/ /*
-                            Expanded(
-                                child: ListTile(
-                                  title: Text('Male',
-                                  textAlign: TextAlign.end,
-                                  style: TextStyle(color: Colors.black)),
-                                  trailing: Radio(
-                                  activeColor: Colors.deepOrangeAccent[700],
-                                  value: 'male',
-                                  groupValue: groupValue,
-                                  onChanged: (e) => valueChanged(e)),
-                            )),
-                            Expanded(
-                                child: ListTile(
-                                  title: Text('Female',
-                                  textAlign: TextAlign.end,
-                                  style: TextStyle(color: Colors.black)),
-                                  trailing: Radio(
-                                  activeColor: Colors.deepOrangeAccent[700],
-                                  value: 'female',
-                                  groupValue: groupValue,
-                                  onChanged: (e) => valueChanged(e)),
-                            )),
-                          ],
-                        ),
-                      ),*/
 //                  TEXTBOX PASSWORD
                     Padding(
                       padding: const EdgeInsets.fromLTRB(

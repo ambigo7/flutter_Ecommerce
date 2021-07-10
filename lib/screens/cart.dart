@@ -1,8 +1,12 @@
+import 'dart:ui';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 //PACKAGE MONEY FORMATTER
 import 'package:intl/intl.dart';
 import 'package:lets_shop/commons/color.dart';
+import 'package:lets_shop/commons/common.dart';
 import 'package:lets_shop/commons/loading.dart';
 import 'package:lets_shop/components/custom_text.dart';
 import 'package:lets_shop/models/cart_item.dart';
@@ -12,7 +16,10 @@ import 'package:lets_shop/provider/app_provider.dart';
 import 'package:lets_shop/provider/user_provider.dart';
 import 'package:lets_shop/service/order.dart';
 import 'package:provider/provider.dart';
+import 'package:transparent_image/transparent_image.dart';
 import 'package:uuid/uuid.dart';
+
+import 'checkout.dart';
 
 class CartScreen extends StatefulWidget {
   @override
@@ -24,6 +31,12 @@ class _CartScreenState extends State<CartScreen> {
   OrderServices _orderServices = OrderServices();
 
   final formatCurrency = new NumberFormat.simpleCurrency(locale: 'id_ID');
+  final formatDate = new DateFormat.MMMMd();
+
+  final dateTomorrow = DateTime.now().add(Duration(days: 1));
+  bool checkListExpress = false;
+  bool checkListPick = false;
+
 
   @override
   Widget build(BuildContext context) {
@@ -70,11 +83,12 @@ class _CartScreenState extends State<CartScreen> {
                             bottomLeft: Radius.circular(20),
                             topLeft: Radius.circular(20),
                           ),
-                          child: Image.network(
-                            userProvider.userModel.cart[index].image,
+                          child: FadeInImage.memoryNetwork(
+                            placeholder: kTransparentImage,
+                            image: userProvider.userModel.cart[index].image,
+                            fit: BoxFit.cover,
                             height: 120,
                             width: 140,
-                            fit: BoxFit.fill,
                           ),
                         ),
                         SizedBox(
@@ -122,7 +136,7 @@ class _CartScreenState extends State<CartScreen> {
                               IconButton(
                                   icon: Icon(
                                     Icons.delete_outline_rounded,
-                                    color: blue,
+                                    color: redAccent,
                                   ),
                                   onPressed: () async {
                                     appProvider.changeIsLoading();
@@ -154,168 +168,35 @@ class _CartScreenState extends State<CartScreen> {
               }),
       //
       bottomNavigationBar: Container(
-        color: white.withOpacity(0.6),
+        color: white,
         height: 70,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              RichText(
-                text: TextSpan(children: [
-                  TextSpan(
-                      text: "SubTotal: ",
-                      style: TextStyle(
-                          color: grey,
-                          fontSize: 22,
-                          fontWeight: FontWeight.w400)),
-                  TextSpan(
-                      text:
-                          "${formatCurrency.format(userProvider.userModel.totalCartPrice)}",
-                      style: TextStyle(
-                          color: black,
-                          fontSize: 22,
-                          fontWeight: FontWeight.normal)),
-                ]),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  CustomText(text: 'SubTotal', color: grey, size: 18,),
+                  CustomText(text: '${formatCurrency.format(userProvider.userModel.totalCartPrice)}', size: 22,),
+                ],
               ),
               Container(
+                width: 200,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20), color: blue),
                 child: FlatButton(
                     onPressed: () {
                       if (userProvider.userModel.totalCartPrice == 0) {
-                        showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return Dialog(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20.0)),
-                                //this right here
-                                child: Container(
-                                  height: 200,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(12.0),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: <Widget>[
-                                            Text(
-                                              'Your cart is empty',
-                                              textAlign: TextAlign.center,
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              );
-                            });
+                        checkoutDialogEmpty();
                         return null;
                       }
-                      showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return Dialog(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20.0)),
-                              //this right here
-                              child: Container(
-                                height: 200,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(12.0),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'You will be charged ${formatCurrency.format(userProvider.userModel.totalCartPrice)} upon delivery!',
-                                        textAlign: TextAlign.center,
-                                      ),
-                                      SizedBox(
-                                        width: 320.0,
-                                        child: RaisedButton(
-                                          onPressed: () async {
-                                            var uuid = Uuid();
-                                            String id = uuid.v4();
-                                            _orderServices.createOrder(
-                                                userId: userProvider.user.uid,
-                                                id: id,
-                                                description:
-                                                    "Some random description", //TODO:Cari cara biar bisa panggil product kesini
-                                                status: "Incomplete",
-                                                totalPrice: userProvider
-                                                    .userModel.totalCartPrice,
-                                                cart: userProvider
-                                                    .userModel.cart);
-
-                                            for (CartItemModel cartItem
-                                                in userProvider
-                                                    .userModel.cart) {
-                                              bool value = await userProvider
-                                                  .removeFromCart(
-                                                      cartItem: cartItem);
-                                              if (value) {
-                                                userProvider.reloadUserModel();
-                                                print("Item added to cart");
-                                                _key.currentState.showSnackBar(
-                                                    SnackBar(
-                                                        backgroundColor: white,
-                                                        content: Text(
-                                                            "Removed from Cart!",
-                                                            style: TextStyle(
-                                                                color: blue))));
-                                              } else {
-                                                print("ITEM WAS NOT REMOVED");
-                                              }
-                                            }
-                                            _key.currentState.showSnackBar(
-                                                SnackBar(
-                                                    backgroundColor: white,
-                                                    content: Text(
-                                                        "Order created!",
-                                                        style: TextStyle(
-                                                            color: blue))));
-                                            Navigator.pop(context);
-                                          },
-                                          child: Text(
-                                            "Accept",
-                                            style:
-                                                TextStyle(color: Colors.white),
-                                          ),
-                                          color: Colors
-                                              .green /*const Color(0xFF1BC0C5)*/,
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: 320.0,
-                                        child: RaisedButton(
-                                            onPressed: () {
-                                              Navigator.pop(context);
-                                            },
-                                            child: Text(
-                                              "Reject",
-                                              style: TextStyle(
-                                                  color: Colors.white),
-                                            ),
-                                            color: blue),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            );
-                          });
+                      changeScreen(context, CheckOut(total: userProvider.userModel.totalCartPrice,));
                     },
                     child: CustomText(
-                      text: "Check out",
+                      text: "Check out ("+userProvider.userModel.countCart.toString()+")",
                       size: 20,
                       color: white,
                       weigth: FontWeight.normal,
@@ -326,5 +207,238 @@ class _CartScreenState extends State<CartScreen> {
         ),
       ),
     );
+  }
+
+  Widget shippingAddress(){
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    return Container(
+      color: grey.withOpacity(0.1),
+      child: GestureDetector(
+        onTap: (){
+
+        },
+        child: ListTile(
+          title: Row(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(bottom: 3),
+                child: Icon(
+                  Icons.location_on_outlined,
+                  color: blue,
+                  size: 19,),
+              ),
+              CustomText(text: 'Shipping Address',)
+            ],
+          ),
+          subtitle: Padding(
+            padding: const EdgeInsets.only(left: 20, top: 3),
+            child: CustomText(text: userProvider.userModel.name+' | (+'+userProvider.userModel.phone.toString()+')\n'
+                +userProvider.userModel.address,),
+          ),
+          trailing: Icon(Icons.arrow_forward_ios_outlined),
+        ),
+      ),
+    );
+  }
+
+  Widget dashedHorizontalLine(){
+    return Container(
+      color: grey.withOpacity(0.1),
+      child: Row(
+        children: [
+          for (int i = 0; i < 20; i++)
+            Expanded(
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Divider(
+                      color: blue,
+                      thickness: 2,
+                    ),
+                  ),
+                  Expanded(
+                    child: Container(),
+                  ),
+                ],
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  void checkoutDialog(){
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    var dialog = Dialog(
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20.0)),
+      //this right here
+      child: Container(
+        height: 500,
+        width: 500,
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Stack(
+            children: [
+
+              Positioned(
+                right: 20,
+                left: 100,
+                child: CustomText(
+                    text: 'Check Out',
+                    size: 25, color: blue,
+                    weigth: FontWeight.bold),
+              ),
+
+              //Pake padding karna ga bisa kalo pake positioned
+              Padding(
+                padding: const EdgeInsets.only(top: 320),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    CustomText(text: 'Total'),
+                    CustomText(text: '${formatCurrency.format(userProvider.userModel.totalCartPrice)}')
+                  ],
+                ),
+              ),
+
+
+
+              //Pake padding karna ga bisa kalo pake positioned
+              Padding(
+                padding: const EdgeInsets.only(top: 335),
+                child: Divider(color: grey, thickness: 1.5),
+              ),
+
+              Padding(
+                padding: const EdgeInsets.only(top: 340),
+                child: Container(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      CustomText(text: 'Payment Method', weigth: FontWeight.bold),
+/*                      Column(
+*//*                        crossAxisAlignment: CrossAxisAlignment.start,*//*
+                        children: shippingList.map((_shippingList) => Row(
+                          children: <Widget>[
+                            Radio(
+                              value: _shippingList.index,
+                              groupValue: indexShipping,
+                              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                              activeColor: black,
+                              onChanged: (value){
+                                setState(() {
+                                  indexShipping = value;
+                                  *//*_selectedShippingValue = _shippingList.value;*//*
+                                  print('Selected Value : $_selectedShippingValue');
+                                });
+                              },
+                            ),
+                            CustomText(text: _shippingList.text, size: 10,),
+                          ],
+                        )).toList(),
+                      )*/
+                    ],
+                  )),
+              ),
+
+              Positioned(
+                top: 435,
+                child: Container(
+                  height: 40,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20), color: blue),
+                  width: 305,
+                  child: FlatButton(
+                    onPressed: () async {
+                      var uuid = Uuid();
+                      String id = uuid.v4();
+                      _orderServices.createOrder(
+                          userId: userProvider.user.uid,
+                          id: id,
+                          description:
+                          "Some random description", //TODO:Cari cara biar bisa panggil product kesini
+                          status: "Incomplete",
+                          totalPrice: userProvider
+                              .userModel.totalCartPrice,
+                          cart: userProvider
+                              .userModel.cart);
+
+                      for (CartItemModel cartItem
+                      in userProvider
+                          .userModel.cart) {
+                        bool value = await userProvider
+                            .removeFromCart(
+                            cartItem: cartItem);
+                        if (value) {
+                          userProvider.reloadUserModel();
+                          print("Item added to cart");
+                          _key.currentState.showSnackBar(
+                              SnackBar(
+                                  backgroundColor: white,
+                                  content: Text(
+                                      "Removed from Cart!",
+                                      style: TextStyle(
+                                          color: blue))));
+                        } else {
+                          print("ITEM WAS NOT REMOVED");
+                        }
+                      }
+                      _key.currentState.showSnackBar(
+                          SnackBar(
+                              backgroundColor: white,
+                              content: Text(
+                                  "Order created!",
+                                  style: TextStyle(
+                                      color: blue))));
+                      Navigator.pop(context);
+                    },
+                    child: Text(
+                      "Payment Confirmation",
+                      style:
+                      TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+    showDialog(context: context, builder: (_) => dialog);
+  }
+
+  void checkoutDialogEmpty(){
+    var dialog = Dialog(
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20.0)),
+      //this right here
+      child: Container(
+        height: 200,
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Column(
+            mainAxisAlignment:
+            MainAxisAlignment.center,
+            crossAxisAlignment:
+            CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment:
+                MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    'Your cart is empty',
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+    showDialog(context: context, builder: (_) => dialog);
   }
 }
