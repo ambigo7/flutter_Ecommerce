@@ -312,7 +312,7 @@ class _CheckOutState extends State<CheckOut> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   CustomText(text: 'Total Payment', color: grey, size: 18,),
-                  CustomText(text: '${formatCurrency.format(userProvider.userModel.totalCartPrice)}', size: 22,),
+                  CustomText(text: '${formatCurrency.format(_totalPayment)}', size: 22,),
                 ],
               ),
               Container(
