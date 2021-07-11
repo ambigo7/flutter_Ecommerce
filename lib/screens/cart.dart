@@ -186,7 +186,7 @@ class _CartScreenState extends State<CartScreen> {
               Container(
                 width: 200,
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20), color: blue),
+                    borderRadius: BorderRadius.circular(10), color: blue),
                 child: FlatButton(
                     onPressed: () {
                       if (userProvider.userModel.totalCartPrice == 0) {
