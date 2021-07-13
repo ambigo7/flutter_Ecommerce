@@ -150,10 +150,18 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future countCart(String currentUser) async{
-    _userModel = await _userServices.getUserById(currentUser);
-    print("My Cart Stream ${user.email}: ${userModel.cart.length}");
-    notifyListeners();
+  Future<bool> updatePhoneAddress(userId, phone, address) async{
+    try{
+      _userServices.updatePhoneAddress(userId,
+          {
+            "address": address,
+            "phone": int.parse(phone),
+          });
+      return true;
+    } catch (e) {
+      print("THE ERROR ${e.toString()}");
+      return false;
+    }
   }
 
   Future<bool> addToCart({ProductModel product, String size, String color}) async {

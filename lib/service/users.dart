@@ -15,6 +15,15 @@ class UserServices{
       print('ERROR: ${e.toString()}');
     }
   }
+
+  void updatePhoneAddress(String userId, Map<String, dynamic> data){
+    try {
+      users.doc(userId).update(data);
+    }catch(e){
+      print('ERROR: ${e.toString()}');
+    }
+  }
+
   Future<UserModel> getUserById(String id) =>
       users
           .doc(id)

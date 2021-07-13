@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lets_shop/commons/color.dart';
+import 'package:lets_shop/commons/loading.dart';
 import 'package:lets_shop/components/custom_text.dart';
 import 'package:intl/intl.dart';
 import 'package:lets_shop/provider/user_provider.dart';
+import 'package:line_icons/line_icon.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 
@@ -28,13 +30,16 @@ class _CheckOutState extends State<CheckOut> {
   int _totalPayment;
   bool _checkExpress = false;
   bool _checkPick = false;
+  bool _shippingDialog = false;
   bool _fromTop = true;
-
-  final _phoneController = TextEditingController();
-  TextEditingController _addressController = TextEditingController();
 
 
   TextEditingController _message = TextEditingController();
+
+  TextEditingController _phoneInitial = TextEditingController();
+  TextEditingController _addressInitial = TextEditingController();
+  TextEditingController _phoneController = TextEditingController();
+  TextEditingController _addressController = TextEditingController();
 
   getShippingCharge(int charges){
     setState(() {
@@ -132,6 +137,9 @@ class _CheckOutState extends State<CheckOut> {
       color: grey.withOpacity(0.1),
       child: GestureDetector(
         onTap: (){
+          setState(() {
+            _shippingDialog = true;
+          });
           shippingDialog();
         },
         child: ListTile(
@@ -168,7 +176,7 @@ class _CheckOutState extends State<CheckOut> {
                       text: userProvider.userModel.name+' | (+'+userProvider.userModel.phone.toString()+')\n'
                             +userProvider.userModel.address,)
           ),
-          trailing: Icon(Icons.arrow_forward_ios_outlined),
+          trailing: _shippingDialog != true ? Icon(Icons.arrow_downward_outlined) : Icon(Icons.arrow_upward_outlined, color: Colors.blue,),
         ),
       ),
     );
@@ -176,10 +184,13 @@ class _CheckOutState extends State<CheckOut> {
 
   void shippingDialog(){
     final userProvider = Provider.of<UserProvider>(context, listen: false);
+
+    _phoneInitial = TextEditingController(text: userProvider.userModel.phone.toString());
+    _addressInitial = TextEditingController(text: userProvider.userModel.address);
     var dialog = Align(
       alignment: _fromTop ? Alignment.topCenter : Alignment.bottomCenter,
       child: Container(
-        height: 350,
+        height: 395,
         child: SizedBox.expand(
           child: Padding(
             padding: const EdgeInsets.fromLTRB(8, 12, 8, 8),
@@ -195,12 +206,23 @@ class _CheckOutState extends State<CheckOut> {
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: <Widget>[
-                        SizedBox(width: 25,),
+                        userProvider.userModel.phone == 0
+                        ? SizedBox(width: 25,)
+                        : SizedBox(width: 15,),
                         userProvider.userModel.phone == 0
                             ? CustomText(text: 'Add Shipping Address \t\t\t ', weigth: FontWeight.bold, size: 21, color: blue)
-                            : CustomText(text: 'Edit Shipping Address \t\t\t ', weigth: FontWeight.bold, size: 21, color: blue),
+                            : CustomText(text: 'Update Shipping Address  ', weigth: FontWeight.bold, size: 21, color: blue),
                         InkWell(
                             onTap: (){
+                              if(_phoneController != null || _addressController != null){
+                                setState(() {
+                                  _phoneController.clear();
+                                  _addressController.clear();
+                                });
+                              }
+                              setState(() {
+                                _shippingDialog = false;
+                              });
                               Navigator.pop(context);
                             },
                             child: Icon(
@@ -229,20 +251,34 @@ class _CheckOutState extends State<CheckOut> {
                               child: Padding(
                                 padding: const EdgeInsets.only(left: 12.0),
                                 child: ListTile(
-                                    title: TextFormField(
-                                      controller: _phoneController,
-                                      decoration: InputDecoration(
-                                          hintText: 'Phone Number',
-                                          icon: Icon(Icons.local_phone_outlined),
-                                          border: InputBorder.none),
-                                      keyboardType: TextInputType.phone,
-                                      validator: (value) {
-                                        if (value.isEmpty) {
-                                          return 'You must enter the phone number';
-                                        }
-                                        return null;
-                                      },
-                                    )
+                                    title: userProvider.userModel.phone != 0
+                                        ? TextFormField(
+                                            controller: _phoneInitial,
+                                              decoration: InputDecoration(
+                                                icon: Icon(Icons.local_phone_outlined),
+                                                  border: InputBorder.none),
+                                            keyboardType: TextInputType.phone,
+                                            validator: (value) {
+                                              if (value.isEmpty) {
+                                                return 'You must enter the phone number';
+                                              }
+                                              return null;
+                                            },
+                                          )
+                                        : TextFormField(
+                                            controller: _phoneController,
+                                              decoration: InputDecoration(
+                                              hintText: 'Ex: 628999992378',
+                                                icon: Icon(Icons.local_phone_outlined),
+                                                border: InputBorder.none),
+                                          keyboardType: TextInputType.phone,
+                                          validator: (value) {
+                                            if (value.isEmpty) {
+                                              return 'You must enter the phone number';
+                                            }
+                                            return null;
+                                          },
+                                        )
                                 ),
                               ),
                             ),
@@ -258,23 +294,40 @@ class _CheckOutState extends State<CheckOut> {
                               child: Padding(
                                 padding: const EdgeInsets.only(left: 12.0),
                                 child: ListTile(
-                                  title: TextFormField(
-                                    keyboardType: TextInputType.multiline,
-                                    maxLines: 5,
-                                    controller: _addressController,
-                                    decoration: InputDecoration(
-                                        hintText: 'Address',
-                                        icon: Padding(
-                                          padding: const EdgeInsets.only(bottom: 80),
-                                          child: Icon(Icons.home_outlined),
-                                        ),
-                                        border: InputBorder.none
-                                    ),
-                                    validator: (value) {
-                                      if (value.isEmpty) {
-                                        return 'You must enter the address';
-                                      }
-                                      return null;
+                                  title: userProvider.userModel.address != ""
+                                      ? TextFormField(
+                                          keyboardType: TextInputType.multiline,
+                                            maxLines: 5,
+                                            controller: _addressInitial,
+                                            decoration: InputDecoration(
+                                          icon: Padding(
+                                            padding: const EdgeInsets.only(bottom: 80),
+                                            child: Icon(Icons.home_outlined),
+                                           ),
+                                            border: InputBorder.none),
+                                          validator: (value) {
+                                          if (value.isEmpty) {
+                                            return 'You must enter the address';
+                                           }
+                                         return null;
+                                        },
+                                      )
+                                    : TextFormField(
+                                        keyboardType: TextInputType.multiline,
+                                          maxLines: 5,
+                                        controller: _addressController,
+                                        decoration: InputDecoration(
+                                          hintText: 'Address',
+                                          icon: Padding(
+                                              padding: const EdgeInsets.only(bottom: 80),
+                                              child: Icon(Icons.home_outlined),
+                                            ),
+                                          border: InputBorder.none),
+                                        validator: (value) {
+                                          if (value.isEmpty) {
+                                            return 'You must enter the address';
+                                         }
+                                          return null;
                                     },
                                   ),
                                 ),
@@ -289,8 +342,12 @@ class _CheckOutState extends State<CheckOut> {
                                 color: blue,
                                 elevation: 0.0,
                                 child: MaterialButton(
-                                    onPressed: (){
-                                      //TODO: buat fungsi di provider sama service update user, abis itu di reload user biar realtime datanya
+                                    onPressed: () async{
+                                      validateAddUpdateShipping(_phoneInitial.text, _addressInitial.text);
+                                      setState(() {
+                                        _shippingDialog = false;
+                                      });
+                                      Navigator.pop(context);
                                     },
                                     minWidth: MediaQuery.of(context).size.width,
                                     child:  userProvider.userModel.phone == 0
@@ -308,7 +365,7 @@ class _CheckOutState extends State<CheckOut> {
             ),
           ),
         ),
-        margin: EdgeInsets.only(top: 200, left: 30, right: 30, bottom: 50),
+        margin: EdgeInsets.only(top: 150, left: 30, right: 30, bottom: 50),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(30),
@@ -318,7 +375,6 @@ class _CheckOutState extends State<CheckOut> {
 
     showGeneralDialog(
         barrierLabel: "Label",
-        barrierDismissible: true,
         barrierColor: Colors.black.withOpacity(0.5),
         transitionDuration: Duration(milliseconds: 700),
         context: context,
@@ -331,6 +387,75 @@ class _CheckOutState extends State<CheckOut> {
             child: child,
             );
     });
+  }
+
+  void validateAddUpdateShipping(phoneText,addressText) async{
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+
+    _phoneInitial = TextEditingController(text: phoneText.toString());
+     _addressInitial = TextEditingController(text: addressText.toString());
+
+    if (_formKey.currentState.validate()) {
+      if(userProvider.userModel.phone != 0) {
+        if(_phoneInitial.text == userProvider.userModel.phone.toString()
+            && _addressInitial.text == userProvider.userModel.address){
+          _key.currentState.showSnackBar(SnackBar(
+            backgroundColor: white,
+            content: Text('No data has changed',
+                style: TextStyle(color: blue)),
+          ));
+          setState(() {
+            _shippingDialog = false;
+          });
+        }else{
+          bool updateData = await userProvider.updatePhoneAddress(userProvider.userModel.id,
+              _phoneInitial.text, _addressInitial.text);
+          if(updateData != true){
+            _key.currentState.showSnackBar(SnackBar(
+              backgroundColor: white,
+              content: Text('Update Failed',
+                  style: TextStyle(color: blue)),
+            ));
+            setState(() {
+              _shippingDialog = false;
+            });
+          }else{
+            _key.currentState.showSnackBar(SnackBar(
+              backgroundColor: white,
+              content: Text('Update Success',
+                  style: TextStyle(color: blue)),
+            ));
+            setState(() {
+              _shippingDialog = false;
+            });
+            userProvider.reloadUserModel();
+          }
+        }
+      }else{
+        bool addData = await userProvider.updatePhoneAddress(userProvider.userModel.id,
+            _phoneController.text, _addressController.text);
+        if(addData != true){
+          _key.currentState.showSnackBar(SnackBar(
+            backgroundColor: white,
+            content: Text('Update Failed',
+                style: TextStyle(color: blue)),
+          ));
+          setState(() {
+            _shippingDialog = false;
+          });
+        }else{
+          _key.currentState.showSnackBar(SnackBar(
+            backgroundColor: white,
+            content: Text('Update Success',
+                style: TextStyle(color: blue)),
+          ));
+          setState(() {
+            _shippingDialog = false;
+          });
+          userProvider.reloadUserModel();
+        }
+      }
+    }
   }
 
   Widget dashedHorizontalLine(){
