@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:lets_shop/commons/color.dart';
+import 'package:lets_shop/commons/common.dart';
 import 'package:lets_shop/components/custom_text.dart';
 import 'package:lets_shop/models/order.dart';
 import 'package:lets_shop/provider/user_provider.dart';
+import 'package:lets_shop/screens/home.dart';
 import 'package:provider/provider.dart';
 
 //PACKAGE MONEY FORMATTER
@@ -15,7 +17,7 @@ class OrdersScreen extends StatelessWidget {
     final formatCurrency = new NumberFormat.simpleCurrency(locale: 'id_ID');
 
     final userProvider = Provider.of<UserProvider>(context);
-    String _length = userProvider.orders.length.toString();
+    //TODO: Redesign UI Orders History!!!
 
     return Scaffold(
       appBar: AppBar(
@@ -27,7 +29,7 @@ class OrdersScreen extends StatelessWidget {
         leading: IconButton(
             icon: Icon(Icons.arrow_back_ios),
             onPressed: () {
-              Navigator.pop(context);
+              changeScreen(context, HomePage());
             }),
       ),
       backgroundColor: white,
@@ -42,7 +44,7 @@ class OrdersScreen extends StatelessWidget {
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
                     width: 80,
-                    child: Center(child: CustomText(text: "$_length""x", color: white, size: 20,))
+                    child: Center(child: CustomText(text: "${_order.cart.length.toString()}""x", color: white, size: 20,))
                   ),
                 ),
               ),
@@ -50,13 +52,18 @@ class OrdersScreen extends StatelessWidget {
                 text: "${formatCurrency.format(_order.total)}",
                 weigth: FontWeight.bold,
               ),*/
-              title: Text(_order.description),
+              title: CustomText(text: _order.description),
               subtitle: Text(DateTime.fromMillisecondsSinceEpoch(_order.createdAt).toString()),
-              trailing: _order.status == "Completed"
-                  ? CustomText(text: _order.status, color: Colors.green)
-                  : _order.status == "Incomplete"
-                ? CustomText(text: _order.status, color: Colors.redAccent)
-                  : CustomText(text: _order.status, color: Colors.yellow)
+              trailing: Column(
+                children: <Widget>[
+                  _order.status == "Completed"
+                      ? CustomText(text: _order.status, color: Colors.green)
+                      : _order.status == "Incomplete"
+                      ? CustomText(text: _order.status, color: Colors.redAccent)
+                      : CustomText(text: _order.status, color: Colors.yellow)
+
+                ],
+              )
             );
           }),
     );

@@ -207,10 +207,35 @@ class UserProvider with ChangeNotifier {
     }
 
   }
+
+  Future<bool> createOrder(userId, id, description, status, message, cart, totalPrice) async{
+    try{
+       _orderServices.createOrder(
+        userId: userId,
+         id: id,
+         description: description,
+         status: status,
+         message: message ?? "",
+         cart: cart,
+         totalPrice: totalPrice
+      );
+       print('Message for admin: ${message}');
+      return true;
+    }catch(e){
+      print("THE ERROR ${e.toString()}");
+      return false;
+    }
+  }
+
+
   // public variables
   List<OrderModel> orders = [];
-  getOrders()async{
+  getOrders()async{ ///TODO: convert data cart caranya sama kaya user cart, biar bisa dimapnggil di switch case order nanti!!!
     orders = await _orderServices.getUserOrders(userId: _user.uid);
+
+    //Ini buat jaga2 kalo dibutuhin
+    /*_orderModel = await _orderServices.getOrderByUserId(userId: _user.uid);
+    print("My Cart Order ${user.email}: ${orderModel.cartMap.length}");*/
     notifyListeners();
   }
 

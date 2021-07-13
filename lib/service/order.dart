@@ -9,7 +9,7 @@ class OrderServices{
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
 
-  void createOrder({String userId ,String id,String description,String status ,List<CartItemModel> cart, int totalPrice}) {
+  void createOrder({String userId ,String id,String description, String status, String message, List<CartItemModel> cart, int totalPrice}) {
     List<Map> convertedCart = [];
 
     //Semua item yang ada di CartItemModel harus di convert dulu ke Map
@@ -22,6 +22,7 @@ class OrderServices{
       "userId": userId,
       "id": id,
       "cart": convertedCart,
+      "message": message,
       "total": totalPrice,
       "createdAt": DateTime.now().millisecondsSinceEpoch,
       "description": description,
@@ -29,12 +30,28 @@ class OrderServices{
     });
   }
 
+  //Ini buat jaga2 kalo dibutuhin
+/*  Future<OrderModel> getOrderByUserId({String userId}) async =>
+      _firestore.collection(collection)
+          .where('userId', isEqualTo: userId)
+          .get().then((result) {
+        DocumentSnapshot order;
+        for (order in result.docs) {
+          OrderModel.fromFirebase(order.data());
+        }
+        return OrderModel.fromFirebase(order.data());
+      });*/
+
+
   Future<List<OrderModel>> getUserOrders({String userId}) async =>
+
       _firestore.collection(collection)
           .where('userId', isEqualTo: userId)
           .get().then((result) {
         List<OrderModel> orders = [];
-        for (DocumentSnapshot order in result.docs) {
+        DocumentSnapshot order;
+        for (order in result.docs) {
+          /*print('result getOrders : ${order.data()}');*/
           orders.add(OrderModel.fromSnapshot(order));
         }
         return orders;

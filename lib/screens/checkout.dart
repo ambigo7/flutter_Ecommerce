@@ -1,13 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lets_shop/commons/color.dart';
+import 'package:lets_shop/commons/common.dart';
 import 'package:lets_shop/commons/loading.dart';
 import 'package:lets_shop/components/custom_text.dart';
 import 'package:intl/intl.dart';
+import 'package:lets_shop/models/cart_item.dart';
 import 'package:lets_shop/provider/user_provider.dart';
-import 'package:line_icons/line_icon.dart';
+import 'package:lets_shop/screens/payment.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
 
 class CheckOut extends StatefulWidget {
   final int total;
@@ -31,10 +34,11 @@ class _CheckOutState extends State<CheckOut> {
   bool _checkExpress = false;
   bool _checkPick = false;
   bool _shippingDialog = false;
+  bool _loading = false;
   bool _fromTop = true;
 
 
-  TextEditingController _message = TextEditingController();
+  TextEditingController _messageController = TextEditingController();
 
   TextEditingController _phoneInitial = TextEditingController();
   TextEditingController _addressInitial = TextEditingController();
@@ -64,6 +68,7 @@ class _CheckOutState extends State<CheckOut> {
   @override
   Widget build(BuildContext context) {
     final formatCurrency = new NumberFormat.simpleCurrency(locale: 'id_ID');
+    final userProvider = Provider.of<UserProvider>(context);
 
     return Scaffold(
       key: _key,
@@ -81,18 +86,20 @@ class _CheckOutState extends State<CheckOut> {
               Navigator.pop(context);
             }),
       ),
-      body: Container(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(0, 7, 0, 12),
-          child: ListView(
-              children: <Widget>[
-                shippingAddress(),
-                dashedHorizontalLine(),
-                shippingOptionPayment()
-              ]
-          ),
-        ),
-      ),
+      body: _loading
+          ? Loading()
+          : Container(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(0, 7, 0, 12),
+                  child: ListView(
+                      children: <Widget>[
+                        shippingAddress(),
+                        dashedHorizontalLine(),
+                        shippingOptionPayment()
+                      ]
+                    ),
+                  ),
+            ),
       bottomNavigationBar: Container(
         color: white,
         height: 70,
@@ -114,8 +121,59 @@ class _CheckOutState extends State<CheckOut> {
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10), color: blue),
                 child: FlatButton(
-                    onPressed: () {
+                    onPressed: () async {
+                      setState(() {
+                        _loading = true;
+                      });
+                      if(_selectedShippingCharged == 0 || userProvider.userModel.phone == 0){
+                        _key.currentState.showSnackBar(
+                            SnackBar(content: Text("Please, select shipping options or add your shipping address", style: TextStyle(color: blue)),
+                                backgroundColor: white
+                            ));
+                      }else{
+                        var uuid = Uuid();
+                        String id = uuid.v4();
 
+                        bool _createOrder = await userProvider.createOrder(
+                            userProvider.user.uid, id,
+                            'Orders '+userProvider.userModel.countCart.toString()+' item',
+                            'Incomplete', _messageController.text, userProvider
+                            .userModel.cart, userProvider
+                            .userModel.totalCartPrice);
+                        for (CartItemModel cartItem in userProvider.userModel.cart) {
+                          bool value = await userProvider.removeFromCart(
+                              cartItem: cartItem);
+                          if (value) {
+                            userProvider.reloadUserModel();
+                            _key.currentState.showSnackBar(
+                                SnackBar(
+                                    backgroundColor: white,
+                                    content: Text(
+                                        "Removed from Cart!",
+                                        style: TextStyle(
+                                            color: blue))));
+                          } else {
+                            print("ITEM WAS NOT REMOVED");
+                          }
+                        }
+
+                        if(_createOrder != true){
+                          _key.currentState.showSnackBar(
+                              SnackBar(content: Text("Order Failed", style: TextStyle(color: blue)),
+                                  backgroundColor: white
+                              ));
+                        }else{
+                          _key.currentState.showSnackBar(
+                              SnackBar(content: Text("Order Created! Please, make payment", style: TextStyle(color: blue)),
+                                  backgroundColor: white
+                              ));
+                          changeScreen(context, PaymentScreen(orderId: id,));
+                        }
+                      }
+
+                      setState(() {
+                        _loading = false;
+                      });
                     },
                     child: CustomText(
                       text: 'Order',
@@ -521,10 +579,10 @@ class _CheckOutState extends State<CheckOut> {
           ),
           title: userProvider.userModel.countCart == 1
               ? CustomText(
-              text: 'Purchase of '+userProvider.userModel.countCart.toString()+' item',
+              text: 'Order '+userProvider.userModel.countCart.toString()+' item',
               size: 18)
               : CustomText(
-              text: 'Purchase of '+userProvider.userModel.countCart.toString()+' items',
+              text: 'Orders '+userProvider.userModel.countCart.toString()+' items',
               size: 18),
           subtitle: CustomText(text: '${formatCurrency.format(userProvider.userModel.totalCartPrice)}',),
         ),
@@ -621,7 +679,7 @@ class _CheckOutState extends State<CheckOut> {
                 Expanded(
                   child: TextFormField(
                     textAlign: TextAlign.end,
-                    controller: _message,
+                    controller: _messageController,
                     decoration: InputDecoration(
                         hintText: 'Message for admin...',
                         border: InputBorder.none),
