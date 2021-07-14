@@ -9,7 +9,8 @@ class OrderServices{
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
 
-  void createOrder({String userId ,String id,String description, String status, String message, List<CartItemModel> cart, int totalPrice}) {
+  void createOrder({String userId, String id,String description, String status, String message,
+    String service,  List<CartItemModel> cart,int charges, int totalPrice, int totalPayment}) {
     List<Map> convertedCart = [];
 
     //Semua item yang ada di CartItemModel harus di convert dulu ke Map
@@ -23,7 +24,10 @@ class OrderServices{
       "id": id,
       "cart": convertedCart,
       "message": message,
-      "total": totalPrice,
+      "service": service,
+      "charges": charges,
+      "totalPrice": totalPrice,
+      "totalPayment": totalPayment,
       "createdAt": DateTime.now().millisecondsSinceEpoch,
       "description": description,
       "status": status
@@ -47,6 +51,7 @@ class OrderServices{
 
       _firestore.collection(collection)
           .where('userId', isEqualTo: userId)
+          /*.where('status', isEqualTo: '')*/
           .get().then((result) {
         List<OrderModel> orders = [];
         DocumentSnapshot order;

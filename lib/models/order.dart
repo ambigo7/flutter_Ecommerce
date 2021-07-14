@@ -3,13 +3,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'cart_item.dart';
 
 class OrderModel {
-  //TODO: tambahin message karna bakal ada message buat admin
   static const ID = "id";
   static const DESCRIPTION = "description";
   static const CART = "cart";
   static const MESSAGE = "message";
+  static const SERVICE = "service";
+  static const CHARGES = "charges";
   static const USER_ID = "userId";
-  static const TOTAL = "total";
+  static const TOTAL_PRICE = "totalPrice";
+  static const TOTAL_PAYMENT= "totalPayment";
   static const STATUS = "status";
   static const CREATED_AT = "createdAt";
 
@@ -18,8 +20,11 @@ class OrderModel {
   String _userId;
   String _status;
   String _message;
+  String _service;
   int _createdAt;
-  int _total;
+  int _charges;
+  int _totalPrice;
+  int _totalPayment;
 
   //Ini buat jaga2 kalo dibutuhin
 /*  String _idMap;
@@ -46,7 +51,10 @@ class OrderModel {
   String get userId => _userId;
   String get status => _status;
   String get message => _message;
-  int get total => _total;
+  String get service => _service;
+  int get charges => _charges;
+  int get totalPrice => _totalPrice;
+  int get totalPayment => _totalPayment;
   int get createdAt => _createdAt;
   // public variable
   List<CartItemModel> cart;
@@ -54,9 +62,12 @@ class OrderModel {
   OrderModel.fromSnapshot(DocumentSnapshot snapshot) {
     _id = snapshot.data()[ID];
     _description = snapshot.data()[DESCRIPTION];
-    _total = snapshot.data()[TOTAL];
+    _totalPrice = snapshot.data()[TOTAL_PRICE];
+    _totalPayment = snapshot.data()[TOTAL_PAYMENT];
     _status = snapshot.data()[STATUS];
     _message = snapshot.data()[MESSAGE] ?? "";
+    _service = snapshot.data()[SERVICE];
+    _charges = snapshot.data()[CHARGES];
     _userId = snapshot.data()[USER_ID];
     _createdAt = snapshot.data()[CREATED_AT];
     cart = _convertCartItems(snapshot.data()[CART] ?? []);

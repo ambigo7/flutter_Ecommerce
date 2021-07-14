@@ -193,7 +193,7 @@ class _CartScreenState extends State<CartScreen> {
                         checkoutDialogEmpty();
                         return null;
                       }
-                      changeScreen(context, CheckOut(total: userProvider.userModel.totalCartPrice,));
+                      changeScreen(context, CheckOut(totalPrice: userProvider.userModel.totalCartPrice,));
                     },
                     child: CustomText(
                       text: "Check out ("+userProvider.userModel.countCart.toString()+")",

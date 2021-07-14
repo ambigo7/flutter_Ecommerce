@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:lets_shop/commons/color.dart';
 import 'package:lets_shop/commons/common.dart';
+import 'package:lets_shop/commons/loading.dart';
 import 'package:lets_shop/components/custom_text.dart';
 
 // MY OWN PACKAGE
@@ -39,6 +40,8 @@ class _HomePageState extends State<HomePage> {
   bool _isSigningOut = false;
 
   TextEditingController _searchController = TextEditingController();
+
+  bool _loading = false;
 
 
   //FUNGSINYA BUAT inisilalisasi nilai awal pas screen awal load
@@ -135,28 +138,30 @@ class _HomePageState extends State<HomePage> {
                   leading: Icon(Icons.home_outlined, color: blue),
                 ),
               ),
-
-              InkWell(
+              _loading ? Loading()
+                  : InkWell(
                 onTap: () async{
+                  setState(() {
+                    _loading = true;
+                  });
                   await userProvider.getOrders();
                   changeScreen(context, OrdersScreen());
+                  setState(() {
+                    _loading = true;
+                  });
                 },
                 child: ListTile(
                   title: Text('Orders History'),
                   leading:
-                      Icon(Icons.shopping_basket_outlined, color: blue),
+                  Icon(Icons.shopping_basket_outlined, color: blue),
                 ),
               ),
 
               Divider(),
-              InkWell(
+               InkWell(
                 onTap: () async {
                   await userProvider.signOut();
                   print(userProvider.status);
-/*
-                */ /*Navigator.of(context)
-                    .pushReplacement(_routeToLogin());*/ /*
-                Navigator.push(context, MaterialPageRoute(builder: (context) => new Login()));*/
                 },
                 child: ListTile(
                   title: Text('Sign Out'),
@@ -184,7 +189,7 @@ class _HomePageState extends State<HomePage> {
               InkWell(
                 onTap: () {},
                 child: ListTile(
-                  title: Text('About Lets Shop'),
+                  title: Text('About MyOptik'),
                   //leading: Icon(Icons.help),
                 ),
               ),

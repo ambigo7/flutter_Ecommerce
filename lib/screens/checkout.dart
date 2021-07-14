@@ -5,6 +5,7 @@ import 'package:lets_shop/commons/common.dart';
 import 'package:lets_shop/commons/loading.dart';
 import 'package:lets_shop/components/custom_text.dart';
 import 'package:intl/intl.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:lets_shop/models/cart_item.dart';
 import 'package:lets_shop/provider/user_provider.dart';
 import 'package:lets_shop/screens/payment.dart';
@@ -13,9 +14,9 @@ import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
 class CheckOut extends StatefulWidget {
-  final int total;
+  final int totalPrice;
 
-  const CheckOut({Key key, this.total}) : super(key: key);
+  const CheckOut({Key key, this.totalPrice}) : super(key: key);
 
   @override
   _CheckOutState createState() => _CheckOutState();
@@ -24,11 +25,13 @@ class CheckOut extends StatefulWidget {
 class _CheckOutState extends State<CheckOut> {
 
   final formatCurrency = new NumberFormat.simpleCurrency(locale: 'id_ID');
-  final formatDate = new DateFormat.MMMMd();
+  /*final formatDate = new DateFormat.MMMMd();*/
+  DateFormat formatDate ;
 
   final _formKey = GlobalKey<FormState>();
   final _key = GlobalKey<ScaffoldState>();
   final dateTomorrow = DateTime.now().add(Duration(days: 1));
+  String _selectedShippingService;
   int _selectedShippingCharged;
   int _totalPayment;
   bool _checkExpress = false;
@@ -60,7 +63,10 @@ class _CheckOutState extends State<CheckOut> {
   @override
   void initState() {
     getShippingCharge(0);
-    getTotalPayment(0, widget.total);
+    getTotalPayment(0, widget.totalPrice);
+    _selectedShippingService = "";
+    initializeDateFormatting();
+    formatDate = new DateFormat.MMMd('id_ID');
     super.initState();
   }
 
@@ -89,6 +95,7 @@ class _CheckOutState extends State<CheckOut> {
       body: _loading
           ? Loading()
           : Container(
+            color: grey.withOpacity(0.1),
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(0, 7, 0, 12),
                   child: ListView(
@@ -135,11 +142,9 @@ class _CheckOutState extends State<CheckOut> {
                         String id = uuid.v4();
 
                         bool _createOrder = await userProvider.createOrder(
-                            userProvider.user.uid, id,
-                            'Orders '+userProvider.userModel.countCart.toString()+' item',
-                            'Incomplete', _messageController.text, userProvider
-                            .userModel.cart, userProvider
-                            .userModel.totalCartPrice);
+                            userProvider.user.uid, id, 'Orders '+userProvider.userModel.countCart.toString()+' item',
+                            'Incomplete', _messageController.text, _selectedShippingService, _selectedShippingCharged,
+                            userProvider.userModel.cart, widget.totalPrice, _totalPayment);
                         for (CartItemModel cartItem in userProvider.userModel.cart) {
                           bool value = await userProvider.removeFromCart(
                               cartItem: cartItem);
@@ -167,7 +172,7 @@ class _CheckOutState extends State<CheckOut> {
                               SnackBar(content: Text("Order Created! Please, make payment", style: TextStyle(color: blue)),
                                   backgroundColor: white
                               ));
-                          changeScreen(context, PaymentScreen(orderId: id,));
+                          changeScreen(context, PaymentScreen(orderId: id, totalPrice: _totalPayment,));
                         }
                       }
 
@@ -605,12 +610,14 @@ class _CheckOutState extends State<CheckOut> {
                         InkWell(
                           onTap: (){
                             getShippingCharge(10000);
+                            _selectedShippingService = "MyOptik Express";
                             _checkExpress = true;
                             _checkPick = false;
                             getTotalPayment(_selectedShippingCharged, userProvider.userModel.totalCartPrice);
                             print('total payment : $_totalPayment');
                             print('ceklist : $_checkExpress');
                             print('shipping value : $_selectedShippingCharged');
+                            print('shipping service : $_selectedShippingService');
                           },
                           child: ListTile(
                             title: CustomText(text: 'MyOptik Express', weigth: FontWeight.bold,),
@@ -628,6 +635,7 @@ class _CheckOutState extends State<CheckOut> {
                         InkWell(
                           onTap: (){
                             getShippingCharge(2500);
+                            _selectedShippingService = "Pick up";
                             _checkExpress = false;
                             _checkPick = true;
                             getTotalPayment(_selectedShippingCharged, userProvider.userModel.totalCartPrice);
@@ -635,6 +643,7 @@ class _CheckOutState extends State<CheckOut> {
                             print('ceklist express : $_checkExpress');
                             print('ceklist pick : $_checkPick');
                             print('shipping value : $_selectedShippingCharged');
+                            print('shipping service : $_selectedShippingService');
                           },
                           child: ListTile(
                             title: CustomText(text: 'Pick up by yourself', weigth: FontWeight.bold,),

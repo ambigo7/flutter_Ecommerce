@@ -183,8 +183,6 @@ class UserProvider with ChangeNotifier {
       CartItemModel item = CartItemModel.fromMap(cartItem);
 //      if(!itemExists){
       //just For Debugging
-      print("CART ITEMS ARE: ${cart.toString()}");
-
       _userServices.addToCart(userId: _user.uid, cartItem: item);
 //      }
 
@@ -196,8 +194,6 @@ class UserProvider with ChangeNotifier {
   }
 
   Future<bool> removeFromCart({CartItemModel cartItem})async{
-    print("THE PRODUC IS: ${cartItem.toString()}");
-
     try{
       _userServices.removeFromCart(userId: _user.uid, cartItem: cartItem);
       return true;
@@ -208,7 +204,7 @@ class UserProvider with ChangeNotifier {
 
   }
 
-  Future<bool> createOrder(userId, id, description, status, message, cart, totalPrice) async{
+  Future<bool> createOrder(userId, id, description, status, message, service, charges, cart, totalPrice, totalPayment) async{
     try{
        _orderServices.createOrder(
         userId: userId,
@@ -216,8 +212,11 @@ class UserProvider with ChangeNotifier {
          description: description,
          status: status,
          message: message ?? "",
+         service: service,
+         charges: charges,
          cart: cart,
-         totalPrice: totalPrice
+         totalPrice: totalPrice,
+         totalPayment: totalPayment
       );
        print('Message for admin: ${message}');
       return true;
@@ -230,9 +229,8 @@ class UserProvider with ChangeNotifier {
 
   // public variables
   List<OrderModel> orders = [];
-  getOrders()async{ ///TODO: convert data cart caranya sama kaya user cart, biar bisa dimapnggil di switch case order nanti!!!
+  getOrders()async{
     orders = await _orderServices.getUserOrders(userId: _user.uid);
-
     //Ini buat jaga2 kalo dibutuhin
     /*_orderModel = await _orderServices.getOrderByUserId(userId: _user.uid);
     print("My Cart Order ${user.email}: ${orderModel.cartMap.length}");*/
