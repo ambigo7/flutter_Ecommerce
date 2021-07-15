@@ -142,7 +142,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                               SizedBox(height: 15,),
                                               CustomText(
                                                   text: 'Screenshot of mBanking/iBanking transaction details, '
-                                                      'or ATM receipt for payment validation'), //TODO: buat pesan garansi!!
+                                                      'or ATM receipt for payment validation'), //TODO: buat tombol ok understand sama rapihin tulisan
                                             ],
                                           ),
                                         ),
@@ -245,7 +245,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                             ),
                             SizedBox(height: 5,),
                             Visibility(
-                              visible: true,
+                              visible: true, //Todo: kalo image null uploadnya ga keliatan
                               child: Container(
                                 height: 40,
                                 width: 400,
@@ -255,7 +255,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                     elevation: 0.0,
                                     child: MaterialButton(
                                       onPressed: (){
-
+                                        //TODO: buat fungsi upload, update order tambah imgUrlPayment imgRef(storage), upload image ke storage
                                       },
                                       child: CustomText(text: 'Upload', color: white,),
                                     )
