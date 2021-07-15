@@ -7,17 +7,17 @@ class CustomText extends StatelessWidget {
   final double size;
   final Color color;
   final TextAlign align;
-  final FontWeight weigth;
+  final FontWeight weight;
 
 //CUNSTRUKTOR REQUIRED
-  CustomText({@required this.text, this.size, this.color, this.align, this.weigth});
+  CustomText({@required this.text, this.size, this.color, this.align, this.weight});
 
   @override
   Widget build(BuildContext context) {
     return Text(text,
         style: TextStyle(
             color: color ?? black,
-            fontWeight: weigth ?? FontWeight.normal,
+            fontWeight: weight ?? FontWeight.normal,
             fontSize: size ?? 16),
       textAlign: align ?? TextAlign.start,
     );

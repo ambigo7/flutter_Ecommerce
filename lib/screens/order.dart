@@ -48,7 +48,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
         iconTheme: IconThemeData(color: blue),
         backgroundColor: white,
         elevation: 0.0,
-        title: CustomText(text: "Orders History", size: 20, color: blue, weigth: FontWeight.bold,),
+        title: CustomText(text: "Orders History", size: 20, color: blue, weight: FontWeight.bold,),
         centerTitle: true,
         leading: IconButton(
             icon: Icon(Icons.arrow_back_ios),
@@ -183,7 +183,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                                       crossAxisAlignment: CrossAxisAlignment.center,
                                                       children: <Widget>[
                                                         SizedBox(height: 5,),
-                                                        CustomText(text: 'MyOptik Guarantee', weigth: FontWeight.bold,),
+                                                        CustomText(text: 'MyOptik Guarantee', weight: FontWeight.bold,),
                                                         SizedBox(height: 15,),
                                                         CustomText(text: 'MyOptik Guarantee'), //TODO: buat pesan garansi!!
                                                       ],

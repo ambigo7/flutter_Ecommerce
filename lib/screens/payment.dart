@@ -1,9 +1,14 @@
+import 'dart:io';
+
+import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:lets_shop/commons/color.dart';
 import 'package:lets_shop/commons/common.dart';
 import 'package:lets_shop/components/custom_text.dart';
+import 'package:lets_shop/components/expand_image.dart';
 import 'package:lets_shop/components/expandable_text.dart';
 import 'package:lets_shop/provider/user_provider.dart';
 import 'package:lets_shop/screens/order.dart';
@@ -25,10 +30,27 @@ class _PaymentScreenState extends State<PaymentScreen> {
   final formatCurrency = new NumberFormat.simpleCurrency(locale: 'id_ID');
   
   final _key = GlobalKey<ScaffoldState>();
-  
+  final picker = ImagePicker();
+
+
+  File _image1;
   String _orderId;
   int _totalPrice;
   String _numberAccount = '1543 0100 9224 501';
+
+  ImageSource _imageSource;
+
+  //GET IMAGE
+  Future getImage() async {
+    final pickedFile = await picker.getImage(source: _imageSource);
+    if (pickedFile == null) return;
+
+    File tmpImg = await File(pickedFile.path);
+    /*File tmpImg = File(pickedFile.path);*/
+    /*tmpImg = await tmpImg.copy(tmpImg.path);*/
+
+    setState(() => _image1 = tmpImg);
+  }
 
 
   
@@ -50,7 +72,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
         title: CustomText(
             text: 'Payment',
             size: 23, color: blue,
-            weigth: FontWeight.bold),
+            weight: FontWeight.bold),
         centerTitle: true,
         leading: IconButton(
             icon: Icon(Icons.arrow_back_ios, color: blue,),
@@ -73,7 +95,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       CustomText(text: 'Total Payment'),
-                      CustomText(text: '${formatCurrency.format(_totalPrice)}', color: blue, weigth: FontWeight.bold,),
+                      CustomText(text: '${formatCurrency.format(_totalPrice)}', color: blue, weight: FontWeight.bold,),
                     ],
                   ),
                 ),
@@ -96,33 +118,152 @@ class _PaymentScreenState extends State<PaymentScreen> {
                             Icons.cloud_upload_outlined,
                             color: blue,
                             size: 25,),
-/*                          RichText(
-                            text: TextSpan(
-                                text: 'Proof of payment ',
-                                style: TextStyle(fontSize: 16, color: black),
-                                children: <TextSpan>[
-                                  TextSpan(text: '(Screenshot from mBanking/iBanking, or ATM Receipt)',
-                                      style: TextStyle(
-                                          fontStyle: FontStyle.italic,
-                                          fontSize: 10,
-                                          color: green))
-                                ]
-                            ),
-                          ),*/
                           SizedBox(width: 15,),
-                          CustomText(text: 'Proof of payment ',),
+                          CustomText(text: 'Payment validation  ',),
                           GestureDetector(
                             onTap: (){
-                              _key.currentState.showSnackBar(
+
+                              showDialog(
+                                  context: context,
+                                  builder: (_){
+                                    return Dialog(
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(10.0)),
+                                      child: Container(
+                                        height: 200,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(12.0),
+                                          child: Column(
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                            children: <Widget>[
+                                              SizedBox(height: 5,),
+                                              CustomText(text: 'Terms of Payment', weight: FontWeight.bold,),
+                                              SizedBox(height: 15,),
+                                              CustomText(
+                                                  text: 'Screenshot of mBanking/iBanking transaction details, '
+                                                      'or ATM receipt for payment validation'), //TODO: buat pesan garansi!!
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  });
+/*                              _key.currentState.showSnackBar(
                                   SnackBar(
-                                      content: Text("Screenshot of mBanking/iBanking transaction details, or ATM receipt",
+                                      content: Text("Screenshot of mBanking/iBanking transaction details, or ATM receipt for payment validation",
                                           style: TextStyle(color: blue)),
                                       backgroundColor: white
-                                  ));
+                                  ));*/
                             },
                             child: Icon(LineIcons.questionCircle, color: grey, size: 20,),
                           ),
                         ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(50, 0, 8, 8),
+                      child: Container(
+                        child: Column(
+                          children: <Widget>[
+                            Divider(color: grey,),
+                            SizedBox(height: 10,),
+                            DottedBorder(
+                                dashPattern: [8,4],
+                                borderType: BorderType.RRect,
+                                radius: Radius.circular(10),
+                                color: blue,
+                                child: GestureDetector(
+                                  onTap: (){
+                                    if(_image1 != null){
+                                      changeScreen(context, ExpandImage(
+                                        imageType: 'file',
+                                        imageFile: _image1,
+                                        enableSlideOutPage: true,
+                                        )
+                                      );
+                                    }else{
+                                      _key.currentState.showSnackBar(
+                                          SnackBar(
+                                              content: Text("You should take or select a photo first!",
+                                                  style: TextStyle(color: blue)),
+                                              backgroundColor: white
+                                          ));
+                                    }
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10)
+                                    ),
+                                    height: 300,
+                                    width: 400,
+                                    child: displayImage(),
+                                  ),
+                                )
+                            ),
+                            SizedBox(height: 10,),
+                            Container(
+                              height: 40,
+                              width: 400,
+                              child: Row(
+                                children: <Widget>[
+                                  Expanded(
+                                    child: Material(
+                                        borderRadius: BorderRadius.circular(5.0),
+                                        color: blue,
+                                        elevation: 0.0,
+                                        child: MaterialButton(
+                                          onPressed: (){
+                                            setState(() {
+                                              _imageSource = ImageSource.camera;
+                                            });
+                                            getImage();
+                                          },
+                                          child: CustomText(text: 'Take a Photo', color: white,),
+                                        )
+                                    ),
+                                  ),
+                                  SizedBox(width: 5,),
+                                  Expanded(
+                                    child: Material(
+                                        borderRadius: BorderRadius.circular(5.0),
+                                        color: blue,
+                                        elevation: 0.0,
+                                        child: MaterialButton(
+                                          onPressed: (){
+                                            setState(() {
+                                              _imageSource = ImageSource.gallery;
+                                            });
+                                            getImage();
+                                          },
+                                          child: CustomText(text: 'Select Photo', color: white,),
+                                        )
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: 5,),
+                            Visibility(
+                              visible: true,
+                              child: Container(
+                                height: 40,
+                                width: 400,
+                                child: Material(
+                                    borderRadius: BorderRadius.circular(5.0),
+                                    color: blue,
+                                    elevation: 0.0,
+                                    child: MaterialButton(
+                                      onPressed: (){
+
+                                      },
+                                      child: CustomText(text: 'Upload', color: white,),
+                                    )
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ],
@@ -133,6 +274,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
       ),
     );
   }
+
   Widget attention(){
     return Container(
       height: 100,
@@ -259,7 +401,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
                         ),
                       ],
                     )
-                    /*CustomText(text: 'Accept transfers from other banks (No subsidy bank admin fees)', size: 14,)*/
                   ],
                 ),
               ),
@@ -268,5 +409,23 @@ class _PaymentScreenState extends State<PaymentScreen> {
         ),
       ),
     );
+  }
+  Widget displayImage() {
+    if (_image1 == null) {
+      return Padding(
+        padding: const EdgeInsets.fromLTRB(8.0, 70, 8.0, 50.0),
+        child: Column(
+          children: <Widget>[
+            Icon(Icons.image_outlined , color: blue, size: 100,),
+            SizedBox(height: 20,),
+            CustomText(
+              text: 'Make sure you choose the correct photo according to the terms of payment validation',
+              align: TextAlign.center,)
+          ],
+        ),
+      );
+    } else {
+      return Image.file(_image1, fit: BoxFit.cover, width: double.infinity);
+    }
   }
 }

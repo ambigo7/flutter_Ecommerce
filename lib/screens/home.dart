@@ -93,13 +93,13 @@ class _HomePageState extends State<HomePage> {
                 accountName: CustomText(
                   text: userProvider.userModel?.name ?? "loading...username",
                   color: white,
-                  weigth: FontWeight.bold,
+                  weight: FontWeight.bold,
                   size: 18,
                 ), //_user.displayName
                 accountEmail: CustomText(
                   text: userProvider.userModel?.email ?? "loading...email",
                   color: white,
-                  weigth: FontWeight.bold,
+                  weight: FontWeight.bold,
                   size: 18,
                 ), //_user.email
                 currentAccountPicture: GestureDetector(

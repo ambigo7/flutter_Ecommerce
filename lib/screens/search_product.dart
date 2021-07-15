@@ -25,7 +25,7 @@ class SearchProductScreen extends StatelessWidget {
         leading: IconButton(icon: Icon(Icons.arrow_back_ios), onPressed: (){
           Navigator.pop(context);
         }),
-        title: CustomText(text: "Products", size: 20, color: blue, weigth: FontWeight.bold,),
+        title: CustomText(text: "Products", size: 20, color: blue, weight: FontWeight.bold,),
         elevation: 0.0,
         centerTitle: true,
         actions: <Widget>[
@@ -64,7 +64,7 @@ class SearchProductScreen extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              CustomText(text: "No products Found", color: grey, weigth: FontWeight.w300, size: 22,),
+              CustomText(text: "No products Found", color: grey, weight: FontWeight.w300, size: 22,),
             ],
           )
         ],

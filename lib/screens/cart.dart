@@ -199,7 +199,7 @@ class _CartScreenState extends State<CartScreen> {
                       text: "Check out ("+userProvider.userModel.countCart.toString()+")",
                       size: 20,
                       color: white,
-                      weigth: FontWeight.normal,
+                      weight: FontWeight.normal,
                     )),
               )
             ],

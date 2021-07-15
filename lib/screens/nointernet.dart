@@ -27,7 +27,7 @@ class NoInternet extends StatelessWidget {
             CustomText(
               text: "No Internet Connection",
               size: 25,
-              weigth: FontWeight.bold,
+              weight: FontWeight.bold,
             ),
             Center(
               child: Padding(

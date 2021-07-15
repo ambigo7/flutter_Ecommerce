@@ -84,7 +84,7 @@ class _CheckOutState extends State<CheckOut> {
         title: CustomText(
             text: 'Check Out',
             size: 23, color: blue,
-            weigth: FontWeight.bold),
+            weight: FontWeight.bold),
         centerTitle: true,
         leading: IconButton(
             icon: Icon(Icons.arrow_back_ios, color: blue,),
@@ -184,7 +184,7 @@ class _CheckOutState extends State<CheckOut> {
                       text: 'Order',
                       size: 20,
                       color: white,
-                      weigth: FontWeight.normal,
+                      weight: FontWeight.normal,
                     )),
               )
             ],
@@ -273,8 +273,8 @@ class _CheckOutState extends State<CheckOut> {
                         ? SizedBox(width: 25,)
                         : SizedBox(width: 15,),
                         userProvider.userModel.phone == 0
-                            ? CustomText(text: 'Add Shipping Address \t\t\t ', weigth: FontWeight.bold, size: 21, color: blue)
-                            : CustomText(text: 'Update Shipping Address  ', weigth: FontWeight.bold, size: 21, color: blue),
+                            ? CustomText(text: 'Add Shipping Address \t\t\t ', weight: FontWeight.bold, size: 21, color: blue)
+                            : CustomText(text: 'Update Shipping Address  ', weight: FontWeight.bold, size: 21, color: blue),
                         InkWell(
                             onTap: (){
                               if(_phoneController != null || _addressController != null){
@@ -414,8 +414,8 @@ class _CheckOutState extends State<CheckOut> {
                                     },
                                     minWidth: MediaQuery.of(context).size.width,
                                     child:  userProvider.userModel.phone == 0
-                                        ? CustomText(text: 'Add', weigth: FontWeight.bold, color: white,)
-                                        : CustomText(text: 'Update', weigth: FontWeight.bold, color: white,)
+                                        ? CustomText(text: 'Add', weight: FontWeight.bold, color: white,)
+                                        : CustomText(text: 'Update', weight: FontWeight.bold, color: white,)
                                 )
                             ),
                           )
@@ -563,7 +563,7 @@ class _CheckOutState extends State<CheckOut> {
                   color: blue,
                   size: 19,),
               ),
-              CustomText(text: '  Optik Citra Abadi', weigth: FontWeight.bold,)
+              CustomText(text: '  Optik Citra Abadi', weight: FontWeight.bold,)
             ],
           ),
         ),
@@ -620,7 +620,7 @@ class _CheckOutState extends State<CheckOut> {
                             print('shipping service : $_selectedShippingService');
                           },
                           child: ListTile(
-                            title: CustomText(text: 'MyOptik Express', weigth: FontWeight.bold,),
+                            title: CustomText(text: 'MyOptik Express', weight: FontWeight.bold,),
                             subtitle: Padding(
                                 padding: const EdgeInsets.only(bottom: 13),
                                 child: CustomText(
@@ -646,7 +646,7 @@ class _CheckOutState extends State<CheckOut> {
                             print('shipping service : $_selectedShippingService');
                           },
                           child: ListTile(
-                            title: CustomText(text: 'Pick up by yourself', weigth: FontWeight.bold,),
+                            title: CustomText(text: 'Pick up by yourself', weight: FontWeight.bold,),
                             subtitle: Padding(
                                 padding: const EdgeInsets.only(bottom: 13),
                                 child: CustomText(
