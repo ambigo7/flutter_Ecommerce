@@ -45,6 +45,7 @@ dependencies:
   badges: ^2.0.1
   connectivity: ^3.0.6
   dotted_border: ^2.0.0
+  map_launcher: ^2.1.1
   extended_image: ^3.0.0-non-null-safety
 
   # The following adds the Cupertino Icons font to your application.
