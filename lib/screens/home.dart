@@ -132,19 +132,20 @@ class _HomePageState extends State<HomePage> {
 //        ====BODY PART OF DRAWER A.K.A DASHBOARD=====
 
               InkWell(
-                onTap: () {},
+                onTap: () {
+                  changeScreen(context, HomePage());
+                },
                 child: ListTile(
                   title: Text('Home Page'),
                   leading: Icon(Icons.home_outlined, color: blue),
                 ),
               ),
-              _loading ? Loading()
-                  : InkWell(
+              InkWell(
                 onTap: () async{
                   setState(() {
                     _loading = true;
                   });
-                  await userProvider.getOrders();
+                  userProvider.getOrders();
                   changeScreen(context, OrdersScreen());
                   setState(() {
                     _loading = true;
@@ -196,7 +197,7 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
         ),
-        body: SafeArea(
+        body: _loading ? Loading() : SafeArea(
             child: ListView(children: <Widget>[
 //           Custom App bar
           //           Custom App bar
@@ -228,8 +229,8 @@ class _HomePageState extends State<HomePage> {
                         child: userProvider.userModel.countCart > 0
                             ? Badge(
                             position: BadgePosition.topEnd(top: -13, end: -8),
-/*                                animationDuration: Duration(milliseconds: 300),
-                                  animationType: BadgeAnimationType.slide,*/
+                                animationDuration: Duration(seconds: 1),
+                                  animationType: BadgeAnimationType.slide,
                             badgeContent: Text(
                                 userProvider.userModel.countCart.toString(),
                                 style: TextStyle(color: Colors.white)),

@@ -174,8 +174,8 @@ class _ProductDetailsState extends State<ProductDetails> {
                             child: userProvider.userModel.countCart > 0
                                 ? Badge(
                                 position: BadgePosition.topEnd(top: -13, end: -8),
-/*                                animationDuration: Duration(milliseconds: 300),
-                                  animationType: BadgeAnimationType.slide,*/
+                                animationDuration: Duration(seconds: 1),
+                                animationType: BadgeAnimationType.slide,
                                 badgeContent: Text(
                                     userProvider.userModel.countCart.toString(),
                                     style: TextStyle (color: Colors.white)),
@@ -194,11 +194,8 @@ class _ProductDetailsState extends State<ProductDetails> {
                     child: InkWell(
                       onTap: () {
                         print("CLICKED");
+                        userProvider.reloadUserModel();
                         Navigator.pop(context);
-/*                        setState(() {
-                          _getCountCart(context);
-                        });*/
-                      userProvider.reloadUserModel();
                       },
                       child: Container(
                         decoration: BoxDecoration(
@@ -243,7 +240,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                         children: <Widget>[
                           Padding(
                             padding:
-                                const EdgeInsets.symmetric(horizontal: 8.0),
+                            const EdgeInsets.symmetric(horizontal: 8.0),
                             child: CustomText(
                               text: 'Select a Color :',
                               color: black,
@@ -251,15 +248,15 @@ class _ProductDetailsState extends State<ProductDetails> {
                           ),
                           Padding(
                             padding:
-                                const EdgeInsets.symmetric(horizontal: 8.0),
+                            const EdgeInsets.symmetric(horizontal: 8.0),
                             child: DropdownButton<String>(
                               value: _selectedColor,
                               style: TextStyle(color: black),
                               items: widget.product.color
                                   .map<DropdownMenuItem<String>>((value) =>
-                                      DropdownMenuItem(
-                                          value: value,
-                                          child: CustomText(text: value)))
+                                  DropdownMenuItem(
+                                      value: value,
+                                      child: CustomText(text: value)))
                                   .toList(),
                               onChanged: (value) {
                                 setState(() {
@@ -277,7 +274,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                         children: <Widget>[
                           Padding(
                             padding:
-                                const EdgeInsets.symmetric(horizontal: 8.0),
+                            const EdgeInsets.symmetric(horizontal: 8.0),
                             child: CustomText(
                               text: 'Select a size :',
                               color: black,
@@ -285,15 +282,15 @@ class _ProductDetailsState extends State<ProductDetails> {
                           ),
                           Padding(
                             padding:
-                                const EdgeInsets.symmetric(horizontal: 8.0),
+                            const EdgeInsets.symmetric(horizontal: 8.0),
                             child: DropdownButton<String>(
                               value: _selectedSize,
                               style: TextStyle(color: black),
                               items: widget.product.sizes
                                   .map<DropdownMenuItem<String>>((value) =>
-                                      DropdownMenuItem(
-                                          value: value,
-                                          child: CustomText(text: value)))
+                                  DropdownMenuItem(
+                                      value: value,
+                                      child: CustomText(text: value)))
                                   .toList(),
                               onChanged: (value) {
                                 setState(() {
@@ -349,13 +346,13 @@ class _ProductDetailsState extends State<ProductDetails> {
                             child: appProvider.isLoading
                                 ? Loading()
                                 : Text(
-                                    "Add to Cart",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        color: white,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 20.0),
-                                  ),
+                              "Add to Cart",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20.0),
+                            ),
                           )),
                     ),
                   ],

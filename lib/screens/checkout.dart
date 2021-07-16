@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:lets_shop/commons/color.dart';
 import 'package:lets_shop/commons/common.dart';
 import 'package:lets_shop/commons/loading.dart';
+import 'package:lets_shop/commons/random_string.dart';
 import 'package:lets_shop/components/custom_text.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -11,7 +12,6 @@ import 'package:lets_shop/provider/user_provider.dart';
 import 'package:lets_shop/screens/payment.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
-import 'package:uuid/uuid.dart';
 
 class CheckOut extends StatefulWidget {
   final int totalPrice;
@@ -22,10 +22,10 @@ class CheckOut extends StatefulWidget {
   _CheckOutState createState() => _CheckOutState();
 }
 
-class _CheckOutState extends State<CheckOut> {
+class _CheckOutState extends State<CheckOut> with TickerProviderStateMixin {
 
   final formatCurrency = new NumberFormat.simpleCurrency(locale: 'id_ID');
-  /*final formatDate = new DateFormat.MMMMd();*/
+
   DateFormat formatDate ;
 
   final _formKey = GlobalKey<FormState>();
@@ -40,6 +40,7 @@ class _CheckOutState extends State<CheckOut> {
   bool _loading = false;
   bool _fromTop = true;
 
+  AnimationController _animationController;
 
   TextEditingController _messageController = TextEditingController();
 
@@ -67,6 +68,7 @@ class _CheckOutState extends State<CheckOut> {
     _selectedShippingService = "";
     initializeDateFormatting();
     formatDate = new DateFormat.MMMd('id_ID');
+    _animationController = AnimationController(vsync: this, duration: Duration(seconds: 1));
     super.initState();
   }
 
@@ -127,10 +129,11 @@ class _CheckOutState extends State<CheckOut> {
                 width: 200,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10), color: blue),
-                child: FlatButton(
-                    onPressed: () async {
+                child: GestureDetector(
+                    onTap: () async {
                       setState(() {
                         _loading = true;
+                        print('loading value : $_loading');
                       });
                       if(_selectedShippingCharged == 0 || userProvider.userModel.phone == 0){
                         _key.currentState.showSnackBar(
@@ -138,8 +141,7 @@ class _CheckOutState extends State<CheckOut> {
                                 backgroundColor: white
                             ));
                       }else{
-                        var uuid = Uuid();
-                        String id = uuid.v4();
+                        String id = generateRandomString(15);
 
                         bool _createOrder = await userProvider.createOrder(
                             userProvider.user.uid, id, 'Orders '+userProvider.userModel.countCart.toString()+' item',
@@ -175,7 +177,6 @@ class _CheckOutState extends State<CheckOut> {
                           changeScreen(context, PaymentScreen(orderId: id, totalPrice: _totalPayment,));
                         }
                       }
-
                       setState(() {
                         _loading = false;
                       });
@@ -201,7 +202,10 @@ class _CheckOutState extends State<CheckOut> {
       child: GestureDetector(
         onTap: (){
           setState(() {
-            _shippingDialog = true;
+            _shippingDialog = !_shippingDialog;
+            _shippingDialog
+                ? _animationController.forward()
+                : _animationController.reverse();
           });
           shippingDialog();
         },
@@ -239,7 +243,7 @@ class _CheckOutState extends State<CheckOut> {
                       text: userProvider.userModel.name+' | (+'+userProvider.userModel.phone.toString()+')\n'
                             +userProvider.userModel.address,)
           ),
-          trailing: _shippingDialog != true ? Icon(Icons.arrow_downward_outlined) : Icon(Icons.arrow_upward_outlined, color: Colors.blue,),
+          trailing: AnimatedIcon(icon: AnimatedIcons.home_menu, progress: _animationController)
         ),
       ),
     );
@@ -284,7 +288,11 @@ class _CheckOutState extends State<CheckOut> {
                                 });
                               }
                               setState(() {
-                                _shippingDialog = false;
+                                /*_shippingDialog = false;*/
+                                _shippingDialog = !_shippingDialog;
+                                _shippingDialog
+                                    ? _animationController.forward()
+                                    : _animationController.reverse();
                               });
                               Navigator.pop(context);
                             },
@@ -408,7 +416,11 @@ class _CheckOutState extends State<CheckOut> {
                                     onPressed: () async{
                                       validateAddUpdateShipping(_phoneInitial.text, _addressInitial.text);
                                       setState(() {
-                                        _shippingDialog = false;
+                                        /*_shippingDialog = false;*/
+                                        _shippingDialog = !_shippingDialog;
+                                        _shippingDialog
+                                            ? _animationController.forward()
+                                            : _animationController.reverse();
                                       });
                                       Navigator.pop(context);
                                     },
@@ -468,7 +480,10 @@ class _CheckOutState extends State<CheckOut> {
                 style: TextStyle(color: blue)),
           ));
           setState(() {
-            _shippingDialog = false;
+            _shippingDialog = !_shippingDialog;
+            _shippingDialog
+                ? _animationController.forward()
+                : _animationController.reverse();
           });
         }else{
           bool updateData = await userProvider.updatePhoneAddress(userProvider.userModel.id,
@@ -480,7 +495,10 @@ class _CheckOutState extends State<CheckOut> {
                   style: TextStyle(color: blue)),
             ));
             setState(() {
-              _shippingDialog = false;
+              _shippingDialog = !_shippingDialog;
+              _shippingDialog
+                  ? _animationController.forward()
+                  : _animationController.reverse();
             });
           }else{
             _key.currentState.showSnackBar(SnackBar(
@@ -489,7 +507,10 @@ class _CheckOutState extends State<CheckOut> {
                   style: TextStyle(color: blue)),
             ));
             setState(() {
-              _shippingDialog = false;
+              _shippingDialog = !_shippingDialog;
+              _shippingDialog
+                  ? _animationController.forward()
+                  : _animationController.reverse();
             });
             userProvider.reloadUserModel();
           }
@@ -504,7 +525,10 @@ class _CheckOutState extends State<CheckOut> {
                 style: TextStyle(color: blue)),
           ));
           setState(() {
-            _shippingDialog = false;
+            _shippingDialog = !_shippingDialog;
+            _shippingDialog
+                ? _animationController.forward()
+                : _animationController.reverse();
           });
         }else{
           _key.currentState.showSnackBar(SnackBar(
@@ -513,7 +537,10 @@ class _CheckOutState extends State<CheckOut> {
                 style: TextStyle(color: blue)),
           ));
           setState(() {
-            _shippingDialog = false;
+            _shippingDialog = !_shippingDialog;
+            _shippingDialog
+                ? _animationController.forward()
+                : _animationController.reverse();
           });
           userProvider.reloadUserModel();
         }

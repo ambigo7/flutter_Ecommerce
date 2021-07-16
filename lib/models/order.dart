@@ -13,7 +13,10 @@ class OrderModel {
   static const TOTAL_PRICE = "totalPrice";
   static const TOTAL_PAYMENT= "totalPayment";
   static const STATUS = "status";
-  static const CREATED_AT = "createdAt";
+  static const ORDER_TIME = "orderTime";
+  static const PAYMENT_TIME = "paymentTime";
+  static const SHIP_TIME = "shipTime";
+  static const COMPLETED_TIME = "completedTime";
 
   String _id;
   String _description;
@@ -21,7 +24,10 @@ class OrderModel {
   String _status;
   String _message;
   String _service;
-  int _createdAt;
+  int _orderTime;
+  int _paymentTime;
+  int _shipTime;
+  int _completedTime;
   int _charges;
   int _totalPrice;
   int _totalPayment;
@@ -55,7 +61,10 @@ class OrderModel {
   int get charges => _charges;
   int get totalPrice => _totalPrice;
   int get totalPayment => _totalPayment;
-  int get createdAt => _createdAt;
+  int get orderTime => _orderTime;
+  int get paymentTime => _paymentTime;
+  int get shipTime => _shipTime;
+  int get completedTime => _completedTime;
   // public variable
   List<CartItemModel> cart;
 
@@ -69,7 +78,10 @@ class OrderModel {
     _service = snapshot.data()[SERVICE];
     _charges = snapshot.data()[CHARGES];
     _userId = snapshot.data()[USER_ID];
-    _createdAt = snapshot.data()[CREATED_AT];
+    _orderTime = snapshot.data()[ORDER_TIME];
+    _paymentTime = snapshot.data()[PAYMENT_TIME];
+    _shipTime = snapshot.data()[SHIP_TIME];
+    _completedTime = snapshot.data()[COMPLETED_TIME];
     cart = _convertCartItems(snapshot.data()[CART] ?? []);
   }
 

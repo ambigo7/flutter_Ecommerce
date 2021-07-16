@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:lets_shop/models/cart_item.dart';
 import 'package:lets_shop/models/order.dart';
+import 'package:lets_shop/tidak_terpakai/signup.dart';
 
 
 class OrderServices{
@@ -28,10 +29,26 @@ class OrderServices{
       "charges": charges,
       "totalPrice": totalPrice,
       "totalPayment": totalPayment,
-      "createdAt": DateTime.now().millisecondsSinceEpoch,
+      "orderTime": DateTime.now().millisecondsSinceEpoch,
+      "paymentTime": 0,
+      "shipTime": 0,
+      "completedTime": 0,
       "description": description,
       "status": status
     });
+  }
+
+  void updateOrder({String orderId, String status, String imgUrlPayment, String imgRef}){
+    try {
+      _firestore.collection(collection).doc(orderId).update({
+        "paymentTime": DateTime.now().millisecondsSinceEpoch,
+        "status": status,
+        "imgUrlPayment": imgUrlPayment,
+        "imgRef": imgRef
+      });
+    }catch(e){
+      print('ERROR: ${e.toString()}');
+    }
   }
 
   //Ini buat jaga2 kalo dibutuhin
@@ -48,7 +65,6 @@ class OrderServices{
 
 
   Future<List<OrderModel>> getUserOrders({String userId}) async =>
-
       _firestore.collection(collection)
           .where('userId', isEqualTo: userId)
           /*.where('status', isEqualTo: '')*/
@@ -61,5 +77,4 @@ class OrderServices{
         }
         return orders;
       });
-
 }

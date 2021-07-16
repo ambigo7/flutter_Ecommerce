@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -219,6 +221,41 @@ class UserProvider with ChangeNotifier {
          totalPayment: totalPayment
       );
        print('Message for admin: ${message}');
+      return true;
+    }catch(e){
+      print("THE ERROR ${e.toString()}");
+      return false;
+    }
+  }
+
+  Future<bool> updateOrder(File image, orderId, status,)async{
+    String imgUrl;
+    try{
+          final firebase_storage.FirebaseStorage storage =
+              firebase_storage.FirebaseStorage.instance;
+
+          final String pictureRef =
+              '${DateTime
+              .now()
+              .millisecondsSinceEpoch
+              .toString()}.jpg';
+          firebase_storage.UploadTask uploadTask =
+          storage.ref().child(pictureRef).putFile(image);
+
+          firebase_storage.TaskSnapshot snapshot =
+          await uploadTask.then((snapshot) => snapshot);
+
+          uploadTask.then((snapshot) async {
+            imgUrl = await snapshot.ref.getDownloadURL();
+
+            _orderServices.updateOrder(
+              orderId: orderId,
+              status: status,
+              imgUrlPayment: imgUrl,
+              imgRef: pictureRef
+            );
+          });
+
       return true;
     }catch(e){
       print("THE ERROR ${e.toString()}");

@@ -277,21 +277,12 @@ class _CartScreenState extends State<CartScreen> {
         child: Padding(
           padding: const EdgeInsets.all(12.0),
           child: Column(
-            mainAxisAlignment:
-            MainAxisAlignment.center,
-            crossAxisAlignment:
-            CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment:
-                MainAxisAlignment.center,
-                children: <Widget>[
-                  Text(
-                    'Your cart is empty', //TODO: bikin tombol buat ke home arahin buat belanja
-                    textAlign: TextAlign.center,
-                  ),
-                ],
-              ),
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Icon(Icons.shopping_cart_outlined, color: grey, size: 30,),
+              CustomText(text: 'Your cart is empty', size: 20, align: TextAlign.center, color: grey,),
+
             ],
           ),
         ),
