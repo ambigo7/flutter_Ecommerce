@@ -324,6 +324,7 @@ class _CheckOutState extends State<CheckOut> with TickerProviderStateMixin {
                                 child: ListTile(
                                     title: userProvider.userModel.phone != 0
                                         ? TextFormField(
+                                            autovalidateMode: AutovalidateMode.onUserInteraction,
                                             controller: _phoneInitial,
                                               decoration: InputDecoration(
                                                 icon: Icon(Icons.local_phone_outlined),
@@ -337,6 +338,7 @@ class _CheckOutState extends State<CheckOut> with TickerProviderStateMixin {
                                             },
                                           )
                                         : TextFormField(
+                                            autovalidateMode: AutovalidateMode.onUserInteraction,
                                             controller: _phoneController,
                                               decoration: InputDecoration(
                                               hintText: 'Ex: 628999992378',
@@ -367,6 +369,7 @@ class _CheckOutState extends State<CheckOut> with TickerProviderStateMixin {
                                 child: ListTile(
                                   title: userProvider.userModel.address != ""
                                       ? TextFormField(
+                                          autovalidateMode: AutovalidateMode.onUserInteraction,
                                           keyboardType: TextInputType.multiline,
                                             maxLines: 5,
                                             controller: _addressInitial,
@@ -624,7 +627,7 @@ class _CheckOutState extends State<CheckOut> with TickerProviderStateMixin {
             color: greenAccent.withOpacity(0.2),
             child: Column(
               children: <Widget>[
-                ExpansionTile(
+                ExpansionTile( //TODO: buat active color utk trailing, caranya sm kaya di admin manage
                   title: Row(
                     children: <Widget>[
                       Icon(LineIcons.shippingFast, color: blue,),
@@ -714,11 +717,18 @@ class _CheckOutState extends State<CheckOut> with TickerProviderStateMixin {
                 CustomText(text: 'Message : '),
                 Expanded(
                   child: TextFormField(
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
                     textAlign: TextAlign.end,
                     controller: _messageController,
                     decoration: InputDecoration(
                         hintText: 'Message for admin...',
                         border: InputBorder.none),
+                    validator: (value) {
+                      if (value.length > 10) {
+                        return 'Product name cant have more then 10 letters';
+                      }
+                      return null;
+                    },
                   ),
                 ),
               ],

@@ -10,7 +10,7 @@ import 'package:lets_shop/commons/common.dart';
 import 'package:lets_shop/commons/loading.dart';
 import 'package:lets_shop/commons/random_string.dart';
 import 'package:lets_shop/components/custom_text.dart';
-import 'package:lets_shop/components/expand_image.dart';
+import 'package:lets_shop/components/expand_image_file.dart';
 import 'package:lets_shop/components/expandable_text.dart';
 import 'package:lets_shop/provider/user_provider.dart';
 import 'package:lets_shop/screens/home.dart';
@@ -307,11 +307,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
                       child: GestureDetector(
                         onTap: (){
                           if(_image != null){
-                            changeScreen(context, ExpandImage(
-                              imageType: 'file',
+                            changeScreen(context, ExpandImageFile(
                               imageFile: _image,
-                              enableSlideOutPage: true,
-                            )
+                              enableSlideOutPage: true,)
                             );
                           }else{
                             _key.currentState.showSnackBar(

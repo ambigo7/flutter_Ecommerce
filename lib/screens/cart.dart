@@ -109,16 +109,16 @@ class _CartScreenState extends State<CartScreen> {
                                           fontSize: 20,
                                           fontWeight: FontWeight.bold)),
                                   TextSpan(
-                                      text: userProvider
-                                              .userModel.cart[index].size +
+                                      text: /*userProvider
+                                              .userModel.cart[index].size +*/ //TODO: jadiiin custom lesan
                                           "\n",
                                       style: TextStyle(
                                           color: black,
                                           fontSize: 12,
                                           fontWeight: FontWeight.bold)),
                                   TextSpan(
-                                      text: userProvider
-                                              .userModel.cart[index].color +
+                                      text: /*userProvider
+                                              .userModel.cart[index].color +*/
                                           "\n\n",
                                       style: TextStyle(
                                           color: black,

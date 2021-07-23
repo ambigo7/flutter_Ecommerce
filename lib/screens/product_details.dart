@@ -4,6 +4,8 @@ import 'package:lets_shop/commons/color.dart';
 import 'package:lets_shop/commons/common.dart';
 import 'package:lets_shop/commons/loading.dart';
 import 'package:lets_shop/components/custom_text.dart';
+import 'package:lets_shop/components/expand_image_file.dart';
+import 'package:lets_shop/components/expand_image_network.dart';
 import 'package:lets_shop/models/product.dart';
 
 //PACKAGE MONEY FORMATTER
@@ -96,30 +98,40 @@ class _ProductDetailsState extends State<ProductDetails> {
                 //PICTURE BOX
                 Align(
                   alignment: Alignment.bottomCenter,
-                  child: Container(
-                      height: 400,
-                      decoration: BoxDecoration(
-                        // Box decoration takes a gradient
-                        gradient: LinearGradient(
-                          // Where the linear gradient begins and ends
-                          begin: Alignment.bottomCenter,
-                          end: Alignment.topCenter,
-                          // Add one stop for each color. Stops should increase from 0 to 1
-                          colors: [
-                            // Colors are easy thanks to Flutter's Colors class.
-                            Colors.black.withOpacity(0.8),
-                            Colors.black.withOpacity(0.6),
-                            Colors.black.withOpacity(0.6),
-                            Colors.black.withOpacity(0.4),
-                            Colors.black.withOpacity(0.07),
-                            Colors.black.withOpacity(0.05),
-                            Colors.black.withOpacity(0.025),
-                          ],
+                  child: GestureDetector(
+                    onTap: (){
+                      print('clicked');
+                      changeScreen(context, ExpandImageNetwork(
+                        imageUrl: widget.product.imageUrl,
+                        enableSlideOutPage: true,
+                      )
+                      );
+                    },
+                    child: Container(
+                        height: 400,
+                        decoration: BoxDecoration(
+                          // Box decoration takes a gradient
+                          gradient: LinearGradient(
+                            // Where the linear gradient begins and ends
+                            begin: Alignment.bottomCenter,
+                            end: Alignment.topCenter,
+                            // Add one stop for each color. Stops should increase from 0 to 1
+                            colors: [
+                              // Colors are easy thanks to Flutter's Colors class.
+                              Colors.black.withOpacity(0.8),
+                              Colors.black.withOpacity(0.6),
+                              Colors.black.withOpacity(0.6),
+                              Colors.black.withOpacity(0.4),
+                              Colors.black.withOpacity(0.07),
+                              Colors.black.withOpacity(0.05),
+                              Colors.black.withOpacity(0.025),
+                            ],
+                          ),
                         ),
-                      ),
-                      child: Padding(
-                          padding: const EdgeInsets.only(top: 8.0),
-                          child: Container())),
+                        child: Padding(
+                            padding: const EdgeInsets.only(top: 8.0),
+                            child: Container())),
+                  ),
                 ),
                 //PRODUCT NAME
                 Positioned(
@@ -252,8 +264,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                             child: DropdownButton<String>(
                               value: _selectedColor,
                               style: TextStyle(color: black),
-                              items: widget.product.color
-                                  .map<DropdownMenuItem<String>>((value) =>
+                              items: widget.product.color.map<DropdownMenuItem<String>>((value) =>
                                   DropdownMenuItem(
                                       value: value,
                                       child: CustomText(text: value)))

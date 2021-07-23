@@ -69,11 +69,11 @@ class ProductCard extends StatelessWidget {
                   style: TextStyle(fontSize: 20),
                 ),
                 TextSpan(
-                  text: 'by: ${product.brand} \n\n\n\n\n',
+                  text: /*'by: ${product.brand} */'\n\n\n\n\n', //TODO: nanti jadi brand yang di input aja, bukan dari database brand
                   style: TextStyle(fontSize: 16, color: Colors.grey),
                 ),
                 TextSpan(
-                  text: '${formatCurrency.format(product.price)} \t',
+                  text: '${formatCurrency.format(product.price)} \t',//TODO: diatasnya tambahin old price yak
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 ),
                 TextSpan(

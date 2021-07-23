@@ -100,6 +100,7 @@ class _LoginState extends State<Login> {
                           padding: const EdgeInsets.only(left: 12.0),
                           child: ListTile(
                             title: TextFormField(
+                              autovalidateMode: AutovalidateMode.onUserInteraction,
                               controller: _email,
                               decoration: InputDecoration(
                                   hintText: 'Email',
@@ -136,6 +137,7 @@ class _LoginState extends State<Login> {
                           padding: const EdgeInsets.only(left: 12.0),
                           child: ListTile(
                             title: TextFormField(
+                              autovalidateMode: AutovalidateMode.onUserInteraction,
                               controller: _password,
                               obscureText: _passwordVisible,
                               decoration: InputDecoration(
@@ -368,6 +370,7 @@ class _LoginState extends State<Login> {
                           padding: const EdgeInsets.only(left: 12.0),
                           child: ListTile(
                             title: TextFormField(
+                              autovalidateMode: AutovalidateMode.onUserInteraction,
                               controller: _name,
                               decoration: InputDecoration(
                                   hintText: 'Full Name',
@@ -397,6 +400,7 @@ class _LoginState extends State<Login> {
                           padding: const EdgeInsets.only(left: 12.0),
                           child: ListTile(
                             title: TextFormField(
+                              autovalidateMode: AutovalidateMode.onUserInteraction,
                               controller: _emailSignUp,
                               decoration: InputDecoration(
                                   hintText: 'Email',
@@ -431,6 +435,7 @@ class _LoginState extends State<Login> {
                         elevation: 0.0,
                         child: ListTile(
                           title: TextFormField(
+                            autovalidateMode: AutovalidateMode.onUserInteraction,
                             controller: _passwordSignUp,
                             obscureText: _passwordVisible,
                             decoration: InputDecoration(
@@ -685,6 +690,7 @@ class _LoginState extends State<Login> {
                           padding: const EdgeInsets.only(left: 12.0),
                           child: ListTile(
                             title: TextFormField(
+                              autovalidateMode: AutovalidateMode.onUserInteraction,
                               controller: _phoneController,
                               decoration: InputDecoration(
                                   hintText: 'Phone Number(ex: 628999992378)',
@@ -715,6 +721,7 @@ class _LoginState extends State<Login> {
                           padding: const EdgeInsets.only(left: 12.0),
                           child: ListTile(
                             title: TextFormField(
+                              autovalidateMode: AutovalidateMode.onUserInteraction,
                               keyboardType: TextInputType.multiline,
                               maxLines: 5,
                               controller: _addressController,

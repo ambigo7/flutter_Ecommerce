@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ProductModel{
+  //TODO: update produk model ada di app admin!!!!
   static const ID = 'id';
   static const NAME = 'name';
   static const PRICE = 'price';

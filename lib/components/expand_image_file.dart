@@ -4,12 +4,8 @@ import 'package:lets_shop/commons/color.dart';
 
 import 'custom_text.dart';
 
-class ExpandImage extends StatelessWidget {
+class ExpandImageFile extends StatelessWidget {
 
-  ///kalo mau sumber fotonya network, isi network , kalo mau sumber fotonya file isi 'file'.
-  final String imageType;
-  ///kalo sumber foto network, isi imageUrl. kalo bukan ga perlu diisi
-  final String imageUrl;
   ///kalo sumber foto file, isi imageFile. kalo bukan ga perlu diisi
   final File imageFile;
 
@@ -26,12 +22,12 @@ class ExpandImage extends StatelessWidget {
   ///kalo mau pake appbar pake true
   bool appBar = false;
 
-  ExpandImage({this.title, this.colorTitle, this.sizeTitle, this.appBar,
-    this.enableSlideOutPage, this.imageFile, this.imageUrl,  this.imageType});
+  ExpandImageFile({this.imageFile ,this.title, this.colorTitle, this.sizeTitle, this.appBar,
+    this.enableSlideOutPage});
+
 
   @override
   Widget build(BuildContext context) {
-    String _imageType = imageType[0].toUpperCase();
     return Scaffold(
         appBar: appBar != true
         ? null : AppBar(
@@ -59,8 +55,7 @@ class ExpandImage extends StatelessWidget {
             child: ExtendedImageSlidePage(
                 slideAxis: SlideAxis.both,
                 slideType: SlideType.onlyImage,
-                child: _imageType != "Network"
-                    ? ExtendedImage.file(
+                child: ExtendedImage.file(
                   imageFile,
                   //disable to stop image sliding off page && entering dead end without back button.
                   //setting to false means it won't slide at all.
@@ -77,22 +72,6 @@ class ExpandImage extends StatelessWidget {
                     inPageView: false,
                   ),
                   // onDoubleTap: ?  zoom in on image
-                  fit: BoxFit.scaleDown,
-                )
-                : ExtendedImage.network(
-                  imageUrl,
-                  enableSlideOutPage: true,
-                  mode: ExtendedImageMode.gesture,
-                  initGestureConfigHandler: (state) => GestureConfig(
-                    minScale: 1.0,
-                    animationMinScale: 0.8,
-                    maxScale: 3.0,
-                    animationMaxScale: 3.5,
-                    speed: 1.0,
-                    inertialSpeed: 100.0,
-                    initialScale: 1.0,
-                    inPageView: false,
-                  ),
                   fit: BoxFit.scaleDown,
                 )
             ),
