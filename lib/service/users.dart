@@ -32,7 +32,7 @@ class UserServices{
       return UserModel.fromSnapshot(doc);
   });
 
-  Future<UserModel> getUserIdStream(String id){ //Belajar tarik data Stream tapi masih gagal
+  Future<UserModel> getUserIdStream(String id){ //Belajar tarik data Stream tapi masih gagal, USELESS
      /*users.doc(id).get().then((querySnapshot) {
        querySnapshot.docs.fore
      });*/

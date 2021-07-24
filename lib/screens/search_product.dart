@@ -17,7 +17,6 @@ class SearchProductScreen extends StatelessWidget {
     final productProvider = Provider.of<ProductProvider>(context);
     final userProvider = Provider.of<UserProvider>(context);
 
-
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(color: blue),

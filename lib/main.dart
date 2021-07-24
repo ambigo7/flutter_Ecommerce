@@ -7,6 +7,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:lets_shop/commons/loading.dart';
 import 'package:lets_shop/provider/app_provider.dart';
 import 'package:lets_shop/provider/connectivity_provider.dart';
+import 'package:lets_shop/provider/lens_provider.dart';
 import 'package:lets_shop/provider/product_provider.dart';
 import 'package:lets_shop/screens/nointernet.dart';
 import 'package:provider/provider.dart';
@@ -29,6 +30,7 @@ void main() async {
         ),
         ChangeNotifierProvider.value(value: UserProvider.initialize()),
         ChangeNotifierProvider.value(value: ProductProvider.initialize()),
+        ChangeNotifierProvider.value(value: LensProvider.initialize()),
         ChangeNotifierProvider.value(value: AppProvider()),
       ],
       child: MaterialApp(
