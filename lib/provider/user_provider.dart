@@ -134,7 +134,7 @@ class UserProvider with ChangeNotifier {
               "photo": user.photoURL,
               "email": user.email,
               "uid": user.uid,
-              "phone":user.phoneNumber, //update belom commit
+              "phone": user.phoneNumber, //update belom commit
               "address": "" //update belom commit
             });
         print('User was Created');

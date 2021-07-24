@@ -57,7 +57,7 @@ class ExpandImageNetwork extends StatelessWidget {
               slideType: SlideType.onlyImage,
               child: ExtendedImage.network(
                   imageUrl,
-                  enableSlideOutPage: true,
+                  enableSlideOutPage: enableSlideOutPage ?? false,
                   mode: ExtendedImageMode.gesture,
                   initGestureConfigHandler: (state) => GestureConfig(
                     minScale: 1.0,

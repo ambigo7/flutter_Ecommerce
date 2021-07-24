@@ -29,7 +29,6 @@ class CartItemModel {
   /*int get quantity => _quantity;*/
 
 
-//Contructure data from DB
   CartItemModel.fromMap(Map data){
     _id = data[ID];
     _name =  data[NAME];
@@ -41,7 +40,7 @@ class CartItemModel {
     /*_quantity = data[QUANTITY];*/
   }
 
-// PROCEDURE FOR DATA from DB
+// buat convert ke map
   Map toMap() => {
     ID: _id,
     IMAGE: _image,

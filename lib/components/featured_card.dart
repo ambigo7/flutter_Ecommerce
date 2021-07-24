@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lets_shop/commons/color.dart';
 import 'package:lets_shop/commons/common.dart';
 import 'package:lets_shop/commons/loading.dart';
 import 'package:lets_shop/models/product.dart';
@@ -98,6 +99,10 @@ class FeaturedCard extends StatelessWidget {
                       padding: const EdgeInsets.only(left:8.0),
                       child: RichText(text: TextSpan(children: [
                         TextSpan(text: '${product.name} \n', style: TextStyle(fontSize: 18)),
+                        TextSpan(
+                          text:  product.sale ? '${formatCurrency.format(product.oldPrice)} \n' : '', //TODO: nanti jadi brand yang di input aja, bukan dari database brand
+                          style: TextStyle(fontSize: 18, color: redAccent, decoration: TextDecoration.lineThrough, fontWeight: FontWeight.bold),
+                        ),
                         TextSpan(text: '${formatCurrency.format(product.price)}', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
 
                       ]))
