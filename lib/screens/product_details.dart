@@ -1,4 +1,5 @@
 import 'package:badges/badges.dart';
+import 'package:editable/editable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:lets_shop/commons/color.dart';
@@ -8,6 +9,7 @@ import 'package:lets_shop/components/column_builder.dart';
 import 'package:lets_shop/components/custom_text.dart';
 import 'package:lets_shop/components/expand_image_file.dart';
 import 'package:lets_shop/components/expand_image_network.dart';
+import 'package:lets_shop/models/adjust_lens.dart';
 import 'package:lets_shop/models/lens.dart';
 import 'package:lets_shop/models/product.dart';
 
@@ -53,12 +55,57 @@ class _ProductDetailsState extends State<ProductDetails> {
   Color noActive = grey;
 
   String _priceCustomText = 'Price';
-  String _expansion;
-  bool _selectedExpansionLens = false;
-  bool _selectedExpansionAdjustLens = false;
+  bool _expansionLens = false;
 
   int _idLensLength;
   int _totalPrice;
+
+  bool _fromTop = true;
+
+  final _editableKey = GlobalKey<EditableState>();
+
+  List _dataAdjustLens = [];
+
+  ///Print only edited rows.
+  void _submitDataAdjustLens() {
+    // List<AdjustLens> _adjustLens = [];
+    _dataAdjustLens  = _editableKey.currentState.editedRows;
+    print(_dataAdjustLens);
+    // buat Debugging doang
+/*    for(Map data in _dataAdjustLens){
+      _adjustLens.add(AdjustLens.fromMap(data));
+    }
+    print(_adjustLens[1].sph);*/
+  }
+
+  List rowsAdjustLens = [
+    {
+      "rl": 'R',
+      "sph": '',
+      "cyl": '',
+      "axis": '',
+      "add": '',
+      "pd": ''
+    },
+    {
+      "rl": 'L',
+      "sph": '',
+      "cyl": '',
+      "axis": '',
+      "add": '',
+      "pd": 'X'
+    }
+  ];
+
+  List colsAdjustLens = [
+    {"title": ' ', 'widthFactor': 0.1, 'key': 'rl', 'editable': false},
+    {"title": 'SPH', 'key': 'sph'},
+    {"title": 'CYL', 'key': 'cyl'},
+    {"title": 'AXIS', 'key': 'axis'},
+    {"title": 'ADD', 'key': 'add'},
+    {"title": 'PD', 'widthFactor': 0.1, 'key': 'pd'},
+  ];
+
 
   getPrice(int lens, int product){
     setState(() {
@@ -318,119 +365,134 @@ class _ProductDetailsState extends State<ProductDetails> {
                             /*blurRadius: 10*/
                           )
                         ]),
-                    child: ListView(
-                      controller: _hideBottomNavController,
-                      children: <Widget>[
-                        /*Padding(
-                      padding: const EdgeInsets.only(left: 4.0, right: 4.0),
-                      child: Row(
+                    child: GestureDetector(
+                      onHorizontalDragEnd: (DragEndDetails details){
+                        if (details.primaryVelocity > 0) {
+                          // User swiped Left
+                          setState(() {
+                            _selectedPage = Page.detail;
+                          });
+                        } else if (details.primaryVelocity < 0) {
+                          // User swiped Right
+                          setState(() {
+                            _selectedPage = Page.custom;
+                          });
+                        }
+                      },
+                      child: ListView(
+                        controller: _hideBottomNavController,
                         children: <Widget>[
-                          Padding(
-                            padding:
-                            const EdgeInsets.symmetric(horizontal: 8.0),
-                            child: CustomText(
-                              text: 'Select a Color :',
-                              color: black,
-                            ),
-                          ),
-                          Padding(
-                            padding:
-                            const EdgeInsets.symmetric(horizontal: 8.0),
-                            child: DropdownButton<String>(
-                              value: _selectedColor,
-                              style: TextStyle(color: black),
-                              items: widget.product.color.map<DropdownMenuItem<String>>((value) =>
-                                  DropdownMenuItem(
-                                      value: value,
-                                      child: CustomText(text: value)))
-                                  .toList(),
-                              onChanged: (value) {
-                                setState(() {
-                                  _selectedColor = value;
-                                });
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),*/
-                        /*Padding(
-                      padding: const EdgeInsets.only(left: 4.0, right: 4.0),
-                      child: Row(
-                        children: <Widget>[
-                          Padding(
-                            padding:
-                            const EdgeInsets.symmetric(horizontal: 8.0),
-                            child: CustomText(
-                              text: 'Select a size :',
-                              color: black,
-                            ),
-                          ),
-                          Padding(
-                            padding:
-                            const EdgeInsets.symmetric(horizontal: 8.0),
-                            child: DropdownButton<String>(
-                              value: _selectedSize,
-                              style: TextStyle(color: black),
-                              items: widget.product.sizes
-                                  .map<DropdownMenuItem<String>>((value) =>
-                                  DropdownMenuItem(
-                                      value: value,
-                                      child: CustomText(text: value)))
-                                  .toList(),
-                              onChanged: (value) {
-                                setState(() {
-                                  _selectedSize = value;
-                                });
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),*/
-                        SizedBox(height: 8,),
-                        Row(
+                          /*Padding(
+                        padding: const EdgeInsets.only(left: 4.0, right: 4.0),
+                        child: Row(
                           children: <Widget>[
-                            Expanded(
-                                child: GestureDetector(
-                                  onTap: (){
-                                    setState(() {
-                                      _selectedPage = Page.detail;
-                                    });
-                                  },
-                                  child: Container(
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: <Widget>[
-                                        CustomText(text: 'Product Details', weight: FontWeight.bold,),
-                                        Divider(thickness: 3, color: _selectedPage == Page.detail ? active : noActive,)
-                                      ],
-                                    ),
-                                  ),
-                                )
+                            Padding(
+                              padding:
+                              const EdgeInsets.symmetric(horizontal: 8.0),
+                              child: CustomText(
+                                text: 'Select a Color :',
+                                color: black,
+                              ),
                             ),
-                            Expanded(
-                                child: GestureDetector(
-                                  onTap: (){
-                                    setState(() {
-                                      _selectedPage = Page.custom;
-                                    });
-                                  },
-                                  child: Container(
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: <Widget>[
-                                        CustomText(text: 'Custom Eyeglass', weight: FontWeight.bold,),
-                                        Divider(thickness: 3, color: _selectedPage == Page.custom ? active : noActive,)
-                                      ],
-                                    ),
-                                  ),
-                                )
-                            )
+                            Padding(
+                              padding:
+                              const EdgeInsets.symmetric(horizontal: 8.0),
+                              child: DropdownButton<String>(
+                                value: _selectedColor,
+                                style: TextStyle(color: black),
+                                items: widget.product.color.map<DropdownMenuItem<String>>((value) =>
+                                    DropdownMenuItem(
+                                        value: value,
+                                        child: CustomText(text: value)))
+                                    .toList(),
+                                onChanged: (value) {
+                                  setState(() {
+                                    _selectedColor = value;
+                                  });
+                                },
+                              ),
+                            ),
                           ],
                         ),
-                        contentPage()
-                      ],
+                      ),*/
+                          /*Padding(
+                        padding: const EdgeInsets.only(left: 4.0, right: 4.0),
+                        child: Row(
+                          children: <Widget>[
+                            Padding(
+                              padding:
+                              const EdgeInsets.symmetric(horizontal: 8.0),
+                              child: CustomText(
+                                text: 'Select a size :',
+                                color: black,
+                              ),
+                            ),
+                            Padding(
+                              padding:
+                              const EdgeInsets.symmetric(horizontal: 8.0),
+                              child: DropdownButton<String>(
+                                value: _selectedSize,
+                                style: TextStyle(color: black),
+                                items: widget.product.sizes
+                                    .map<DropdownMenuItem<String>>((value) =>
+                                    DropdownMenuItem(
+                                        value: value,
+                                        child: CustomText(text: value)))
+                                    .toList(),
+                                onChanged: (value) {
+                                  setState(() {
+                                    _selectedSize = value;
+                                  });
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),*/
+                          SizedBox(height: 8,),
+                          Row(
+                            children: <Widget>[
+                              Expanded(
+                                  child: GestureDetector(
+                                    onTap: (){
+                                      setState(() {
+                                        _selectedPage = Page.detail;
+                                      });
+                                    },
+                                    child: Container(
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: <Widget>[
+                                          CustomText(text: 'Product Details', weight: FontWeight.bold,),
+                                          Divider(thickness: 3, color: _selectedPage == Page.detail ? active : noActive,)
+                                        ],
+                                      ),
+                                    ),
+                                  )
+                              ),
+                              Expanded(
+                                  child: GestureDetector(
+                                    onTap: (){
+                                      setState(() {
+                                        _selectedPage = Page.custom;
+                                      });
+                                    },
+                                    child: Container(
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: <Widget>[
+                                          CustomText(text: 'Custom Eyeglass', weight: FontWeight.bold,),
+                                          Divider(thickness: 3, color: _selectedPage == Page.custom ? active : noActive,)
+                                        ],
+                                      ),
+                                    ),
+                                  )
+                              )
+                            ],
+                          ),
+                          contentPage()
+                        ],
+                      ),
                     ),
                   ),
                 )
@@ -548,8 +610,25 @@ class _ProductDetailsState extends State<ProductDetails> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        CustomText(text: _priceCustomText, color: grey,),
-                        CustomText(text: '${formatCurrency.format(_totalPrice)}', weight: FontWeight.bold, color: blue,),
+                        AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 500),
+                          transitionBuilder: (Widget child, Animation<double> animation){
+                            return ScaleTransition(child: child, scale: animation,);
+                          },
+                          child: Text(_priceCustomText,
+                            key: ValueKey<String>(_priceCustomText),
+                            style: TextStyle(color: grey, fontSize: 16,),),
+                        ),/*CustomText(text: _priceCustomText, color: grey,),*/
+                        AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 500),
+                          transitionBuilder: (Widget child, Animation<double> animation){
+                            return ScaleTransition(child: child, scale: animation,);
+                          },
+                          child: Text('${formatCurrency.format(_totalPrice)}',
+                            style: TextStyle(color: blue, fontSize: 16, fontWeight:FontWeight.bold),
+                            key: ValueKey<int>(_totalPrice),
+                          ),
+                        ),
                       ],
                     ),
                     Divider(color: grey,),
@@ -557,63 +636,39 @@ class _ProductDetailsState extends State<ProductDetails> {
                 ),
               ),
             ),
-            Visibility(
-                visible: _selectedExpansionAdjustLens ? true : false,
-                child: ExpansionTile(
-                  initiallyExpanded: _selectedExpansionAdjustLens,
-                  onExpansionChanged: (newState){
-                    setState(() {
-
-                    });
-                  },
-                  title: CustomText(
-                    text: 'Adjust your selected eyeglass',),
-                  children: <Widget>[
-                    CustomText(text: 'TEST',),
-                    CustomText(text: 'TEST',),
-                    CustomText(text: 'TEST',),
-                  ],
-
-                )
-            ),
-            ExpansionTile(
-/*              onExpansionChanged: (newState){
-                setState(() {
-                  Duration(seconds: 20000);
-                });
-              },*/
-              initiallyExpanded: _selectedExpansionLens,
-              title: Row(
+            Padding(
+              padding: const EdgeInsets.only(left: 15, bottom: 5),
+              child: Row(
                 children: <Widget>[
                   CustomText(text: 'Select Eyeglass',),
                   GestureDetector(
                     onTap: (){
                       _key.currentState.showSnackBar(
                           SnackBar(content: RichText(text: TextSpan(
-                            text: 'Tap ',
-                            style: TextStyle(color: blue, fontWeight: FontWeight.bold),
-                            children: <TextSpan>[
-                              TextSpan(
-                                text: 'for select eyeglass.\n',
-                                style: TextStyle(color: black, fontWeight: FontWeight.normal),
-                              ),
-                              TextSpan(
-                                text: 'Double Tap ',
-                                style: TextStyle(color: blue, fontWeight: FontWeight.bold),
-                              ),
-                              TextSpan(
-                                text: 'for detail eyeglass.\n',
-                                style: TextStyle(color: black, fontWeight: FontWeight.normal),
-                              ),
-                              TextSpan(
-                                text: 'Long Press ',
-                                style: TextStyle(color: blue, fontWeight: FontWeight.bold),
-                              ),
-                              TextSpan(
-                                text: 'for cancel custom eyeglass',
-                                style:  TextStyle(color: black, fontWeight: FontWeight.normal),
-                              ),
-                            ]
+                              text: 'Tap ',
+                              style: TextStyle(color: blue, fontWeight: FontWeight.bold),
+                              children: <TextSpan>[
+                                TextSpan(
+                                  text: 'for select eyeglass.\n',
+                                  style: TextStyle(color: black, fontWeight: FontWeight.normal),
+                                ),
+                                TextSpan(
+                                  text: 'Double Tap ',
+                                  style: TextStyle(color: blue, fontWeight: FontWeight.bold),
+                                ),
+                                TextSpan(
+                                  text: 'for detail eyeglass.\n',
+                                  style: TextStyle(color: black, fontWeight: FontWeight.normal),
+                                ),
+                                TextSpan(
+                                  text: 'Long Press ',
+                                  style: TextStyle(color: blue, fontWeight: FontWeight.bold),
+                                ),
+                                TextSpan(
+                                  text: 'for cancel custom eyeglass',
+                                  style:  TextStyle(color: black, fontWeight: FontWeight.normal),
+                                ),
+                              ]
                           )),
                               backgroundColor: white
                           ));
@@ -622,70 +677,68 @@ class _ProductDetailsState extends State<ProductDetails> {
                   )
                 ],
               ),
-              expandedCrossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                ColumnBuilder(
-                    itemCount: lensProvider.lens.length,
-                    itemBuilder: (_, index){
-                      return GestureDetector(
-                        onTap: (){
-                          setState(() {
-                            _priceCustomText = 'Price after custom';
-                            getPrice(lensProvider.lens[index].price, widget.product.price);
-                            _idLensLength = index;
-                            _selectedExpansionLens = false;
-                            _selectedExpansionAdjustLens = true;
-                          });
-                        },
-                        onDoubleTap: (){
-                          lensDetailModal(
-                              lensProvider.lens[index].name, lensProvider.lens[index].brand,
-                              lensProvider.lens[index].imageUrl, lensProvider.lens[index].oldPrice,
-                              lensProvider.lens[index].price, lensProvider.lens[index].sale,
-                              lensProvider.lens[index].color, lensProvider.lens[index].description);
-                        },
-                        onLongPress: (){
-                          _priceCustomText = 'Price';
-                          getPrice(0, widget.product.price);
-                          _idLensLength = -1;
-                        },
-                        child: ListTile(
-                          leading: Container(
-                            height: 80,
-                            width: 80,
-                            child: FadeInImage.memoryNetwork(
-                              placeholder: kTransparentImage,
-                              image: lensProvider.lens[index].imageUrl,
-                              fit: BoxFit.fill,
-                              height: 120,
-                              width: 140,
-                            ),
-                          ),
-                          title: CustomText(text: lensProvider.lens[index].name),
-                          subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+            ),
+            ColumnBuilder(
+                itemCount: lensProvider.lens.length,
+                itemBuilder: (_, index){
+                  return GestureDetector(
+                    onTap: (){
+                      setState(() {
+                        _priceCustomText = 'Price after custom';
+                        getPrice(lensProvider.lens[index].price, widget.product.price);
+                        _idLensLength = index;
+                        _expansionLens = false;
+                      });
+                      Future.delayed(Duration(milliseconds: 500));
+                      lensAdjutDialog();
+                    },
+                    onDoubleTap: (){
+                      lensDetailModal(
+                          lensProvider.lens[index].name, lensProvider.lens[index].brand,
+                          lensProvider.lens[index].imageUrl, lensProvider.lens[index].oldPrice,
+                          lensProvider.lens[index].price, lensProvider.lens[index].sale,
+                          lensProvider.lens[index].color, lensProvider.lens[index].description);
+                    },
+                    onLongPress: (){
+                      _priceCustomText = 'Price';
+                      getPrice(0, widget.product.price);
+                      _idLensLength = -1;
+                    },
+                    child: ListTile(
+                      leading: Container(
+                        height: 80,
+                        width: 80,
+                        child: FadeInImage.memoryNetwork(
+                          placeholder: kTransparentImage,
+                          image: lensProvider.lens[index].imageUrl,
+                          fit: BoxFit.fill,
+                          height: 120,
+                          width: 140,
+                        ),
+                      ),
+                      title: CustomText(text: lensProvider.lens[index].name),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          CustomText(
+                            text: lensProvider.lens[index].sale ? '${formatCurrency.format(lensProvider.lens[index].oldPrice)}' : '',
+                            decoration: TextDecoration.lineThrough, color: redAccent, size: 14,),
+                          Row(
                             children: <Widget>[
-                              CustomText(
-                                text: lensProvider.lens[index].sale ? '${formatCurrency.format(lensProvider.lens[index].oldPrice)}' : '',
-                                decoration: TextDecoration.lineThrough, color: redAccent, size: 14,),
-                              Row(
-                                children: <Widget>[
-                                  CustomText(text: '${formatCurrency.format(lensProvider.lens[index].price)}',),
-                                  Visibility(
-                                    visible: lensProvider.lens[index].sale ? true : false,
-                                      child: CustomText(
-                                        text: ' ON SALE', color: redAccent,)
-                                  )
-                                ],
-                              ),
+                              CustomText(text: '${formatCurrency.format(lensProvider.lens[index].price)}',),
+                              Visibility(
+                                visible: lensProvider.lens[index].sale ? true : false,
+                                  child: CustomText(
+                                    text: ' ON SALE', color: redAccent,)
+                              )
                             ],
                           ),
-                          trailing: _idLensLength == index ? Icon(Icons.check_outlined, color: blue) : null,
-                        ),
-                      );
-                    }
-                )
-              ],
+                        ],
+                      ),
+                      trailing: _idLensLength == index ? Icon(Icons.check_outlined, color: blue) : null,
+                    ),
+                  );
+                }
             ),
           ],
         );
@@ -693,6 +746,103 @@ class _ProductDetailsState extends State<ProductDetails> {
       default:
         return Container();
     }
+  }
+
+  void lensAdjutDialog(){
+    var dialog = Align(
+      alignment: _fromTop ? Alignment.topCenter : Alignment.bottomCenter,
+      child: Container(
+          height: 270,
+          margin: EdgeInsets.only(top: 200, bottom: 50),
+          decoration: BoxDecoration(
+            color: white,
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Column(
+            children: <Widget>[
+              SizedBox(height: 10,),
+              Material(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      CustomText(
+                        text: 'Adjust Your\nSelected Eyeglass ',
+                        color: blue,
+                        size: 18,
+                        align: TextAlign.center,
+                        weight: FontWeight.bold,),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 22),
+                        child: Tooltip(
+                            decoration: BoxDecoration(color: black.withOpacity(0.5) ),
+                            textStyle: TextStyle(color: white),
+                            waitDuration: Duration(microseconds: 0),
+                            message: 'Optional, If you want to adjust the eyeglass to your eyes',
+                            child: Icon(LineIcons.questionCircle, color: grey, size: 18,)),
+                      ),
+                    ],
+                  )),
+              SizedBox(height: 10,),
+              Expanded(
+                flex: 1,
+                child: Editable(
+                  key: _editableKey,
+                  thSize: 16,
+                  thWeight: FontWeight.bold,
+                  thAlignment: TextAlign.center,
+                  tdStyle: TextStyle(fontSize: 16),
+                  tdAlignment: TextAlign.center,
+                  columns: colsAdjustLens,
+                  rows: rowsAdjustLens,
+                  zebraStripe: true,
+                  borderColor: black,
+                  stripeColor2: grey.withOpacity(0.3),
+                  onRowSaved: (value) {
+                    print(value);
+                  },
+                  onSubmitted: (value) {
+                    print(value);
+                  },
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(14.0, 10, 14.0, 10),
+                child: Material(
+                    borderRadius: BorderRadius.circular(10.0),
+                    color: blue,
+                    elevation: 0.0,
+                    child: MaterialButton(
+                        onPressed: (){
+                          _submitDataAdjustLens();
+                          Navigator.pop(context);
+                        },
+                        minWidth: MediaQuery.of(context).size.width,
+                        child: CustomText(text: 'Submit', weight: FontWeight.bold, color: white,)
+                    )
+                ),
+              )
+/*              OutlineButton(
+                  child: CustomText(text: 'Submit'),
+                  onPressed: () => _printEditedRows()),*/
+            ],
+          )
+      )
+    );
+    showGeneralDialog(
+        barrierLabel: "Label",
+        barrierDismissible: true,
+        barrierColor: black.withOpacity(0.5),
+        transitionDuration: Duration(milliseconds: 500),
+        context: context,
+        pageBuilder: (context, anim1, anim2){
+          return dialog;
+        },
+        transitionBuilder: (context, anim1, anim2, child) {
+          return SlideTransition(
+            position: Tween(begin: Offset(0, _fromTop ? -1 : 1), end: Offset(0, 0)).animate(anim1),
+            child: child,
+          );
+        });
   }
 
   void lensDetailModal(nameLens, brand, img, oldPrice, price, sale, color, desc){
@@ -704,7 +854,7 @@ class _ProductDetailsState extends State<ProductDetails> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Container(
-              child: CustomText(text: 'Eyeglass Details', weight: FontWeight.bold,),
+              child: CustomText(text: 'Eyeglass Details', weight: FontWeight.bold, size: 18,),
             ),
             SizedBox(height: 2,),
             Divider(thickness: 3, color: blue,),
@@ -797,6 +947,7 @@ class _ProductDetailsState extends State<ProductDetails> {
       ),
     );
     showBarModalBottomSheet(
+        barrierColor: black.withOpacity(0.5),
         backgroundColor: black.withOpacity(0.1),
         context: context,
         builder: (_) => modal);

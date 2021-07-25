@@ -97,18 +97,18 @@ class _CheckOutState extends State<CheckOut> with TickerProviderStateMixin {
       body: _loading
           ? Loading()
           : Container(
-            color: grey.withOpacity(0.1),
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(0, 7, 0, 12),
-                  child: ListView(
-                      children: <Widget>[
-                        shippingAddress(),
-                        dashedHorizontalLine(),
-                        shippingOptionPayment()
-                      ]
-                    ),
-                  ),
-            ),
+        color: grey.withOpacity(0.1),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(0, 7, 0, 12),
+          child: ListView(
+              children: <Widget>[
+                shippingAddress(),
+                dashedHorizontalLine(),
+                shippingOptionPayment()
+              ]
+          ),
+        ),
+      ),
       bottomNavigationBar: Container(
         color: white,
         height: 70,
@@ -210,40 +210,40 @@ class _CheckOutState extends State<CheckOut> with TickerProviderStateMixin {
           shippingDialog();
         },
         child: ListTile(
-          title: Row(
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(bottom: 3),
-                child: Icon(
-                  Icons.location_on_outlined,
-                  color: blue,
-                  size: 19,),
-              ),
-              CustomText(text: 'Shipping Address',)
-            ],
-          ),
-          subtitle: Padding(
-            padding: const EdgeInsets.only(left: 20, top: 3),
-            child: userProvider.userModel.phone == 0
-                ? Row(
-                    children: <Widget>[
-                      CustomText(text: userProvider.userModel.name+' '),
-                      InkWell(
-                        onTap: (){
-                          _key.currentState.showSnackBar(
-                              SnackBar(content: Text("Please, add your shipping address", style: TextStyle(color: blue)),
-                                  backgroundColor: white
-                              ));
-                        },
-                        child: Icon(LineIcons.exclamationCircle, color: grey, size: 18,),
-                      ),
-                    ],
-                  )
-                : CustomText(
-                      text: userProvider.userModel.name+' | (+'+userProvider.userModel.phone.toString()+')\n'
-                            +userProvider.userModel.address,)
-          ),
-          trailing: AnimatedIcon(icon: AnimatedIcons.home_menu, progress: _animationController)
+            title: Row(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 3),
+                  child: Icon(
+                    Icons.location_on_outlined,
+                    color: blue,
+                    size: 19,),
+                ),
+                CustomText(text: 'Shipping Address',)
+              ],
+            ),
+            subtitle: Padding(
+                padding: const EdgeInsets.only(left: 20, top: 3),
+                child: userProvider.userModel.phone == 0
+                    ? Row(
+                  children: <Widget>[
+                    CustomText(text: userProvider.userModel.name+' '),
+                    InkWell(
+                      onTap: (){
+                        _key.currentState.showSnackBar(
+                            SnackBar(content: Text("Please, add your shipping address", style: TextStyle(color: blue)),
+                                backgroundColor: white
+                            ));
+                      },
+                      child: Icon(LineIcons.exclamationCircle, color: grey, size: 18,),
+                    ),
+                  ],
+                )
+                    : CustomText(
+                  text: userProvider.userModel.name+' | (+'+userProvider.userModel.phone.toString()+')\n'
+                      +userProvider.userModel.address,)
+            ),
+            trailing: AnimatedIcon(icon: AnimatedIcons.home_menu, progress: _animationController)
         ),
       ),
     );
@@ -274,8 +274,8 @@ class _CheckOutState extends State<CheckOut> with TickerProviderStateMixin {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: <Widget>[
                         userProvider.userModel.phone == 0
-                        ? SizedBox(width: 25,)
-                        : SizedBox(width: 15,),
+                            ? SizedBox(width: 25,)
+                            : SizedBox(width: 15,),
                         userProvider.userModel.phone == 0
                             ? CustomText(text: 'Add Shipping Address \t\t\t ', weight: FontWeight.bold, size: 21, color: blue)
                             : CustomText(text: 'Update Shipping Address  ', weight: FontWeight.bold, size: 21, color: blue),
@@ -324,34 +324,34 @@ class _CheckOutState extends State<CheckOut> with TickerProviderStateMixin {
                                 child: ListTile(
                                     title: userProvider.userModel.phone != 0
                                         ? TextFormField(
-                                            autovalidateMode: AutovalidateMode.onUserInteraction,
-                                            controller: _phoneInitial,
-                                              decoration: InputDecoration(
-                                                icon: Icon(Icons.local_phone_outlined),
-                                                  border: InputBorder.none),
-                                            keyboardType: TextInputType.phone,
-                                            validator: (value) {
-                                              if (value.isEmpty) {
-                                                return 'You must enter the phone number';
-                                              }
-                                              return null;
-                                            },
-                                          )
+                                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                                      controller: _phoneInitial,
+                                      decoration: InputDecoration(
+                                          icon: Icon(Icons.local_phone_outlined),
+                                          border: InputBorder.none),
+                                      keyboardType: TextInputType.phone,
+                                      validator: (value) {
+                                        if (value.isEmpty) {
+                                          return 'You must enter the phone number';
+                                        }
+                                        return null;
+                                      },
+                                    )
                                         : TextFormField(
-                                            autovalidateMode: AutovalidateMode.onUserInteraction,
-                                            controller: _phoneController,
-                                              decoration: InputDecoration(
-                                              hintText: 'Ex: 628999992378',
-                                                icon: Icon(Icons.local_phone_outlined),
-                                                border: InputBorder.none),
-                                          keyboardType: TextInputType.phone,
-                                          validator: (value) {
-                                            if (value.isEmpty) {
-                                              return 'You must enter the phone number';
-                                            }
-                                            return null;
-                                          },
-                                        )
+                                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                                      controller: _phoneController,
+                                      decoration: InputDecoration(
+                                          hintText: 'Ex: 628999992378',
+                                          icon: Icon(Icons.local_phone_outlined),
+                                          border: InputBorder.none),
+                                      keyboardType: TextInputType.phone,
+                                      validator: (value) {
+                                        if (value.isEmpty) {
+                                          return 'You must enter the phone number';
+                                        }
+                                        return null;
+                                      },
+                                    )
                                 ),
                               ),
                             ),
@@ -369,39 +369,39 @@ class _CheckOutState extends State<CheckOut> with TickerProviderStateMixin {
                                 child: ListTile(
                                   title: userProvider.userModel.address != ""
                                       ? TextFormField(
-                                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                                          keyboardType: TextInputType.multiline,
-                                            maxLines: 5,
-                                            controller: _addressInitial,
-                                            decoration: InputDecoration(
-                                          icon: Padding(
-                                            padding: const EdgeInsets.only(bottom: 80),
-                                            child: Icon(Icons.home_outlined),
-                                           ),
-                                            border: InputBorder.none),
-                                          validator: (value) {
-                                          if (value.isEmpty) {
-                                            return 'You must enter the address';
-                                           }
-                                         return null;
-                                        },
-                                      )
-                                    : TextFormField(
-                                        keyboardType: TextInputType.multiline,
-                                          maxLines: 5,
-                                        controller: _addressController,
-                                        decoration: InputDecoration(
-                                          hintText: 'Address',
-                                          icon: Padding(
-                                              padding: const EdgeInsets.only(bottom: 80),
-                                              child: Icon(Icons.home_outlined),
-                                            ),
-                                          border: InputBorder.none),
-                                        validator: (value) {
-                                          if (value.isEmpty) {
-                                            return 'You must enter the address';
-                                         }
-                                          return null;
+                                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                                    keyboardType: TextInputType.multiline,
+                                    maxLines: 5,
+                                    controller: _addressInitial,
+                                    decoration: InputDecoration(
+                                        icon: Padding(
+                                          padding: const EdgeInsets.only(bottom: 80),
+                                          child: Icon(Icons.home_outlined),
+                                        ),
+                                        border: InputBorder.none),
+                                    validator: (value) {
+                                      if (value.isEmpty) {
+                                        return 'You must enter the address';
+                                      }
+                                      return null;
+                                    },
+                                  )
+                                      : TextFormField(
+                                    keyboardType: TextInputType.multiline,
+                                    maxLines: 5,
+                                    controller: _addressController,
+                                    decoration: InputDecoration(
+                                        hintText: 'Address',
+                                        icon: Padding(
+                                          padding: const EdgeInsets.only(bottom: 80),
+                                          child: Icon(Icons.home_outlined),
+                                        ),
+                                        border: InputBorder.none),
+                                    validator: (value) {
+                                      if (value.isEmpty) {
+                                        return 'You must enter the address';
+                                      }
+                                      return null;
                                     },
                                   ),
                                 ),
@@ -454,7 +454,7 @@ class _CheckOutState extends State<CheckOut> with TickerProviderStateMixin {
     showGeneralDialog(
         barrierLabel: "Label",
         barrierColor: Colors.black.withOpacity(0.5),
-        transitionDuration: Duration(milliseconds: 700),
+        transitionDuration: Duration(milliseconds: 500),
         context: context,
         pageBuilder: (context, anim1, anim2){
           return dialog;
@@ -463,15 +463,15 @@ class _CheckOutState extends State<CheckOut> with TickerProviderStateMixin {
           return SlideTransition(
             position: Tween(begin: Offset(0, _fromTop ? -1 : 1), end: Offset(0, 0)).animate(anim1),
             child: child,
-            );
-    });
+          );
+        });
   }
 
   void validateAddUpdateShipping(phoneText,addressText) async{
     final userProvider = Provider.of<UserProvider>(context, listen: false);
 
     _phoneInitial = TextEditingController(text: phoneText.toString());
-     _addressInitial = TextEditingController(text: addressText.toString());
+    _addressInitial = TextEditingController(text: addressText.toString());
 
     if (_formKey.currentState.validate()) {
       if(userProvider.userModel.phone != 0) {
@@ -773,9 +773,16 @@ class _CheckOutState extends State<CheckOut> with TickerProviderStateMixin {
                   children: <Widget>[
                     CustomText(text: 'Subtotal for products ',
                       size: 14, color: grey,),
-                    CustomText(
-                      text: '${formatCurrency.format(userProvider.userModel.totalCartPrice)}',
-                      size: 14, color: grey,)
+                    AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 500),
+                      transitionBuilder: (Widget child, Animation<double> animation){
+                        return ScaleTransition(child: child, scale: animation,);
+                      },
+                      child: Text('${formatCurrency.format(userProvider.userModel.totalCartPrice)}',
+                        key: ValueKey<int>(userProvider.userModel.totalCartPrice),
+                        style: TextStyle(fontSize: 14, color: grey),
+                      ),
+                    )
                   ],
                 ),
               ),
@@ -800,8 +807,16 @@ class _CheckOutState extends State<CheckOut> with TickerProviderStateMixin {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     CustomText(text: 'Total payment ', size: 18,),
-                    CustomText(
-                      text: '${formatCurrency.format(_totalPayment)}', size: 18,)
+                    AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 500),
+                      transitionBuilder: (Widget child, Animation<double> animation){
+                        return ScaleTransition(child: child, scale: animation,);
+                      },
+                      child: Text('${formatCurrency.format(_totalPayment)}',
+                        key: ValueKey<int>(_totalPayment),
+                        style: TextStyle(fontSize: 18, color: grey),
+                      ),
+                    ),
                   ],
                 ),
               ),
