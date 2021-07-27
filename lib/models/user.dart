@@ -57,7 +57,7 @@ class UserModel{
       return 0;
     }
     for(Map cartItem in cart){
-      _priceSum += cartItem["price"];
+      _priceSum += cartItem["totalPriceCart"];
     }
 
     int total = _priceSum;

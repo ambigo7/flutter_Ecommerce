@@ -3,6 +3,7 @@ import 'package:lets_shop/commons/color.dart';
 import 'package:lets_shop/commons/common.dart';
 import 'package:lets_shop/components/column_builder.dart';
 import 'package:lets_shop/components/custom_text.dart';
+import 'package:lets_shop/models/cart_item.dart';
 import 'package:lets_shop/models/order.dart';
 import 'package:lets_shop/provider/user_provider.dart';
 import 'package:lets_shop/screens/home.dart';
@@ -28,6 +29,11 @@ class _OrdersScreenState extends State<OrdersScreen> {
   /*final formatDate = new DateFormat('yMd', 'id_ID').add_Hm();*/
 
   final _key = GlobalKey<ScaffoldState>();
+
+  bool _onExpansionClicked = false;
+
+  Color active = blue;
+  Color noActive = grey;
 
   @override
   void initState() {
@@ -78,8 +84,9 @@ class _OrdersScreenState extends State<OrdersScreen> {
           ],
         ) : ListView.builder(
             itemCount: userProvider.orders.length,
-            itemBuilder: (_, index){
-              OrderModel _order = userProvider.orders[index];
+            itemBuilder: (_, indexOrders){
+              OrderModel _order = userProvider.orders[indexOrders];
+              CartItemModel _cart = _order.cart[0];
               return Padding(
                 padding: const EdgeInsets.only(top: 8, bottom: 8),
                 child: Container(
@@ -109,88 +116,125 @@ class _OrdersScreenState extends State<OrdersScreen> {
                           ),
                           SizedBox(height: 10,),
                           //PRODUCT LIST
-                          ExpansionTile( //TODO: buat active color utk trailing, caranya sm kaya di admin manage
-                            title: Row(
-                              children: <Widget>[
-                                Container(
-                                  color: blue,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Container(
-                                        height: 40,
-                                        width: 80,
-                                        child: Center(child: CustomText(text: "${_order.cart.length.toString()}""x", color: white, size: 20,))
+                          Theme(
+                            data: ThemeData(accentColor: _onExpansionClicked ? active : noActive,),
+                            child: ExpansionTile(
+                              title: Row(
+                                children: <Widget>[
+                                  Container(
+                                    color: blue,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Container(
+                                          height: 40,
+                                          width: 80,
+                                          child: Center(child: CustomText(text: "${_order.cart.length.toString()}""x", color: white, size: 20,))
+                                      ),
                                     ),
                                   ),
-                                ),
-                                SizedBox(width: 10,),
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    CustomText(text: _order.id.toUpperCase(), weight: FontWeight.bold,),
-                                    CustomText(text: _order.description),
-                                    CustomText(text: _order.service),
-                                  ],
-                                )
-                              ],
-                            ),
-                            expandedCrossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: <Widget>[
-                                    CustomText(
-                                        text: 'Message order '),
-                                    _order.message.isEmpty
-                                        ? CustomText(text: '---')
-                                        : CustomText(text: _order.message)
-                                  ],
-                                ),
+                                  SizedBox(width: 10,),
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Row(
+                                        children: <Widget>[
+                                          CustomText(text: 'ID : '),
+                                          CustomText(text: _order.id.toUpperCase(), weight: FontWeight.bold,),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: <Widget>[
+                                          CustomText(text: 'Desc : '),
+                                          CustomText(text: _order.description),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: <Widget>[
+                                          CustomText(text: 'Service : '),
+                                          CustomText(text: _order.service),
+                                        ],
+                                      ),
+                                    ],
+                                  )
+                                ],
                               ),
-                              ColumnBuilder(
-                                  itemCount: _order.cart.length,
-                                  itemBuilder: (_, index){
-                                    return ListTile(
-                                      leading: Container(
-                                        height: 80,
-                                        width: 80,
-                                        child: FadeInImage.memoryNetwork(
-                                          placeholder: kTransparentImage,
-                                          image: _order.cart[index].image,
-                                          fit: BoxFit.fill,
-                                          height: 120,
-                                          width: 140,
+                              expandedCrossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: <Widget>[
+                                      CustomText(
+                                          text: 'Message order '),
+                                      _order.message.isEmpty
+                                          ? CustomText(text: '---')
+                                          : CustomText(text: _order.message)
+                                    ],
+                                  ),
+                                ),
+                                ColumnBuilder(
+                                    itemCount: _order.cart.length,
+                                    itemBuilder: (_, indexCart){
+                                      CartItemModel _cart = _order.cart[indexCart];
+                                      return ListTile(
+                                        leading: Container(
+                                          height: 80,
+                                          width: 80,
+                                          child: FadeInImage.memoryNetwork(
+                                            placeholder: kTransparentImage,
+                                            image: _order.cart[indexCart].imageProduct,
+                                            fit: BoxFit.fill,
+                                            height: 120,
+                                            width: 140,
+                                          ),
+                                        ),
+                                        title: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: <Widget>[
+                                            CustomText(text: _cart.nameProduct),
+                                            Visibility(
+                                              visible: _cart.nameLens != "",
+                                                child: CustomText(text: _cart.nameLens)),
+                                          ],
+                                        ),
+                                        subtitle: CustomText(text: '${formatCurrency.format(_cart.priceProduct)}',),
+                                      );
+                                    }),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    children: <Widget>[
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: <Widget>[
+                                          CustomText(text: 'Subtotal for product', color: grey,),
+                                          CustomText(text: '${formatCurrency.format(_cart.priceProduct)}')
+                                        ],
+                                      ),
+                                      Visibility(
+                                        visible: _cart.priceLens != 0 ? true : false,
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: <Widget>[
+                                            CustomText(text: 'Subtotal for custom lens', color: grey),
+                                            CustomText(text: '${formatCurrency.format(_cart.priceLens)}')
+                                          ],
                                         ),
                                       ),
-                                      title: CustomText(text: _order.cart[index].name),
-                                      subtitle: CustomText(text: '${formatCurrency.format(_order.cart[index].price)}',),
-                                    );
-                                  }),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Column(
-                                  children: <Widget>[
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: <Widget>[
-                                        CustomText(text: 'Subtotal for product'),
-                                        CustomText(text: '${formatCurrency.format(_order.totalPrice)}')
-                                      ],
-                                    ),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: <Widget>[
-                                        CustomText(text: 'Subtotal for shipping '),
-                                        CustomText(text: '${formatCurrency.format(_order.charges)}'),
-                                      ],
-                                    ),
-                                  ],
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: <Widget>[
+                                          CustomText(text: 'Subtotal for shipping ', color: grey),
+                                          CustomText(text: '${formatCurrency.format(_order.charges)}'),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                           Divider(color: blue),
                           //Amount Payable

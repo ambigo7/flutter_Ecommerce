@@ -100,7 +100,7 @@ class FeaturedCard extends StatelessWidget {
                       child: RichText(text: TextSpan(children: [
                         TextSpan(text: '${product.name} \n', style: TextStyle(fontSize: 18)),
                         TextSpan(
-                          text:  product.sale ? '${formatCurrency.format(product.oldPrice)} \n' : '', //TODO: nanti jadi brand yang di input aja, bukan dari database brand
+                          text:  product.sale ? '${formatCurrency.format(product.oldPrice)} \n' : '',
                           style: TextStyle(fontSize: 18, color: redAccent, decoration: TextDecoration.lineThrough, fontWeight: FontWeight.bold),
                         ),
                         TextSpan(text: '${formatCurrency.format(product.price)}', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),

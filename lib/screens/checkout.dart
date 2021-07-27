@@ -31,14 +31,31 @@ class _CheckOutState extends State<CheckOut> with TickerProviderStateMixin {
   final _formKey = GlobalKey<FormState>();
   final _key = GlobalKey<ScaffoldState>();
   final dateTomorrow = DateTime.now().add(Duration(days: 1));
+  ScrollController _scrollController = ScrollController();
   String _selectedShippingService;
   int _selectedShippingCharged;
   int _totalPayment;
+
   bool _checkExpress = false;
   bool _checkPick = false;
   bool _shippingDialog = false;
   bool _loading = false;
   bool _fromTop = true;
+  bool _onExpansionClicked = false;
+
+  void _scrollToBottom(bool event){
+    if(event){
+      _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent,
+          duration: Duration(milliseconds: 500),
+          curve: Curves.fastOutSlowIn);
+    }else{
+      return null;
+    }
+  }
+
+  Color active = blue;
+  Color noActive = grey;
 
   AnimationController _animationController;
 
@@ -59,6 +76,7 @@ class _CheckOutState extends State<CheckOut> with TickerProviderStateMixin {
       _totalPayment = shipping+product;
     });
   }
+
 
 
   @override
@@ -101,6 +119,7 @@ class _CheckOutState extends State<CheckOut> with TickerProviderStateMixin {
         child: Padding(
           padding: const EdgeInsets.fromLTRB(0, 7, 0, 12),
           child: ListView(
+            controller: _scrollController,
               children: <Widget>[
                 shippingAddress(),
                 dashedHorizontalLine(),
@@ -122,15 +141,24 @@ class _CheckOutState extends State<CheckOut> with TickerProviderStateMixin {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   CustomText(text: 'Total Payment', color: grey, size: 18,),
-                  CustomText(text: '${formatCurrency.format(_totalPayment)}', size: 22,),
+                  AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 500),
+                    transitionBuilder: (Widget child, Animation<double> animation){
+                      return ScaleTransition(child: child, scale: animation,);
+                    },
+                    child: Text('${formatCurrency.format(_totalPayment)}',
+                      key: ValueKey<int>(_totalPayment),
+                      style: TextStyle(fontSize: 18, color: grey),
+                    ),
+                  ),
                 ],
               ),
               Container(
                 width: 200,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10), color: blue),
-                child: GestureDetector(
-                    onTap: () async {
+                child: FlatButton(
+                    onPressed: () async{
                       setState(() {
                         _loading = true;
                         print('loading value : $_loading');
@@ -627,70 +655,80 @@ class _CheckOutState extends State<CheckOut> with TickerProviderStateMixin {
             color: greenAccent.withOpacity(0.2),
             child: Column(
               children: <Widget>[
-                ExpansionTile( //TODO: buat active color utk trailing, caranya sm kaya di admin manage
-                  title: Row(
+                Theme(
+                  data: ThemeData(accentColor: _onExpansionClicked ? active : noActive,),
+                  child: ExpansionTile(
+                    onExpansionChanged: (clicked){
+                      setState(() {
+                        _onExpansionClicked = clicked;
+                      });
+                    },
+                    title: Row(
+                      children: <Widget>[
+                        Icon(LineIcons.shippingFast, color: blue,),
+                        CustomText(text: '  Shipping Options')
+                      ],
+                    ),
                     children: <Widget>[
-                      Icon(LineIcons.shippingFast, color: blue,),
-                      CustomText(text: '  Shipping Options')
+                      Column(
+                        children: <Widget>[
+                          InkWell(
+                            onTap: (){
+                              _scrollToBottom(true);
+                              getShippingCharge(10000);
+                              _selectedShippingService = "MyOptik Express";
+                              _checkExpress = true;
+                              _checkPick = false;
+                              getTotalPayment(_selectedShippingCharged, userProvider.userModel.totalCartPrice);
+                              print('total payment : $_totalPayment');
+                              print('ceklist : $_checkExpress');
+                              print('shipping value : $_selectedShippingCharged');
+                              print('shipping service : $_selectedShippingService');
+                            },
+                            child: ListTile(
+                              title: CustomText(text: 'MyOptik Express', weight: FontWeight.bold,),
+                              subtitle: Padding(
+                                  padding: const EdgeInsets.only(bottom: 13),
+                                  child: CustomText(
+                                    text: 'Estimated arrival one working day - ${formatDate.format(dateTomorrow)}',
+                                    color: grey,
+                                    size: 14,
+                                  )
+                              ),
+                              trailing: _checkExpress ? Icon(Icons.check_outlined, color: blue) : null,
+                            ),
+                          ),
+                          InkWell(
+                            onTap: (){
+                              _scrollToBottom(true);
+                              getShippingCharge(2500);
+                              _selectedShippingService = "Pick up";
+                              _checkExpress = false;
+                              _checkPick = true;
+                              getTotalPayment(_selectedShippingCharged, userProvider.userModel.totalCartPrice);
+                              print('total payment : $_totalPayment');
+                              print('ceklist express : $_checkExpress');
+                              print('ceklist pick : $_checkPick');
+                              print('shipping value : $_selectedShippingCharged');
+                              print('shipping service : $_selectedShippingService');
+                            },
+                            child: ListTile(
+                              title: CustomText(text: 'Pick up by yourself', weight: FontWeight.bold,),
+                              subtitle: Padding(
+                                  padding: const EdgeInsets.only(bottom: 13),
+                                  child: CustomText(
+                                    text: 'When the order is ready - Working hour and day',
+                                    color: grey,
+                                    size: 14,
+                                  )
+                              ),
+                              trailing: _checkPick ? Icon(Icons.check_outlined, color: blue) : null,
+                            ),
+                          ),
+                        ],
+                      )
                     ],
                   ),
-                  children: <Widget>[
-                    Column(
-                      children: <Widget>[
-                        InkWell(
-                          onTap: (){
-                            getShippingCharge(10000);
-                            _selectedShippingService = "MyOptik Express";
-                            _checkExpress = true;
-                            _checkPick = false;
-                            getTotalPayment(_selectedShippingCharged, userProvider.userModel.totalCartPrice);
-                            print('total payment : $_totalPayment');
-                            print('ceklist : $_checkExpress');
-                            print('shipping value : $_selectedShippingCharged');
-                            print('shipping service : $_selectedShippingService');
-                          },
-                          child: ListTile(
-                            title: CustomText(text: 'MyOptik Express', weight: FontWeight.bold,),
-                            subtitle: Padding(
-                                padding: const EdgeInsets.only(bottom: 13),
-                                child: CustomText(
-                                  text: 'Estimated arrival one working day - ${formatDate.format(dateTomorrow)}',
-                                  color: grey,
-                                  size: 14,
-                                )
-                            ),
-                            trailing: _checkExpress ? Icon(Icons.check_outlined, color: blue) : null,
-                          ),
-                        ),
-                        InkWell(
-                          onTap: (){
-                            getShippingCharge(2500);
-                            _selectedShippingService = "Pick up";
-                            _checkExpress = false;
-                            _checkPick = true;
-                            getTotalPayment(_selectedShippingCharged, userProvider.userModel.totalCartPrice);
-                            print('total payment : $_totalPayment');
-                            print('ceklist express : $_checkExpress');
-                            print('ceklist pick : $_checkPick');
-                            print('shipping value : $_selectedShippingCharged');
-                            print('shipping service : $_selectedShippingService');
-                          },
-                          child: ListTile(
-                            title: CustomText(text: 'Pick up by yourself', weight: FontWeight.bold,),
-                            subtitle: Padding(
-                                padding: const EdgeInsets.only(bottom: 13),
-                                child: CustomText(
-                                  text: 'Anytime you want - Working hour and day',
-                                  color: grey,
-                                  size: 14,
-                                )
-                            ),
-                            trailing: _checkPick ? Icon(Icons.check_outlined, color: blue) : null,
-                          ),
-                        ),
-                      ],
-                    )
-                  ],
                 ),
                 Divider(color: greenAccent),
                 Padding(
@@ -773,16 +811,9 @@ class _CheckOutState extends State<CheckOut> with TickerProviderStateMixin {
                   children: <Widget>[
                     CustomText(text: 'Subtotal for products ',
                       size: 14, color: grey,),
-                    AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 500),
-                      transitionBuilder: (Widget child, Animation<double> animation){
-                        return ScaleTransition(child: child, scale: animation,);
-                      },
-                      child: Text('${formatCurrency.format(userProvider.userModel.totalCartPrice)}',
-                        key: ValueKey<int>(userProvider.userModel.totalCartPrice),
-                        style: TextStyle(fontSize: 14, color: grey),
-                      ),
-                    )
+                    CustomText(
+                      text: '${formatCurrency.format(userProvider.userModel.totalCartPrice)}',
+                      size: 14, color: grey,)
                   ],
                 ),
               ),
@@ -794,9 +825,16 @@ class _CheckOutState extends State<CheckOut> with TickerProviderStateMixin {
                   children: <Widget>[
                     CustomText(text: 'Subtotal for shipping ',
                       size: 14, color: grey,),
-                    CustomText(
-                      text: '${formatCurrency.format(_selectedShippingCharged)}',
-                      size: 14, color: grey,)
+                    AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 500),
+                      transitionBuilder: (Widget child, Animation<double> animation){
+                        return ScaleTransition(child: child, scale: animation,);
+                      },
+                      child: Text('${formatCurrency.format(_selectedShippingCharged)}',
+                        key: ValueKey<int>(_selectedShippingCharged),
+                        style: TextStyle(fontSize: 14, color: grey),
+                      ),
+                    ),
                   ],
                 ),
               ),

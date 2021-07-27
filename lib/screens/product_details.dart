@@ -40,7 +40,8 @@ class _ProductDetailsState extends State<ProductDetails> {
 
   final formatCurrency = new NumberFormat.simpleCurrency(locale: 'id_ID');
 
-  ScrollController _hideBottomNavController;
+  ScrollController _scrollController;
+  bool _toTopButton = false;
   bool _isVisibleBottomNav;
 
 
@@ -55,47 +56,55 @@ class _ProductDetailsState extends State<ProductDetails> {
   Color noActive = grey;
 
   String _priceCustomText = 'Price';
-  bool _expansionLens = false;
 
   int _idLensLength;
   int _totalPrice;
+  int _indexSelectedLens = -1;
 
   bool _fromTop = true;
 
   final _editableKey = GlobalKey<EditableState>();
 
-  List _dataAdjustLens = [];
+  List _dataAdjustLens;
 
   ///Print only edited rows.
-  void _submitDataAdjustLens() {
-    // List<AdjustLens> _adjustLens = [];
-    _dataAdjustLens  = _editableKey.currentState.editedRows;
-    print(_dataAdjustLens);
-    // buat Debugging doang
-/*    for(Map data in _dataAdjustLens){
-      _adjustLens.add(AdjustLens.fromMap(data));
+  void _submitDataAdjustLens(List dataAdjust) {
+    _dataAdjustLens = dataAdjust;
+    if(dataAdjust.isNotEmpty){
+      setState(() {
+        rowsAdjustLens[0]['sph'] = _dataAdjustLens[0]['sph'] ?? '';
+        rowsAdjustLens[0]['cyl'] = _dataAdjustLens[0]['cyl'] ?? '';
+        rowsAdjustLens[0]['axis'] =  _dataAdjustLens[0]['axis'] ?? '';
+        rowsAdjustLens[0]['add'] = _dataAdjustLens[0]['add'] ?? '';
+
+        rowsAdjustLens[0]['pd'] =  _dataAdjustLens[0]['pd'] ?? '';
+
+        rowsAdjustLens[1]['sph'] = _dataAdjustLens[1]['sph'] ?? '';
+        rowsAdjustLens[1]['cyl'] = _dataAdjustLens[1]['cyl'] ?? '';
+        rowsAdjustLens[1]['axis'] =  _dataAdjustLens[1]['axis'] ?? '';
+        rowsAdjustLens[1]['add'] = _dataAdjustLens[1]['add'] ?? '';
+      });
+    }else{
+      setState(() {
+        rowsAdjustLens[0]['sph'] = '';
+        rowsAdjustLens[0]['cyl'] = '';
+        rowsAdjustLens[0]['axis'] = '';
+        rowsAdjustLens[0]['add'] = '';
+
+        rowsAdjustLens[0]['pd'] =  '';
+
+        rowsAdjustLens[1]['sph'] = '';
+        rowsAdjustLens[1]['cyl'] = '';
+        rowsAdjustLens[1]['axis'] = '';
+        rowsAdjustLens[1]['add'] = '';
+
+        rowsAdjustLens[0]['pd'] =  'X';
+      });
     }
-    print(_adjustLens[1].sph);*/
+    print(_dataAdjustLens);
   }
 
-  List rowsAdjustLens = [
-    {
-      "rl": 'R',
-      "sph": '',
-      "cyl": '',
-      "axis": '',
-      "add": '',
-      "pd": ''
-    },
-    {
-      "rl": 'L',
-      "sph": '',
-      "cyl": '',
-      "axis": '',
-      "add": '',
-      "pd": 'X'
-    }
-  ];
+  List rowsAdjustLens;
 
   List colsAdjustLens = [
     {"title": ' ', 'widthFactor': 0.1, 'key': 'rl', 'editable': false},
@@ -113,23 +122,57 @@ class _ProductDetailsState extends State<ProductDetails> {
     });
   }
 
+  // This function is triggered when the user presses the back-to-top button
+  void _scrollToTop() {
+    _scrollController.animateTo(0,
+        duration: Duration(seconds: 1), curve: Curves.linear);
+  }
+
+
   @override
   void initState() {
     super.initState();
+    _dataAdjustLens = [];
+    rowsAdjustLens =  [
+      {
+        "rl": 'R',
+        "sph": '',
+        "cyl": '',
+        "axis": '',
+        "add": '',
+        "pd": ''
+      },
+      {
+        "rl": 'L',
+        "sph": '',
+        "cyl": '',
+        "axis": '',
+        "add": '',
+        "pd": 'X'
+      }
+    ];
     _idLensLength = -1;
     getPrice(0, widget.product.price);
     _isVisibleBottomNav = true;
-    _hideBottomNavController = ScrollController();
-    _hideBottomNavController.addListener(
-          () {
-        if (_hideBottomNavController.position.userScrollDirection ==
+    _scrollController = ScrollController();
+    _scrollController.addListener(() {
+      if (_scrollController.offset >= 400) {
+        setState(() {
+          _toTopButton = true; // to-top button
+        });
+      } else {
+        setState(() {
+          _toTopButton = false;
+        });
+      }
+        if (_scrollController.position.userScrollDirection ==
             ScrollDirection.reverse) {
           if (_isVisibleBottomNav)
             setState(() {
               _isVisibleBottomNav = false;
             });
         }
-        if (_hideBottomNavController.position.userScrollDirection ==
+        if (_scrollController.position.userScrollDirection ==
             ScrollDirection.forward) {
           if (!_isVisibleBottomNav)
             setState(() {
@@ -146,6 +189,7 @@ class _ProductDetailsState extends State<ProductDetails> {
     //  ====CREATE MONEY CURRENCY FORMATTER====
 
     final userProvider = Provider.of<UserProvider>(context);
+    final lensProvider = Provider.of<LensProvider>(context);
     final appProvider = Provider.of<AppProvider>(context);
 
     return Scaffold(
@@ -380,7 +424,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                         }
                       },
                       child: ListView(
-                        controller: _hideBottomNavController,
+                        controller: _scrollController,
                         children: <Widget>[
                           /*Padding(
                         padding: const EdgeInsets.only(left: 4.0, right: 4.0),
@@ -513,25 +557,52 @@ class _ProductDetailsState extends State<ProductDetails> {
               child: MaterialButton(
                 onPressed: () async {
                   appProvider.changeIsLoading();
-                  bool success = await userProvider.addToCart(
-                      product: widget.product,
-                      color: _selectedColor,
-                      size: _selectedSize);
-                  if (success) {
-                    _key.currentState.showSnackBar(SnackBar(
-                        backgroundColor: white,
-                        content: Text("Product has been Added to Cart",
-                            style: TextStyle(color: blue))));
-                    userProvider.reloadUserModel();
-                    appProvider.changeIsLoading();
-                    return null;
-                  } else {
-                    _key.currentState.showSnackBar(SnackBar(
-                        backgroundColor: white,
-                        content: Text("Sorry, No products added to Cart",
-                            style: TextStyle(color: blue))));
-                    appProvider.changeIsLoading();
-                    return null;
+                  print('index selected lens: $_indexSelectedLens');
+                  if(_indexSelectedLens == -1){
+                    bool success = await userProvider.addToCart(
+                      product: widget.product, totalPrice: _totalPrice);
+                    if (success) {
+                      _key.currentState.showSnackBar(SnackBar(
+                          backgroundColor: white,
+                          content: Text("Product has been Added to Cart",
+                              style: TextStyle(color: blue))));
+                      userProvider.reloadUserModel();
+                      appProvider.changeIsLoading();
+                      return null;
+                    } else {
+                      _key.currentState.showSnackBar(SnackBar(
+                          backgroundColor: white,
+                          content: Text("Sorry, No products added to Cart",
+                              style: TextStyle(color: blue))));
+                      appProvider.changeIsLoading();
+                      return null;
+                    }
+                  }else{
+                    print('data lens name : ${lensProvider.lens[_indexSelectedLens].name}');
+                    print('list adjust : $_dataAdjustLens');
+
+                    bool success = await userProvider.addToCart(
+                        product: widget.product,
+                        lens: lensProvider.lens[_indexSelectedLens],
+                        adjustLens: _dataAdjustLens,
+                        totalPrice: _totalPrice
+                    );
+                    if (success) {
+                      _key.currentState.showSnackBar(SnackBar(
+                          backgroundColor: white,
+                          content: Text("Product has been Added to Cart",
+                              style: TextStyle(color: blue))));
+                      userProvider.reloadUserModel();
+                      appProvider.changeIsLoading();
+                      return null;
+                    } else {
+                      _key.currentState.showSnackBar(SnackBar(
+                          backgroundColor: white,
+                          content: Text("Sorry, No products added to Cart",
+                              style: TextStyle(color: blue))));
+                      appProvider.changeIsLoading();
+                      return null;
+                    }
                   }
                 },
                 minWidth: MediaQuery.of(context).size.width,
@@ -683,13 +754,16 @@ class _ProductDetailsState extends State<ProductDetails> {
                 itemBuilder: (_, index){
                   return GestureDetector(
                     onTap: (){
+                      _scrollToTop();
                       setState(() {
+                        _isVisibleBottomNav = true;
+                        _indexSelectedLens = index;
+                        print('selected index : $_indexSelectedLens');
                         _priceCustomText = 'Price after custom';
                         getPrice(lensProvider.lens[index].price, widget.product.price);
                         _idLensLength = index;
-                        _expansionLens = false;
                       });
-                      Future.delayed(Duration(milliseconds: 500));
+                      // Future.delayed(Duration(milliseconds: 500));
                       lensAdjutDialog();
                     },
                     onDoubleTap: (){
@@ -700,9 +774,33 @@ class _ProductDetailsState extends State<ProductDetails> {
                           lensProvider.lens[index].color, lensProvider.lens[index].description);
                     },
                     onLongPress: (){
+                      _indexSelectedLens = -1;
                       _priceCustomText = 'Price';
                       getPrice(0, widget.product.price);
                       _idLensLength = -1;
+                      _scrollToTop();
+                      setState(() {
+                        _isVisibleBottomNav = true;
+                        rowsAdjustLens =  [
+                          {
+                            "rl": 'R',
+                            "sph": '',
+                            "cyl": '',
+                            "axis": '',
+                            "add": '',
+                            "pd": ''
+                          },
+                          {
+                            "rl": 'L',
+                            "sph": '',
+                            "cyl": '',
+                            "axis": '',
+                            "add": '',
+                            "pd": 'X'
+                          }
+                        ];
+                        _dataAdjustLens = [];
+                      });
                     },
                     child: ListTile(
                       leading: Container(
@@ -753,7 +851,7 @@ class _ProductDetailsState extends State<ProductDetails> {
       alignment: _fromTop ? Alignment.topCenter : Alignment.bottomCenter,
       child: Container(
           height: 270,
-          margin: EdgeInsets.only(top: 200, bottom: 50),
+          margin: EdgeInsets.only(top: 160),
           decoration: BoxDecoration(
             color: white,
             borderRadius: BorderRadius.circular(20),
@@ -762,6 +860,9 @@ class _ProductDetailsState extends State<ProductDetails> {
             children: <Widget>[
               SizedBox(height: 10,),
               Material(
+                color: white,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20)),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
@@ -774,7 +875,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                       Padding(
                         padding: const EdgeInsets.only(top: 22),
                         child: Tooltip(
-                            decoration: BoxDecoration(color: black.withOpacity(0.5) ),
+                            decoration: BoxDecoration(color: black.withOpacity(0.5), borderRadius: BorderRadius.circular(20)),
                             textStyle: TextStyle(color: white),
                             waitDuration: Duration(microseconds: 0),
                             message: 'Optional, If you want to adjust the eyeglass to your eyes',
@@ -785,24 +886,24 @@ class _ProductDetailsState extends State<ProductDetails> {
               SizedBox(height: 10,),
               Expanded(
                 flex: 1,
-                child: Editable(
-                  key: _editableKey,
-                  thSize: 16,
-                  thWeight: FontWeight.bold,
-                  thAlignment: TextAlign.center,
-                  tdStyle: TextStyle(fontSize: 16),
-                  tdAlignment: TextAlign.center,
-                  columns: colsAdjustLens,
-                  rows: rowsAdjustLens,
-                  zebraStripe: true,
-                  borderColor: black,
-                  stripeColor2: grey.withOpacity(0.3),
-                  onRowSaved: (value) {
-                    print(value);
-                  },
-                  onSubmitted: (value) {
-                    print(value);
-                  },
+                child: Scrollbar(
+                  isAlwaysShown: true,
+                  child: Editable(
+                    key: _editableKey,
+                    thSize: 16,
+                    thWeight: FontWeight.bold,
+                    thAlignment: TextAlign.center,
+                    tdStyle: TextStyle(fontSize: 16),
+                    tdAlignment: TextAlign.center,
+                    columns: colsAdjustLens,
+                    rows: rowsAdjustLens,
+                    zebraStripe: true,
+                    borderColor: black,
+                    stripeColor2: grey.withOpacity(0.3),
+                    onSubmitted: (value) {
+                      print(value);
+                    },
+                  ),
                 ),
               ),
               Padding(
@@ -813,7 +914,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                     elevation: 0.0,
                     child: MaterialButton(
                         onPressed: (){
-                          _submitDataAdjustLens();
+                          _submitDataAdjustLens(_editableKey.currentState.editedRows);
                           Navigator.pop(context);
                         },
                         minWidth: MediaQuery.of(context).size.width,
@@ -821,9 +922,6 @@ class _ProductDetailsState extends State<ProductDetails> {
                     )
                 ),
               )
-/*              OutlineButton(
-                  child: CustomText(text: 'Submit'),
-                  onPressed: () => _printEditedRows()),*/
             ],
           )
       )

@@ -7,7 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:lets_shop/commons/color.dart';
+import 'package:lets_shop/models/adjust_lens.dart';
 import 'package:lets_shop/models/cart_item.dart';
+import 'package:lets_shop/models/lens.dart';
 import 'package:lets_shop/models/order.dart';
 import 'package:lets_shop/models/product.dart';
 import 'package:lets_shop/models/user.dart';
@@ -166,28 +168,76 @@ class UserProvider with ChangeNotifier {
     }
   }
 
-  Future<bool> addToCart({ProductModel product, String size, String color}) async {
+  Future<bool> addToCart({ProductModel product, LensModel lens, List adjustLens, int totalPrice}) async {
     try {
       var uuid = Uuid();
       String cartItemId = uuid.v4();
       List<CartItemModel> cart = _userModel.cart;
 
-      Map cartItem = {
-        "id": cartItemId,
-        "name": product.name,
-        "image": product.imageUrl,
-        "productId": product.id,
-        "price": product.price,
-        "size": size,
-        "color": color
-      };
+      print('list<AdjustLens> adjust : $adjustLens');
 
-      CartItemModel item = CartItemModel.fromMap(cartItem);
-//      if(!itemExists){
-      //just For Debugging
-      _userServices.addToCart(userId: _user.uid, cartItem: item);
-//      }
 
+      CartItemModel item;
+      if(lens != null){
+        if(adjustLens.isNotEmpty){
+          List<AdjustLens> _adjustLens = [];
+          for(Map _dataAdjust in adjustLens){
+            _adjustLens.add(AdjustLens.fromMap(_dataAdjust));
+          }
+          print('converted adjust from map : $_adjustLens');
+          Map cartItem = {
+            "id": cartItemId,
+            "nameProduct": product.name,
+            "imageProduct": product.imageUrl,
+            "productId": product.id,
+            "priceProduct": product.price,
+            "nameLens": lens.name,
+            "imageLens": lens.imageUrl,
+            "lensId": lens.id,
+            "priceLens": lens.price,
+            "totalPriceCart": totalPrice,
+            "adjustLens":
+            'R => sph : ${_adjustLens[0].sph ?? ' '},'
+                ' cyl : ${_adjustLens[0].cyl ?? ' '},'
+                ' axis : ${_adjustLens[0].axis ?? ' '},'
+                ' add : ${_adjustLens[0].add ?? ' '},'
+                '\nL => sph : ${_adjustLens[1].sph ?? ' '},'
+                ' cyl :  ${_adjustLens[1].cyl ?? ' '},'
+                ' axis : ${_adjustLens[1].axis ?? ' '},'
+                ' add : ${_adjustLens[1].add ?? ' '},'
+                '\npd : ${_adjustLens[0].pd ?? ' '}'
+          };
+          item = CartItemModel.fromMap(cartItem);
+        }else{
+          Map cartItem = {
+            "id": cartItemId,
+            "nameProduct": product.name,
+            "imageProduct": product.imageUrl,
+            "productId": product.id,
+            "priceProduct": product.price,
+            "nameLens": lens.name,
+            "imageLens": lens.imageUrl,
+            "lensId": lens.id,
+            "priceLens": lens.price,
+            "totalPriceCart": totalPrice,
+            "adjustLens": ''
+          };
+          item = CartItemModel.fromMap(cartItem);
+        }
+        _userServices.addToCart(userId: _user.uid, cartItem: item);
+      }else{
+        Map cartItem = {
+          "id": cartItemId,
+          "nameProduct": product.name,
+          "imageProduct": product.imageUrl,
+          "productId": product.id,
+          "priceProduct": product.price,
+          "totalPriceCart": totalPrice,
+        };
+        item = CartItemModel.fromMap(cartItem);
+
+        _userServices.addToCart(userId: _user.uid, cartItem: item);
+      }
       return true;
     } catch (e) {
       print("THE ERROR ${e.toString()}");

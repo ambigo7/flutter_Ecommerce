@@ -85,7 +85,7 @@ class _CartScreenState extends State<CartScreen> {
                           ),
                           child: FadeInImage.memoryNetwork(
                             placeholder: kTransparentImage,
-                            image: userProvider.userModel.cart[index].image,
+                            image: userProvider.userModel.cart[index].imageProduct,
                             fit: BoxFit.cover,
                             height: 120,
                             width: 140,
@@ -102,31 +102,31 @@ class _CartScreenState extends State<CartScreen> {
                                 text: TextSpan(children: [
                                   TextSpan(
                                       text: userProvider
-                                              .userModel.cart[index].name +
-                                          "\n\n",
+                                              .userModel.cart[index].nameProduct +
+                                          "\n",
                                       style: TextStyle(
                                           color: black,
                                           fontSize: 20,
                                           fontWeight: FontWeight.bold)),
                                   TextSpan(
-                                      text: /*userProvider
-                                              .userModel.cart[index].size +*/ //TODO: jadiiin custom lesan
-                                          "\n",
+                                      text: userProvider
+                                          .userModel.cart[index].nameLens != null ? '${userProvider
+                                          .userModel.cart[index].nameLens}\n' : 'Default\n\n',
                                       style: TextStyle(
                                           color: black,
-                                          fontSize: 12,
+                                          fontSize: 14,
                                           fontWeight: FontWeight.bold)),
                                   TextSpan(
-                                      text: /*userProvider
-                                              .userModel.cart[index].color +*/
-                                          "\n\n",
+                                      text: userProvider
+                                          .userModel.cart[index].adjustLens != null ? '${userProvider
+                                          .userModel.cart[index].adjustLens.toUpperCase()}\n\n' : '\n\n',
                                       style: TextStyle(
-                                          color: black,
-                                          fontSize: 12,
+                                          color: grey,
+                                          fontSize: 10,
                                           fontWeight: FontWeight.bold)),
                                   TextSpan(
                                       text:
-                                          "${formatCurrency.format(userProvider.userModel.cart[index].price)} \n\n",
+                                          "${formatCurrency.format(userProvider.userModel.cart[index].totalPriceCart)}",
                                       style: TextStyle(
                                           color: black,
                                           fontSize: 18,
