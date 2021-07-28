@@ -96,7 +96,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Loading(),
-            CustomText(text: '${_textLoading}...')
+            CustomText(text: '$_textLoading...')
           ],
         ),
       ) :  Container(
@@ -407,7 +407,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                 _textLoading = 'Uploading your payment validation';
                               });
                               if(_image != null){
-                                bool uploadPayment = await userProvider.updateOrder(_image, _orderId, 'Waiting for validation');
+                                bool uploadPayment = await userProvider.updateOrder(_image, _orderId, 'Pending validation');
                                 if(!uploadPayment){
                                   setState(() {
                                     _textLoading = "Upload Failed";

@@ -256,7 +256,8 @@ class UserProvider with ChangeNotifier {
 
   }
 
-  Future<bool> createOrder(userId, id, description, status, message, service, charges, cart, totalPrice, totalPayment) async{
+  Future<bool> createOrder(userId, id, description, status, message, service,
+      charges, cart, totalCartPrice, totalProductPrice, totalLensPrice,totalPayment) async{
     try{
        _orderServices.createOrder(
         userId: userId,
@@ -267,7 +268,9 @@ class UserProvider with ChangeNotifier {
          service: service,
          charges: charges,
          cart: cart,
-         totalPrice: totalPrice,
+         totalProductPrice: totalProductPrice,
+         totalLensPrice: totalLensPrice,
+         totalCartPrice: totalCartPrice,
          totalPayment: totalPayment
       );
        print('Message for admin: ${message}');

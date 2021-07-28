@@ -11,7 +11,8 @@ class OrderServices{
 
 
   void createOrder({String userId, String id,String description, String status, String message,
-    String service,  List<CartItemModel> cart,int charges, int totalPrice, int totalPayment}) {
+    String service,  List<CartItemModel> cart,int charges, int totalCartPrice, int totalProductPrice,
+    int totalLensPrice, int totalPayment}) {
     List<Map> convertedCart = [];
 
     //Semua item yang ada di CartItemModel harus di convert dulu ke Map
@@ -27,7 +28,9 @@ class OrderServices{
       "message": message,
       "service": service,
       "charges": charges,
-      "totalPrice": totalPrice,
+      "totalProductPrice": totalProductPrice,
+      "totalLensPrice": totalLensPrice,
+      "totalCartPrice": totalCartPrice,
       "totalPayment": totalPayment,
       "orderTime": DateTime.now().millisecondsSinceEpoch,
       "paymentTime": 0,
@@ -67,12 +70,10 @@ class OrderServices{
   Future<List<OrderModel>> getUserOrders({String userId}) async =>
       _firestore.collection(collection)
           .where('userId', isEqualTo: userId)
-          /*.where('status', isEqualTo: '')*/
           .get().then((result) {
         List<OrderModel> orders = [];
         DocumentSnapshot order;
         for (order in result.docs) {
-          /*print('result getOrders : ${order.data()}');*/
           orders.add(OrderModel.fromSnapshot(order));
         }
         return orders;

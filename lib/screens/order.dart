@@ -24,7 +24,6 @@ class OrdersScreen extends StatefulWidget {
 
 class _OrdersScreenState extends State<OrdersScreen> {
   final formatCurrency = new NumberFormat.simpleCurrency(locale: 'id_ID');
-
   DateFormat dateFormat;
   /*final formatDate = new DateFormat('yMd', 'id_ID').add_Hm();*/
 
@@ -86,7 +85,6 @@ class _OrdersScreenState extends State<OrdersScreen> {
             itemCount: userProvider.orders.length,
             itemBuilder: (_, indexOrders){
               OrderModel _order = userProvider.orders[indexOrders];
-              CartItemModel _cart = _order.cart[0];
               return Padding(
                 padding: const EdgeInsets.only(top: 8, bottom: 8),
                 child: Container(
@@ -106,7 +104,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                               CustomText(
                                   text: _order.status,
                                   weight: FontWeight.bold,
-                                  color: _order.status == "Completed"
+                                  color: _order.status == "Completed" || _order.status == "Validation success"
                                       ? green
                                       : _order.status == "Delivery" || _order.status == "Ready to pick up"
                                       ? yellow
@@ -176,15 +174,15 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                 ),
                                 ColumnBuilder(
                                     itemCount: _order.cart.length,
-                                    itemBuilder: (_, indexCart){
-                                      CartItemModel _cart = _order.cart[indexCart];
+                                    itemBuilder: (_, indexCartProduct){
+                                      CartItemModel _cart = _order.cart[indexCartProduct];
                                       return ListTile(
                                         leading: Container(
                                           height: 80,
                                           width: 80,
                                           child: FadeInImage.memoryNetwork(
                                             placeholder: kTransparentImage,
-                                            image: _order.cart[indexCart].imageProduct,
+                                            image: _order.cart[indexCartProduct].imageProduct,
                                             fit: BoxFit.fill,
                                             height: 120,
                                             width: 140,
@@ -195,8 +193,11 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                           children: <Widget>[
                                             CustomText(text: _cart.nameProduct),
                                             Visibility(
-                                              visible: _cart.nameLens != "",
-                                                child: CustomText(text: _cart.nameLens)),
+                                              visible: _cart.nameLens.isNotEmpty,
+                                              child: CustomText(
+                                                  text: _cart.adjustLens.isNotEmpty
+                                                      ? '${_cart.nameLens} <with adjust lens>' : _cart.nameLens),
+                                            ),
                                           ],
                                         ),
                                         subtitle: CustomText(text: '${formatCurrency.format(_cart.priceProduct)}',),
@@ -210,16 +211,16 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: <Widget>[
                                           CustomText(text: 'Subtotal for product', color: grey,),
-                                          CustomText(text: '${formatCurrency.format(_cart.priceProduct)}')
+                                          CustomText(text: '${formatCurrency.format(_order.totalProductPrice)}')
                                         ],
                                       ),
                                       Visibility(
-                                        visible: _cart.priceLens != 0 ? true : false,
+                                        visible: _order.totalLensPrice != 0 ? true : false,
                                         child: Row(
                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: <Widget>[
                                             CustomText(text: 'Subtotal for custom lens', color: grey),
-                                            CustomText(text: '${formatCurrency.format(_cart.priceLens)}')
+                                            CustomText(text: '${formatCurrency.format(_order.totalLensPrice)}')
                                           ],
                                         ),
                                       ),

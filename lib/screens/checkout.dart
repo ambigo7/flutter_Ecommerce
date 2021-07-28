@@ -14,9 +14,11 @@ import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 
 class CheckOut extends StatefulWidget {
-  final int totalPrice;
+  final int totalCartPrice;
+  final int totalProductPrice;
+  final int totalLensPrice;
 
-  const CheckOut({Key key, this.totalPrice}) : super(key: key);
+  const CheckOut({Key key, this.totalCartPrice, this.totalProductPrice, this.totalLensPrice}) : super(key: key);
 
   @override
   _CheckOutState createState() => _CheckOutState();
@@ -82,7 +84,7 @@ class _CheckOutState extends State<CheckOut> with TickerProviderStateMixin {
   @override
   void initState() {
     getShippingCharge(0);
-    getTotalPayment(0, widget.totalPrice);
+    getTotalPayment(0, widget.totalCartPrice);
     _selectedShippingService = "";
     initializeDateFormatting();
     formatDate = new DateFormat.MMMd('id_ID');
@@ -174,7 +176,8 @@ class _CheckOutState extends State<CheckOut> with TickerProviderStateMixin {
                         bool _createOrder = await userProvider.createOrder(
                             userProvider.user.uid, id, 'Orders '+userProvider.userModel.countCart.toString()+' item',
                             'Incomplete', _messageController.text, _selectedShippingService, _selectedShippingCharged,
-                            userProvider.userModel.cart, widget.totalPrice, _totalPayment);
+                            userProvider.userModel.cart, widget.totalCartPrice, widget.totalProductPrice,
+                            widget.totalLensPrice, _totalPayment);
                         for (CartItemModel cartItem in userProvider.userModel.cart) {
                           bool value = await userProvider.removeFromCart(
                               cartItem: cartItem);
@@ -812,9 +815,26 @@ class _CheckOutState extends State<CheckOut> with TickerProviderStateMixin {
                     CustomText(text: 'Subtotal for products ',
                       size: 14, color: grey,),
                     CustomText(
-                      text: '${formatCurrency.format(userProvider.userModel.totalCartPrice)}',
+                      text: '${formatCurrency.format(userProvider.userModel.totalProductPrice)}',
                       size: 14, color: grey,)
                   ],
+                ),
+              ),
+              SizedBox(height: 8),
+              Visibility(
+                visible: userProvider.userModel.totalLensPrice != 0 ? true : false,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 15, right: 12),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      CustomText(text: 'Subtotal for custom lens ',
+                        size: 14, color: grey,),
+                      CustomText(
+                        text: '${formatCurrency.format(userProvider.userModel.totalLensPrice)}',
+                        size: 14, color: grey,)
+                    ],
+                  ),
                 ),
               ),
               SizedBox(height: 8),
