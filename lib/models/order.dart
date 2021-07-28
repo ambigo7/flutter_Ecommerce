@@ -10,7 +10,9 @@ class OrderModel {
   static const SERVICE = "service";
   static const CHARGES = "charges";
   static const USER_ID = "userId";
-  static const TOTAL_PRICE = "totalPrice";
+  static const TOTAL_PRODUCT_PRICE = "totalProductPrice";
+  static const TOTAL_LENS_PRICE = "totalLensPrice";
+  static const TOTAL_CART_PRICE = "totalCartPrice";
   static const TOTAL_PAYMENT= "totalPayment";
   static const STATUS = "status";
   static const ORDER_TIME = "orderTime";
@@ -29,7 +31,9 @@ class OrderModel {
   int _shipTime;
   int _completedTime;
   int _charges;
-  int _totalPrice;
+  int _totalProductPrice;
+  int _totalLensPrice;
+  int _totalCartPrice;
   int _totalPayment;
 
   //Ini buat jaga2 kalo dibutuhin
@@ -59,7 +63,9 @@ class OrderModel {
   String get message => _message;
   String get service => _service;
   int get charges => _charges;
-  int get totalPrice => _totalPrice;
+  int get totalProductPrice => _totalProductPrice;
+  int get totalLensPrice => _totalLensPrice;
+  int get totalCartPrice => _totalCartPrice;
   int get totalPayment => _totalPayment;
   int get orderTime => _orderTime;
   int get paymentTime => _paymentTime;
@@ -71,7 +77,9 @@ class OrderModel {
   OrderModel.fromSnapshot(DocumentSnapshot snapshot) {
     _id = snapshot.data()[ID];
     _description = snapshot.data()[DESCRIPTION];
-    _totalPrice = snapshot.data()[TOTAL_PRICE];
+    _totalProductPrice = snapshot.data()[TOTAL_PRODUCT_PRICE];
+    _totalLensPrice = snapshot.data()[TOTAL_LENS_PRICE];
+    _totalCartPrice = snapshot.data()[TOTAL_CART_PRICE];
     _totalPayment = snapshot.data()[TOTAL_PAYMENT];
     _status = snapshot.data()[STATUS];
     _message = snapshot.data()[MESSAGE] ?? "";

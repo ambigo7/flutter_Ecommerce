@@ -15,7 +15,9 @@ class UserModel{
   String _email;
   String _address;
   int _phone;
-  int _priceSum = 0;
+  int _priceSumCart = 0;
+  int _priceSumProduct = 0;
+  int _priceSumLens = 0;
 
   //Getter read only, private variabel
   String get id => _id;
@@ -26,6 +28,8 @@ class UserModel{
 
 //Public variabel
   List<CartItemModel> cart;
+  int totalProductPrice;
+  int totalLensPrice;
   int totalCartPrice;
   int countCart;
 
@@ -39,7 +43,9 @@ class UserModel{
     _phone = snapshot.data()[PHONE] ?? 0;
     countCart = snapshot.data()[CART] == null ? 0 : snapshot.data()[CART].length;
     cart = _convertCartItems(snapshot.data()[CART] ?? []);
-    totalCartPrice = snapshot.data()[CART] == null ? 0 : getTotalPrice(cart: snapshot.data()[CART]);
+    totalProductPrice = snapshot.data()[CART] == null ? 0 : getTotalProductPrice(cart: snapshot.data()[CART]);
+    totalLensPrice = snapshot.data()[CART] == null ? 0 : getTotalLensPrice(cart: snapshot.data()[CART]);
+    totalCartPrice = snapshot.data()[CART] == null ? 0 : getTotalCartPrice(cart: snapshot.data()[CART]);
   }
 
 //Firebase tdk mengerti tipe data List makanya harus diconvert ke Map
@@ -51,16 +57,42 @@ class UserModel{
     return convertedCart;
   }
 
-//Total Price for cart item
-  int getTotalPrice({List cart}){
+  //Total Price for cart item
+  int getTotalLensPrice({List cart}){
     if(cart == null){
       return 0;
     }
     for(Map cartItem in cart){
-      _priceSum += cartItem["totalPriceCart"];
+      _priceSumLens += cartItem["priceLens"];
     }
 
-    int total = _priceSum;
+    int total = _priceSumLens;
+    return total;
+  }
+
+  //Total Price for cart item
+  int getTotalProductPrice({List cart}){
+    if(cart == null){
+      return 0;
+    }
+    for(Map cartItem in cart){
+      _priceSumProduct += cartItem["priceProduct"];
+    }
+
+    int total = _priceSumProduct;
+    return total;
+  }
+
+//Total Price for cart item
+  int getTotalCartPrice({List cart}){
+    if(cart == null){
+      return 0;
+    }
+    for(Map cartItem in cart){
+      _priceSumCart += cartItem["totalPriceCart"];
+    }
+
+    int total = _priceSumCart;
     return total;
   }
 }
