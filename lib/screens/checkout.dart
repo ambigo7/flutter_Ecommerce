@@ -765,8 +765,8 @@ class _CheckOutState extends State<CheckOut> with TickerProviderStateMixin {
                         hintText: 'Message for admin...',
                         border: InputBorder.none),
                     validator: (value) {
-                      if (value.length > 10) {
-                        return 'Product name cant have more then 10 letters';
+                      if (value.length > 15) {
+                        return 'Message cant have more then 15 letters';
                       }
                       return null;
                     },

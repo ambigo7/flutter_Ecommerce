@@ -96,6 +96,8 @@ class UserProvider with ChangeNotifier {
         });
         return true;
       }else{
+        _status = Status.Unauthenticated;
+        notifyListeners();
         return false;
       }
     } catch (e) {
@@ -111,7 +113,6 @@ class UserProvider with ChangeNotifier {
     _auth.signOut();
     _status = Status.Unauthenticated;
     notifyListeners();
-    return Future.delayed(Duration.zero);
   }
 
   Future<void> _onStateChanged(User user) async {
