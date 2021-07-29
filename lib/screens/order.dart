@@ -117,6 +117,11 @@ class _OrdersScreenState extends State<OrdersScreen> {
                           Theme(
                             data: ThemeData(accentColor: _onExpansionClicked ? active : noActive,),
                             child: ExpansionTile(
+                              onExpansionChanged: (clicked){
+                                setState(() {
+                                  _onExpansionClicked = clicked;
+                                });
+                              },
                               title: Row(
                                 children: <Widget>[
                                   Container(
