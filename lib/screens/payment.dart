@@ -96,7 +96,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Loading(),
-            CustomText(text: '$_textLoading...')
+            SizedBox(height: 5,),
+            CustomText(text: '$_textLoading...', weight: FontWeight.bold,)
           ],
         ),
       ) :  Container(
