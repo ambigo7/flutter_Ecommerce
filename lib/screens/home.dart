@@ -148,7 +148,7 @@ class _HomePageState extends State<HomePage> {
                   userProvider.getOrders();
                   changeScreen(context, OrdersScreen());
                   setState(() {
-                    _loading = true;
+                    _loading = false;
                   });
                 },
                 child: ListTile(
