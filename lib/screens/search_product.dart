@@ -70,11 +70,7 @@ class SearchProductScreen extends StatelessWidget {
       ) : ListView.builder(
           itemCount: productProvider.productsSearch.length,
           itemBuilder: (context, index){
-            return GestureDetector(
-                onTap: ()async{
-                  changeScreen(context, ProductDetails(product: productProvider.productsSearch[index]));
-                },
-                child: ProductCard(product:  productProvider.productsSearch[index]));
+            return ProductCard(product:  productProvider.productsSearch[index]);
           }),
     );
   }

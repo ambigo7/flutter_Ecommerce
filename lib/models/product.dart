@@ -54,4 +54,5 @@ class ProductModel{
     _featured = snapshot.data()[FEATURED];
     _sale = snapshot.data()[SALE];
   }
+
 }

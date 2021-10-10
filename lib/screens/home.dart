@@ -8,6 +8,7 @@ import 'package:carousel_pro/carousel_pro.dart';
 import 'package:lets_shop/commons/color.dart';
 import 'package:lets_shop/commons/common.dart';
 import 'package:lets_shop/commons/loading.dart';
+import 'package:lets_shop/components/column_builder.dart';
 import 'package:lets_shop/components/custom_text.dart';
 
 // MY OWN PACKAGE
@@ -51,6 +52,44 @@ class _HomePageState extends State<HomePage> {
 
   }
 */
+
+  void bubbleSort(List<int> arr) {
+    var didSwap = false;
+    print('Unsorted: $arr');
+    for (var i = 0; i < arr.length - 1; i++) {
+      didSwap = false;
+      for (var j = 0; j < arr.length - 1; j++) {
+        if (arr[j] > arr[j + 1]) {
+          didSwap = true;
+          var temp = arr[j];
+          arr[j] = arr[j + 1];
+          arr[j + 1] = temp;
+        }
+      }
+
+      print('Sort $i: $arr');
+      if (!didSwap) break;
+    }
+  }
+
+  void selectionSort(List<int> arr) {
+    var i = 0, j = 1;
+    print('Unsorted: $arr');
+    // Traverse through all array elements
+    for (i = 0; i < arr.length; i++) {
+      // Find the minimum element in remaining unsorted array
+      var min_index = i;
+      for (j = i + 1; j < arr.length; j++) {
+        if (arr[min_index] > arr[j]) min_index = j; // Save minimum element's index
+      }
+      // Swap the found minimum element with the first element
+      var temp = arr[min_index];
+      arr[min_index] = arr[i];
+      arr[i] = temp;
+      print('Iter $i, arr: $arr');
+    }
+    print('Sorted: $arr');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -348,7 +387,7 @@ class _HomePageState extends State<HomePage> {
             ),
 
 
-              Column(
+/*              Column(
 //              LOADING DATA in list product provider
                 children: productProvider.products
                     .map((item) => GestureDetector(
@@ -356,7 +395,16 @@ class _HomePageState extends State<HomePage> {
                     product: item,
                   ),
                   )).toList(),
-                )
+                )*/
+              ColumnBuilder(
+                  itemCount: productProvider.products.length,
+                  itemBuilder: (context, index){
+/*                    List<int> arr = [];
+                    arr.add(productProvider.products[index].price);
+                    print('array price : ${arr[4]}');
+                    // bubbleSort(arr);*/
+                    return ProductCard(product:  productProvider.products[index]);
+                  }),
               ]
             )
         )
