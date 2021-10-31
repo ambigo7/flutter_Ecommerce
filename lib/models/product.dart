@@ -41,7 +41,6 @@ class ProductModel{
 
 //Contructure data from DB
   ProductModel.fromSnapshot(DocumentSnapshot snapshot){
-    /*Map data = snapshot.data();*/
     _id = snapshot.data()[ID];
     _name = snapshot.data()[NAME];
     _brand = snapshot.data()[BRAND];

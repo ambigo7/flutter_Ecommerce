@@ -5,7 +5,7 @@ class ProductService {
 /*  FirebaseFirestore _firestore = FirebaseFirestore.instance;
   String collection = 'products';*/
   CollectionReference _products = FirebaseFirestore.instance.collection(
-      'products');
+    /*'products'*/'iterasi1');
 
   // Get data Products
   Future<List<ProductModel>> getProducts() async =>

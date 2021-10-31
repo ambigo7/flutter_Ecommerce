@@ -2,28 +2,34 @@ import 'package:flutter/material.dart';
 import 'package:lets_shop/service/product.dart';
 import 'package:lets_shop/models/product.dart';
 
+import 'package:intl/intl.dart';
+
 class ProductProvider with ChangeNotifier{
   ProductService _productService = ProductService();
-  List<ProductModel> products = [];
+  List<ProductModel> productsBubbleSort = [];
+  List<ProductModel> productsQuickSort = [];
+  List<ProductModel> unSortedProducts = [];
   List<ProductModel> featured = [];
   List<ProductModel> productsSearch = [];
   List<Map> convertedProduct = [];
-  var arrPrice = [];
+
   List<ProductModel> priceBubbleSort = [];
   List<ProductModel> priceSelectionSort = [];
+  List<ProductModel> priceQuickSort = [];
+
+  DateFormat dateFormat = new DateFormat('MM/dd/yyyy hh:mm:ss');
 
   ProductProvider.initialize(){
     loadProducts();
     loadFeatured();
   }
 
-  void bubbleSort(List<ProductModel> arr) {
+  Future<List<ProductModel>> bubbleSort(List<ProductModel> arr) {
     var didSwap = false;
     print('Unsorted: $arr');
     for (var i = 0; i < arr.length - 1; i++) {
       didSwap = false;
       for (var j = 0; j < arr.length - 1; j++) {
-        //TODO : Kalo mau jadi descending tinggal ganti operator dibawah ini jadi '<'
         if (arr[j].price > arr[j + 1].price) {
           didSwap = true;
           var temp = arr[j];
@@ -40,42 +46,65 @@ class ProductProvider with ChangeNotifier{
     }
   }
 
-  void selectionSort(List<ProductModel> arr) {
-    var i = 0, j = 1;
-    print('Unsorted: $arr');
-    // Traverse through all array elements
-    for (i = 0; i < arr.length; i++) {
-      // Find the minimum element in remaining unsorted array
-      var min_index = i;
-      for (j = i + 1; j < arr.length; j++) {
-        //TODO : Kalo mau jadi descending tinggal ganti operator dibawah ini jadi '<'
-        if (arr[min_index].price > arr[j].price) min_index = j; // Save minimum element's index
-      }
-      // Swap the found minimum element with the first element
-      var temp = arr[min_index];
-      arr[min_index] = arr[i];
-      arr[i] = temp;
-      print('Iter $i, arr: $arr');
+  List<ProductModel> quickSort(List<ProductModel> arr, int low, int high){
+    if (low < high) {
+      int pi = partition(arr, low, high);
+      print("pivot: ${arr[pi].price} now at index $pi");
+
+      quickSort(arr, low, pi - 1);
+      quickSort(arr, pi + 1, high);
     }
-    print('Sorted: $arr');
     for(int x =0; x < arr.length; x++){
-      priceSelectionSort.add(arr[x]);
+      priceQuickSort.add(arr[x]);
     }
+    return priceQuickSort;
+  }
+
+  int partition(List<ProductModel> arr, low, high){
+    // Base check
+    if (arr.isEmpty){
+      return 0;
+    }
+    // Take our last element as pivot and counter i one less than low
+    int pivot = arr[high].price;
+
+    int i = low - 1;
+    for (int j = low; j < high; j++) {
+      // When j is < than pivot element we increment i and swap arr[i] and arr[j]
+      if (arr[j].price < pivot) {
+        i++;
+        swap(arr, i, j);
+      }
+    }
+    // Swap the last element and place in front of the i'th element
+    swap(arr, i + 1, high);
+    return i + 1;
+  }
+
+// Swapping using a temp variable
+  void swap(List<ProductModel> list, int i, int j) {
+    var temp = list[i];
+    list[i] = list[j];
+    list[j] = temp;
   }
 
   loadProducts() async{
-    products = await _productService.getProducts();
-/*    print("product provider list : $products");
-    print("length product provider list : ${products.length}");
-    int i;
-    for(i=0; i<products.length;i++){
-      arrPrice.add(products[i].price);
-      *//*print("price index $i product provider list : ${products[i].price}");*//*
-    }
-    print('arrPrice $arrPrice');*/
-    // bubbleSort(products);
-    selectionSort(products);
-    print('priceSelectionSort index 9 ${priceSelectionSort[9].price}');
+    unSortedProducts = await _productService.getProducts();
+    productsBubbleSort = await _productService.getProducts();
+    productsQuickSort = unSortedProducts;
+/*    Stopwatch stopwatch = Stopwatch()..start();
+    print('Time : ${dateFormat.format(DateTime.now())}');
+    bubbleSort(products);
+    print('Time : ${dateFormat.format(DateTime.now())}');
+    stopwatch.stop();
+    print('Time elapsed : ${stopwatch.elapsed}');
+    print('priceBubbleSort index 0 ${priceBubbleSort[0].price}');*/
+/*    Stopwatch stopwatch = Stopwatch()..start();
+    quickSort(products, 0, products.length -1);
+    //TODO:kasih waktu pas eksekusi supaya bisa dicek saat penggunaaa memmory usagenya
+    stopwatch.stop();
+    print('time elapsed ${stopwatch.elapsed}');
+    print('priceQuickSort index 0 ${priceQuickSort[0].price}');*/
     notifyListeners();
   }
 

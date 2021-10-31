@@ -1,19 +1,26 @@
+import 'dart:convert';
+
 import 'package:badges/badges.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
+import 'package:intl/intl.dart';
 
 //PACKAGE CAROUSEL A.K.A SLIDER PICT
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:lets_shop/commons/color.dart';
 import 'package:lets_shop/commons/common.dart';
 import 'package:lets_shop/commons/loading.dart';
+import 'package:lets_shop/commons/random_string.dart';
 import 'package:lets_shop/components/column_builder.dart';
 import 'package:lets_shop/components/custom_text.dart';
 
 // MY OWN PACKAGE
 import 'package:lets_shop/components/featured_product.dart';
 import 'package:lets_shop/components/product_card.dart';
+import 'package:lets_shop/models/product.dart';
 import 'package:lets_shop/models/user.dart';
 import 'package:lets_shop/provider/app_provider.dart';
 import 'package:lets_shop/provider/product_provider.dart';
@@ -22,6 +29,7 @@ import 'package:lets_shop/screens/cart.dart';
 import 'package:lets_shop/screens/order.dart';
 import 'package:lets_shop/screens/search_product.dart';
 import 'package:lets_shop/service/users.dart';
+import 'package:memory_info/memory_info.dart';
 import 'package:provider/provider.dart';
 import 'package:transparent_image/transparent_image.dart';
 
@@ -43,52 +51,71 @@ class _HomePageState extends State<HomePage> {
   TextEditingController _searchController = TextEditingController();
 
   bool _loading = false;
+  int btnSortClicked = 0;
+  List<ProductModel> _unSortedProduct = [];
+  List<ProductModel> _productBubbleSort = [];
+  List<ProductModel> _productQuickSort = [];
+
+  String _nameProductList = 'Recent Products';
+
+  Memory _memory;
+  DiskSpace _diskSpace;
+
+  Future<void> getMemoryInfo() async{
+    Memory memory;
+    DiskSpace diskSpace;
+
+    try{
+      memory = await MemoryInfoPlugin().memoryInfo;
+      diskSpace = await MemoryInfoPlugin().diskSpace;
+    } on PlatformException catch (e) {
+      print('error $e');
+    }
+
+    if (!mounted) return;
+
+    if (memory != null || diskSpace != null)
+      setState(() {
+        _memory = memory;
+        _diskSpace = diskSpace;
+      });
+  }
+
+  DateFormat dateFormat = new DateFormat('MM/dd/yyyy hh:mm:ss');
+
+  List<ProductModel> getProductBubbleFromProvider(){
+    setState(() {
+      _productBubbleSort = Provider.of<ProductProvider>(context, listen:false).productsBubbleSort;
+    });
+    print('_productBubbleSort : ${_productBubbleSort.length}');
+    return _productBubbleSort;
+  }
+
+  List<ProductModel> getProductQuickFromProvider() {
+    setState(() {
+      _productQuickSort = Provider.of<ProductProvider>(context, listen:false).productsQuickSort;
+    });
+    print('_productQuickSort : ${_productQuickSort.length}');
+    return _productQuickSort;
+  }
+
+  List<ProductModel> getUnSortedProductFromProvider(){
+    setState(() {
+      _unSortedProduct = Provider.of<ProductProvider>(context, listen:false).unSortedProducts;
+    });
+    print('_unSortedProduct : ${_unSortedProduct.length}');
+    return _unSortedProduct;
+  }
 
 
-  //FUNGSINYA BUAT inisilalisasi nilai awal pas screen awal load
-/*
+  //FUNGSINYA BUAT inisilalisasi nilai awal pas screen awal loagd
   @override
   void initState() {
-
-  }
-*/
-
-  void bubbleSort(List<int> arr) {
-    var didSwap = false;
-    print('Unsorted: $arr');
-    for (var i = 0; i < arr.length - 1; i++) {
-      didSwap = false;
-      for (var j = 0; j < arr.length - 1; j++) {
-        if (arr[j] > arr[j + 1]) {
-          didSwap = true;
-          var temp = arr[j];
-          arr[j] = arr[j + 1];
-          arr[j + 1] = temp;
-        }
-      }
-
-      print('Sort $i: $arr');
-      if (!didSwap) break;
-    }
-  }
-
-  void selectionSort(List<int> arr) {
-    var i = 0, j = 1;
-    print('Unsorted: $arr');
-    // Traverse through all array elements
-    for (i = 0; i < arr.length; i++) {
-      // Find the minimum element in remaining unsorted array
-      var min_index = i;
-      for (j = i + 1; j < arr.length; j++) {
-        if (arr[min_index] > arr[j]) min_index = j; // Save minimum element's index
-      }
-      // Swap the found minimum element with the first element
-      var temp = arr[min_index];
-      arr[min_index] = arr[i];
-      arr[i] = temp;
-      print('Iter $i, arr: $arr');
-    }
-    print('Sorted: $arr');
+    super.initState();
+    getProductBubbleFromProvider();
+    getProductQuickFromProvider();
+    getUnSortedProductFromProvider();
+    getMemoryInfo();
   }
 
   @override
@@ -119,6 +146,9 @@ class _HomePageState extends State<HomePage> {
       ),
     );
 
+    JsonEncoder encoder = new JsonEncoder.withIndent('  ');
+    String memInfo = encoder.convert(_memory?.toMap());
+    String diskInfo = encoder.convert(_diskSpace?.toMap());
     return Scaffold(
         key: _key,
         backgroundColor: white,
@@ -376,13 +406,85 @@ class _HomePageState extends State<HomePage> {
 
 //          recent products
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.all(14.0),
                   child: Container(
                     alignment: Alignment.centerLeft,
-                    child: new Text('Recent products')),
+                    child: AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 500),
+                      transitionBuilder: (Widget child, Animation<double> animation){
+                        return ScaleTransition(child: child, scale: animation,);
+                      },
+                      child: Text(_nameProductList,
+                        key: ValueKey<String>(_nameProductList),
+                        style: TextStyle(color: grey, fontSize: 16,),),
+                    )
+                    /*Text(_nameProductList)*/
+                  ),
                 ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: GestureDetector(
+                      onTap: (){
+                        _loading = true;
+                        setState((){
+                          _nameProductList = 'Sorted by Bubble Sort Algorithm';
+                          getMemoryInfo();
+                          btnSortClicked = 1;
+                          Stopwatch stopwatch = Stopwatch()..start();
+                          print('Time : ${dateFormat.format(DateTime.now())}');
+                          print('Memory : $memInfo');
+                          print('Disk : $diskInfo');
+                          productProvider.bubbleSort(_productBubbleSort);
+                          print('Memory : $memInfo');
+                          print('Disk : $diskInfo');
+                          print('Time : ${dateFormat.format(DateTime.now())}');
+                          stopwatch.stop();
+                          print('Time elapsed : ${stopwatch.elapsed}');
+                        });
+                        _loading = false;
+                      },
+                      onDoubleTap: (){
+                        print('productsQuickSort : ${_productQuickSort.length}');
+                        _loading = true;
+                        setState(() {
+                          _nameProductList = 'Sorted by Quick Sort Algorithm';
+                          getMemoryInfo();
+                          btnSortClicked = 2;
+                          Stopwatch stopwatch = Stopwatch()..start();
+                          print('Time : ${dateFormat.format(DateTime.now())}');
+                          print('Memory : $memInfo');
+                          print('Disk : $diskInfo');
+                          productProvider.quickSort(_productQuickSort, 0, _productQuickSort.length -1);
+                          print('Memory : $memInfo');
+                          print('Disk : $diskInfo');
+                          print('Time : ${dateFormat.format(DateTime.now())}');
+                          stopwatch.stop();
+                          print('Time elapsed : ${stopwatch.elapsed}');
+                        });
+                        _loading = false;
+                      },
+                      onLongPress: (){
+                        _loading = true;
+                        setState((){
+                          _nameProductList = 'Recent Products';
+                          btnSortClicked = 0;
+                        });
+                        _loading = false;
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(color: blue)
+                        ),
+                        height: 30,
+                        width: 30,
+                        child: Icon(Icons.filter_list_outlined),
+                      ),
+                    ),
+                  ),
               ],
             ),
 
@@ -397,13 +499,19 @@ class _HomePageState extends State<HomePage> {
                   )).toList(),
                 )*/
               ColumnBuilder(
-                  itemCount: productProvider.products.length,
+                  itemCount: productProvider.unSortedProducts.length,
                   itemBuilder: (context, index){
 /*                    List<int> arr = [];
                     arr.add(productProvider.products[index].price);
                     print('array price : ${arr[4]}');
                     // bubbleSort(arr);*/
-                    return ProductCard(product:  productProvider.products[index]);
+                    return ProductCard(
+                        product: btnSortClicked == 0
+                            ? _unSortedProduct[index]
+                            : btnSortClicked == 1
+                            ? _productBubbleSort[index]
+                            : _productQuickSort[index]
+                    );
                   }),
               ]
             )

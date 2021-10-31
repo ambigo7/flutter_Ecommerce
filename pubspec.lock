@@ -408,6 +408,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.12.10"
+  memory_info:
+    dependency: "direct main"
+    description:
+      name: memory_info
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.2"
+  memory_info_platform_interface:
+    dependency: transitive
+    description:
+      name: memory_info_platform_interface
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.1"
   meta:
     dependency: transitive
     description:
@@ -512,7 +526,7 @@ packages:
       name: plugin_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.0"
+    version: "2.0.2"
   process:
     dependency: transitive
     description:
