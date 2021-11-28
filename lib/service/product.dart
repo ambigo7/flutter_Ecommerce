@@ -5,11 +5,12 @@ class ProductService {
 /*  FirebaseFirestore _firestore = FirebaseFirestore.instance;
   String collection = 'products';*/
   CollectionReference _products = FirebaseFirestore.instance.collection(
-    /*'products'*/'iterasi1');
+    /*'products'*/'scrape');
 
   // Get data Products
   Future<List<ProductModel>> getProducts() async =>
       _products
+          // .limit(80)
           .get()
           .then((result) {
         List<ProductModel> products = [];
@@ -18,6 +19,22 @@ class ProductService {
         }
         return products;
       });
+
+
+/*  // Get data Products
+  Future<List<ProductModel>> getProductsDebugging() async =>
+      _products
+      // .limit(80)
+          .where('description', isEqualTo: Null)
+          .get()
+          .then((result) {
+        List<ProductModel> products = [];
+        for (DocumentSnapshot product in result.docs) {
+          products.add(ProductModel.fromSnapshot(product));
+        }
+        return products;
+      });*/
+
 
   // Get data Featured Products
   Future<List<ProductModel>> getFeatured() async =>

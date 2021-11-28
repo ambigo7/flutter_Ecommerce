@@ -98,7 +98,9 @@ class FeaturedCard extends StatelessWidget {
                   child: Padding(
                       padding: const EdgeInsets.only(left:8.0),
                       child: RichText(text: TextSpan(children: [
-                        TextSpan(text: '${product.name} \n', style: TextStyle(fontSize: 18)),
+                        TextSpan(text: '${product.name.length > 15
+                            ? product.name.replaceRange(16, product.name.length, '...')
+                            : product.name} \n', style: TextStyle(fontSize: 18)),
                         TextSpan(
                           text:  product.sale ? '${formatCurrency.format(product.oldPrice)} \n' : '',
                           style: TextStyle(fontSize: 18, color: redAccent, decoration: TextDecoration.lineThrough, fontWeight: FontWeight.bold),

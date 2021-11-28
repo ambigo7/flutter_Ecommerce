@@ -62,7 +62,54 @@ class ProductCard extends StatelessWidget {
             SizedBox(
               width: 10,
             ),
-            RichText(
+            Expanded(
+              child: Container(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Visibility(
+                      visible: product.sale ? false : true,
+                      child: SizedBox(
+                        height: 20,
+                      ),
+                    ),
+                    Text(
+                      '${product.name}',
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                      softWrap: false,
+                      style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20),
+                    ),
+                    Text(
+                      'by: ${product.brand} ',
+                      style: TextStyle(fontSize: 16, color: Colors.grey),
+                    ),
+                    Visibility(
+                      visible: product.sale ? false : true,
+                      child: SizedBox(
+                        height: 50,
+                      ),
+                    ),
+                    Text(
+                      product.sale ? '${formatCurrency.format(product.oldPrice)}' : '',
+                      style: TextStyle(fontSize: 16, color: redAccent, decoration: TextDecoration.lineThrough,),
+                    ),
+                    Text(
+                      '${formatCurrency.format(product.price)}',
+                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      product.sale ? 'ON SALE' : '',
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w400,
+                          color: Colors.red),
+                    ),
+                  ],
+                ),
+              ),
+            )
+            /*RichText(
               text: TextSpan(children: [
                 TextSpan(
                   text: '${product.name} \n',
@@ -88,7 +135,7 @@ class ProductCard extends StatelessWidget {
                       color: Colors.red),
                 )
               ], style: TextStyle(color: Colors.black)),
-            )
+            )*/
           ],
         ),
       ),

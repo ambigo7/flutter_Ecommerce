@@ -288,43 +288,47 @@ class _ProductDetailsState extends State<ProductDetails> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
-                              Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: Text(
-                                  widget.product.name,
-                                  style: TextStyle(
-                                      color: white,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20),
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: Text(
+                                    widget.product.name,
+                                    style: TextStyle(
+                                        color: white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20),
+                                  ),
                                 ),
                               ),
                               //PRODUCT PRICE
-                              Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    Visibility(
-                                      visible: widget.product.sale ? true : false,
-                                      child: Text(
-                                        '${formatCurrency.format(widget.product.oldPrice)}',
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      Visibility(
+                                        visible: widget.product.sale ? true : false,
+                                        child: Text(
+                                          '${formatCurrency.format(widget.product.oldPrice)}',
+                                          textAlign: TextAlign.end,
+                                          style: TextStyle(
+                                              color: redAccent,
+                                              fontSize: 17,
+                                              decoration: TextDecoration.lineThrough,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                      Text(
+                                        '${formatCurrency.format(widget.product.price)}',
                                         textAlign: TextAlign.end,
                                         style: TextStyle(
-                                            color: redAccent,
-                                            fontSize: 20,
-                                            decoration: TextDecoration.lineThrough,
+                                            color: Colors.white,
+                                            fontSize: 23,
                                             fontWeight: FontWeight.bold),
                                       ),
-                                    ),
-                                    Text(
-                                      '${formatCurrency.format(widget.product.price)}',
-                                      textAlign: TextAlign.end,
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 26,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ),
                             ],

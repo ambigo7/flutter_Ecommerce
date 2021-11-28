@@ -32,6 +32,7 @@ import 'package:lets_shop/service/users.dart';
 import 'package:memory_info/memory_info.dart';
 import 'package:provider/provider.dart';
 import 'package:transparent_image/transparent_image.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 class HomePage extends StatefulWidget {
 /*  //KONTRUKTOR BUAT GET VALUES YANG DIKIRIM DARI CLASS LOGIN
@@ -81,7 +82,7 @@ class _HomePageState extends State<HomePage> {
       });
   }
 
-  DateFormat dateFormat = new DateFormat('MM/dd/yyyy hh:mm:ss');
+  DateFormat dateFormat = new DateFormat('hh:mm:ss:SS');
 
   List<ProductModel> getProductBubbleFromProvider(){
     setState(() {
@@ -434,13 +435,9 @@ class _HomePageState extends State<HomePage> {
                           getMemoryInfo();
                           btnSortClicked = 1;
                           Stopwatch stopwatch = Stopwatch()..start();
-                          print('Time : ${dateFormat.format(DateTime.now())}');
-                          print('Memory : $memInfo');
-                          print('Disk : $diskInfo');
+                          print('Time Start: ${dateFormat.format(DateTime.now())}');
                           productProvider.bubbleSort(_productBubbleSort);
-                          print('Memory : $memInfo');
-                          print('Disk : $diskInfo');
-                          print('Time : ${dateFormat.format(DateTime.now())}');
+                          print('Time End: ${dateFormat.format(DateTime.now())}');
                           stopwatch.stop();
                           print('Time elapsed : ${stopwatch.elapsed}');
                         });
@@ -454,13 +451,9 @@ class _HomePageState extends State<HomePage> {
                           getMemoryInfo();
                           btnSortClicked = 2;
                           Stopwatch stopwatch = Stopwatch()..start();
-                          print('Time : ${dateFormat.format(DateTime.now())}');
-                          print('Memory : $memInfo');
-                          print('Disk : $diskInfo');
+                          print('Time Start: ${dateFormat.format(DateTime.now())}');
                           productProvider.quickSort(_productQuickSort, 0, _productQuickSort.length -1);
-                          print('Memory : $memInfo');
-                          print('Disk : $diskInfo');
-                          print('Time : ${dateFormat.format(DateTime.now())}');
+                          print('Time End: ${dateFormat.format(DateTime.now())}');
                           stopwatch.stop();
                           print('Time elapsed : ${stopwatch.elapsed}');
                         });
