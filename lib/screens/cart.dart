@@ -101,9 +101,9 @@ class _CartScreenState extends State<CartScreen> {
                               RichText(
                                 text: TextSpan(children: [
                                   TextSpan(
-                                      text: '${userProvider.userModel.cart[index].nameProduct.length > 15
+                                      text: '${userProvider.userModel.cart[index].nameProduct.length > 10
                                           ? userProvider.userModel.cart[index].nameProduct
-                                          .replaceRange(16, userProvider.userModel.cart[index].nameProduct.length, '...')
+                                          .replaceRange(11, userProvider.userModel.cart[index].nameProduct.length, '...')
                                           : userProvider.userModel.cart[index].nameProduct.length}\n',
                                       style: TextStyle(
                                           color: black,

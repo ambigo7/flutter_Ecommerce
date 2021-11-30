@@ -9,6 +9,7 @@ class ProductProvider with ChangeNotifier{
   List<ProductModel> productsBubbleSort = [];
   List<ProductModel> productsQuickSort = [];
   List<ProductModel> unSortedProducts = [];
+  List<ProductModel> dumpProducts = [];
   List<ProductModel> featured = [];
   List<ProductModel> productsSearch = [];
   List<Map> convertedProduct = [];
@@ -30,7 +31,7 @@ class ProductProvider with ChangeNotifier{
     for (var i = 0; i < arr.length - 1; i++) {
       didSwap = false;
       for (var j = 0; j < arr.length - 1; j++) {
-        if (arr[j].price > arr[j + 1].price) {
+        if (arr[j].price < arr[j + 1].price) {
           didSwap = true;
           var temp = arr[j];
           arr[j] = arr[j + 1];
@@ -90,8 +91,9 @@ class ProductProvider with ChangeNotifier{
 
   loadProducts() async{
     unSortedProducts = await _productService.getProducts();
-    productsBubbleSort = await _productService.getProducts();
+    /*productsBubbleSort = await _productService.getProducts();
     productsQuickSort = unSortedProducts;
+*/
 /*    Stopwatch stopwatch = Stopwatch()..start();
     print('Time : ${dateFormat.format(DateTime.now())}');
     bubbleSort(products);
@@ -101,10 +103,19 @@ class ProductProvider with ChangeNotifier{
     print('priceBubbleSort index 0 ${priceBubbleSort[0].price}');*/
 /*    Stopwatch stopwatch = Stopwatch()..start();
     quickSort(products, 0, products.length -1);
-    //TODO:kasih waktu pas eksekusi supaya bisa dicek saat penggunaaa memmory usagenya
     stopwatch.stop();
     print('time elapsed ${stopwatch.elapsed}');
     print('priceQuickSort index 0 ${priceQuickSort[0].price}');*/
+    notifyListeners();
+  }
+
+  Future loadProductBubble() async{
+    productsBubbleSort = await _productService.getProducts();
+    notifyListeners();
+  }
+
+  Future loadProductQuick() async{
+    productsQuickSort = await _productService.getProducts();
     notifyListeners();
   }
 
