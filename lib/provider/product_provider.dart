@@ -14,11 +14,11 @@ class ProductProvider with ChangeNotifier{
   List<ProductModel> productsSearch = [];
   List<Map> convertedProduct = [];
 
-  List<ProductModel> priceBubbleSort = [];
-  List<ProductModel> priceSelectionSort = [];
-  List<ProductModel> priceQuickSort = [];
+  List<ProductModel> _priceBubbleSort = [];
+  List<ProductModel> _priceQuickSort = [];
 
   DateFormat dateFormat = new DateFormat('MM/dd/yyyy hh:mm:ss');
+
 
   ProductProvider.initialize(){
     loadProducts();
@@ -26,39 +26,35 @@ class ProductProvider with ChangeNotifier{
   }
 
   Future<List<ProductModel>> bubbleSort(List<ProductModel> arr) {
-    var didSwap = false;
-    print('Unsorted: $arr');
-    for (var i = 0; i < arr.length - 1; i++) {
-      didSwap = false;
-      for (var j = 0; j < arr.length - 1; j++) {
+    int n = arr.length;
+
+    for (int i = 0; i < n - 1; i++) {
+      for (int j = 0; j < n - i - 1; j++) {
         if (arr[j].price < arr[j + 1].price) {
-          didSwap = true;
+          print('swap arr[j] : ${arr[j].price}, arr[j+1] : ${arr[j+1].price}');
           var temp = arr[j];
           arr[j] = arr[j + 1];
           arr[j + 1] = temp;
         }
       }
-
+      print('');
       print('Sort $i: $arr');
-      if (!didSwap) break;
     }
     for(int x =0; x < arr.length; x++){
-      priceBubbleSort.add(arr[x]);
+      _priceBubbleSort.add(arr[x]);
     }
   }
 
   List<ProductModel> quickSort(List<ProductModel> arr, int low, int high){
     if (low < high) {
-      int pi = partition(arr, low, high);
-      print("pivot: ${arr[pi].price} now at index $pi");
+      int _pivotIndex = partition(arr, low, high);
+      print("pivot: ${arr[_pivotIndex]} now at index $_pivotIndex");
 
-      quickSort(arr, low, pi - 1);
-      quickSort(arr, pi + 1, high);
+      quickSort(arr, low, _pivotIndex - 1);
+      quickSort(arr, _pivotIndex + 1, high);
     }
-    for(int x =0; x < arr.length; x++){
-      priceQuickSort.add(arr[x]);
-    }
-    return priceQuickSort;
+    _priceQuickSort = arr;
+    return _priceQuickSort;
   }
 
   int partition(List<ProductModel> arr, low, high){
@@ -68,18 +64,18 @@ class ProductProvider with ChangeNotifier{
     }
     // Take our last element as pivot and counter i one less than low
     int pivot = arr[high].price;
+    int pIndex = low - 1;
 
-    int i = low - 1;
-    for (int j = low; j < high; j++) {
-      // When j is < than pivot element we increment i and swap arr[i] and arr[j]
-      if (arr[j].price < pivot) {
-        i++;
-        swap(arr, i, j);
+    for (int i = low; i < high; i++) {
+      // When i is < than pivot element we increment pIndex and swap arr[pIndex] and arr[j]
+      if (arr[i].price < pivot) {
+        pIndex++;
+        swap(arr, pIndex, i);
       }
     }
-    // Swap the last element and place in front of the i'th element
-    swap(arr, i + 1, high);
-    return i + 1;
+    // Swap the last element(pivot) and place in front of the pIndex'th element
+    swap(arr, pIndex + 1, high);
+    return pIndex + 1;
   }
 
 // Swapping using a temp variable
