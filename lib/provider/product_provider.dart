@@ -14,8 +14,8 @@ class ProductProvider with ChangeNotifier{
   List<ProductModel> productsSearch = [];
   List<Map> convertedProduct = [];
 
-  List<ProductModel> _priceBubbleSort = [];
-  List<ProductModel> _priceQuickSort = [];
+  List<ProductModel> priceBubbleSort = [];
+  List<ProductModel> priceQuickSort = [];
 
   DateFormat dateFormat = new DateFormat('MM/dd/yyyy hh:mm:ss');
 
@@ -25,36 +25,43 @@ class ProductProvider with ChangeNotifier{
     loadFeatured();
   }
 
-  Future<List<ProductModel>> bubbleSort(List<ProductModel> arr) {
+  List<ProductModel> bubbleSort(List<ProductModel> arr) {
+/*    List<int> priceBubbleSort = [];
+    for(int y=0; y < arr.length; y++){
+      priceBubbleSort.add(arr[y].price);
+    }
+    print('Unsorted Price : $priceBubbleSort');*/
     int n = arr.length;
-
     for (int i = 0; i < n - 1; i++) {
       for (int j = 0; j < n - i - 1; j++) {
         if (arr[j].price < arr[j + 1].price) {
-          print('swap arr[j] : ${arr[j].price}, arr[j+1] : ${arr[j+1].price}');
+          print('Sort $i : swap price[$j] ${arr[j].price}, price[${j+1}] ${arr[j+1].price}');
           var temp = arr[j];
           arr[j] = arr[j + 1];
           arr[j + 1] = temp;
         }
       }
-      print('');
-      print('Sort $i: $arr');
+/*      print('');
+      print('Sort $i: $arr');*/
     }
-    for(int x =0; x < arr.length; x++){
-      _priceBubbleSort.add(arr[x]);
-    }
+    /*print('Sorted Price');
+    for(int x =0; x < n; x++){
+      print('${x+1}. ${arr[x].price}');
+    }*/
+    priceBubbleSort = arr;
+    return priceBubbleSort;
   }
 
   List<ProductModel> quickSort(List<ProductModel> arr, int low, int high){
     if (low < high) {
       int _pivotIndex = partition(arr, low, high);
-      print("pivot: ${arr[_pivotIndex]} now at index $_pivotIndex");
+      print("pivot: ${arr[_pivotIndex].price} now at index $_pivotIndex");
 
       quickSort(arr, low, _pivotIndex - 1);
       quickSort(arr, _pivotIndex + 1, high);
     }
-    _priceQuickSort = arr;
-    return _priceQuickSort;
+    priceQuickSort = arr;
+    return priceQuickSort;
   }
 
   int partition(List<ProductModel> arr, low, high){
