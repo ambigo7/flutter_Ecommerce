@@ -61,6 +61,8 @@ class _HomePageState extends State<HomePage> {
   List<ProductModel> _productBubbleSort = [];
   List<ProductModel> _productQuickSort = [];
 
+  List<ProductModel> _priceQuickSort = [];
+
   String _nameProductList = 'Recent Products';
 
   DateFormat dateFormat = new DateFormat('hh:mm:ss:SS');
@@ -553,12 +555,12 @@ class _HomePageState extends State<HomePage> {
                 RawMaterialButton(
                   onPressed: () async{
                     fabKey.currentState.close();
-                    if(_productQuickSort.isEmpty){
+                    //if(_productQuickSort.isEmpty){
                       await productProvider.loadProductQuick();
                       setState(() {
                         getProductQuickFromProvider();
                       });
-                    }
+                    //}
                     _loading = true;
                     setState(() {
                       _nameProductList = 'Sorted by Quick Sort Algorithm';
@@ -570,6 +572,10 @@ class _HomePageState extends State<HomePage> {
                       stopwatch.stop();
                       print('Time elapsed : ${stopwatch.elapsed}');
                     });
+                    print('Sorted Price : ');
+                    for(int x =0; x < productProvider.priceQuickSort.length; x++){
+                      print('${x+1}. ${productProvider.priceQuickSort[x].price}');
+                    }
                     _loading = false;
                   },
                   shape: CircleBorder(),
@@ -585,12 +591,12 @@ class _HomePageState extends State<HomePage> {
                 RawMaterialButton(
                   onPressed: () async{
                     fabKey.currentState.close();
-                    if(_productBubbleSort.isEmpty){
+                   // if(_productBubbleSort.isEmpty){
                       await productProvider.loadProductBubble();
                       setState(() {
                         getProductBubbleFromProvider();
                       });
-                    }
+                    //}
                     _loading = true;
                     setState((){
                       _nameProductList = 'Sorted by Bubble Sort Algorithm';
@@ -602,6 +608,10 @@ class _HomePageState extends State<HomePage> {
                       stopwatch.stop();
                       print('Time elapsed : ${stopwatch.elapsed}');
                     });
+                    print('Sorted Price');
+                    for(int x =0; x < productProvider.priceBubbleSort.length; x++){
+                      print('${x+1}. ${productProvider.priceBubbleSort[x].price}');
+                    }
                     _loading = false;
                   },
                   shape: CircleBorder(),
