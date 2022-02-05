@@ -5,12 +5,12 @@ class ProductService {
 /*  FirebaseFirestore _firestore = FirebaseFirestore.instance;
   String collection = 'products';*/
   CollectionReference _products = FirebaseFirestore.instance.collection(
-    /*'products'*/'scrape');
+    /*'products'*/'scrape_tokped');
 
   // Get data Products
   Future<List<ProductModel>> getProducts() async =>
       _products
-          .limit(200)
+          .limit(1500)
           .get()
           .then((result) {
         List<ProductModel> products = [];

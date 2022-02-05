@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'file:///D:/App%20Flutter%20build/lets_shop/lib/tidak_terpakai/home_body.dart';
+import 'package:lets_shop/tidak_terpakai/home_body.dart';
 import 'package:lets_shop/screens/home.dart';
-import 'file:///D:/App%20Flutter%20build/lets_shop/lib/tidak_terpakai/test.dart';
-import 'file:///D:/App%20Flutter%20build/lets_shop/lib/tidak_terpakai/test2.dart';
+import 'package:lets_shop/tidak_terpakai/test.dart';
+import 'package:lets_shop/tidak_terpakai/test2.dart';
 
 //PACKAGE BOTTOM BAR
 import 'package:google_nav_bar/google_nav_bar.dart';

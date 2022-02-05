@@ -5,7 +5,7 @@ import 'package:carousel_pro/carousel_pro.dart';
 
 // MY OWN PACKAGE
 import 'package:lets_shop/components/featured_product.dart';
-import 'file:///D:/App%20Flutter%20build/lets_shop/lib/tidak_terpakai/products.dart';
+import 'package:lets_shop/tidak_terpakai/products.dart';
 
 
 class homeBody extends StatefulWidget {
