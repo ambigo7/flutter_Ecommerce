@@ -409,7 +409,7 @@ class _HomePageState extends State<HomePage> {
                         },
                         child: Text(_nameProductList,
                           key: ValueKey<String>(_nameProductList),
-                          style: TextStyle(color: grey, fontSize: 16,),),
+                          style: TextStyle(color: black, fontSize: 16,),),
                       )
                     /*Text(_nameProductList)*/
                   ),
@@ -570,7 +570,7 @@ class _HomePageState extends State<HomePage> {
                       productProvider.quickSort(_productQuickSort, 0, _productQuickSort.length -1);
                       print('Time End: ${dateFormat.format(DateTime.now())}');
                       stopwatch.stop();
-                      print('Time elapsed : ${stopwatch.elapsed}');
+                      print('Time elapsed Quick Sort : ${stopwatch.elapsed}');
                     });
                     print('Sorted Price : ');
                     for(int x =0; x < productProvider.priceQuickSort.length; x++){
@@ -606,7 +606,7 @@ class _HomePageState extends State<HomePage> {
                       productProvider.bubbleSort(_productBubbleSort);
                       print('Time End: ${dateFormat.format(DateTime.now())}');
                       stopwatch.stop();
-                      print('Time elapsed : ${stopwatch.elapsed}');
+                      print('Time elapsed Bubble Sort : ${stopwatch.elapsed}');
                     });
                     print('Sorted Price');
                     for(int x =0; x < productProvider.priceBubbleSort.length; x++){
@@ -628,5 +628,53 @@ class _HomePageState extends State<HomePage> {
             ),
       ),
     );
+  }
+
+  void detailAlgorithmDialog(){
+    var dialog = Dialog(
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0)),
+      child: Container(
+        height: 185,
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              SizedBox(height: 5,),
+              CustomText(
+                text: 'Detail Algorithm',
+                weight: FontWeight.bold, size: 20,
+                color: blue,
+              ),
+              SizedBox(height: 15,),
+              CustomText(
+                text: "Time Start : \n Time Stop  : \n Time Elapsed : ",
+                align: TextAlign.center,
+              ),
+              SizedBox(height: 15,),
+              InkWell(
+                onTap: (){
+                  Navigator.pop(context);
+                },
+                child: Container(
+                  height: 40,
+                  width: 180,
+                  decoration: BoxDecoration(
+                    color: blue,
+                    borderRadius: BorderRadius.all(
+                        Radius.circular(5.0)
+                    ),
+                  ),
+                  child: Center(child: CustomText(text: "Close", color: white,)),
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+    showDialog(context: context, builder: (_) => dialog);
   }
 }

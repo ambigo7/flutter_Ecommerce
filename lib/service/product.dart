@@ -10,7 +10,7 @@ class ProductService {
   // Get data Products
   Future<List<ProductModel>> getProducts() async =>
       _products
-          .limit(1500)
+          .limit(150)
           .get()
           .then((result) {
         List<ProductModel> products = [];

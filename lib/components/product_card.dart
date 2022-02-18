@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 //PACKAGE MONEY FORMATTER
@@ -36,7 +37,34 @@ class ProductCard extends StatelessWidget {
         child: Container(
           child: Row(
           children: <Widget>[
-            Padding(
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: CachedNetworkImage(
+            imageUrl: product.imageUrl,
+              imageBuilder: (context, imageProvider) => Container(
+                height: 140,
+                width: 120,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  image: DecorationImage(
+                    image: imageProvider,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+              placeholder: (context, url) => Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                height: 140,
+                width: 120,
+                child: Loading(),
+              ),
+              errorWidget: (context, url, error) => const Icon(Icons.error),
+            ),
+          ),
+
+            /*Padding(
               padding: const EdgeInsets.all(8.0),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(10),
@@ -58,7 +86,7 @@ class ProductCard extends StatelessWidget {
                   ),
                 ]),
               ),
-            ),
+            ),*/
             SizedBox(
               width: 10,
             ),

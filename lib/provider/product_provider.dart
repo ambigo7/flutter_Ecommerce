@@ -34,8 +34,8 @@ class ProductProvider with ChangeNotifier{
     int n = arr.length;
     for (int i = 0; i < n - 1; i++) {
       for (int j = 0; j < n - i - 1; j++) {
-        if (arr[j].price < arr[j + 1].price) {
-          print('Sort $i : swap price[$j] ${arr[j].price}, price[${j+1}] ${arr[j+1].price}');
+        if (arr[j].price > arr[j + 1].price) {
+          //print('Sort $i : swap price[$j] ${arr[j].price}, price[${j+1}] ${arr[j+1].price}');
           var temp = arr[j];
           arr[j] = arr[j + 1];
           arr[j + 1] = temp;
@@ -55,7 +55,7 @@ class ProductProvider with ChangeNotifier{
   List<ProductModel> quickSort(List<ProductModel> arr, int low, int high){
     if (low < high) {
       int _pivotIndex = partition(arr, low, high);
-      print("pivot: ${arr[_pivotIndex].price} now at index $_pivotIndex");
+      //print("pivot: ${arr[_pivotIndex].price} now at index $_pivotIndex");
 
       quickSort(arr, low, _pivotIndex - 1);
       quickSort(arr, _pivotIndex + 1, high);
@@ -94,6 +94,10 @@ class ProductProvider with ChangeNotifier{
 
   loadProducts() async{
     unSortedProducts = await _productService.getProducts();
+    print('Unsorted Price : ');
+    for(int x =0; x < unSortedProducts.length; x++){
+      print('${x+1}. ${unSortedProducts[x].price}');
+    }
     /*productsBubbleSort = await _productService.getProducts();
     productsQuickSort = unSortedProducts;
 */
