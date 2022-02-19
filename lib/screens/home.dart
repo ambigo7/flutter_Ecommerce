@@ -1,9 +1,12 @@
 import 'dart:convert';
 
 import 'package:badges/badges.dart';
+import 'package:category_picker/category_picker.dart';
+import 'package:category_picker/category_picker_item.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fab_circular_menu/fab_circular_menu.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -30,6 +33,7 @@ import 'package:lets_shop/screens/cart.dart';
 import 'package:lets_shop/screens/order.dart';
 import 'package:lets_shop/screens/search_product.dart';
 import 'package:lets_shop/service/users.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -46,6 +50,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
   User _user = FirebaseAuth.instance.currentUser;
   bool _isSigningOut = false;
 
@@ -55,13 +60,41 @@ class _HomePageState extends State<HomePage> {
 
   bool _fabIsOpen = false;
 
+  bool _checkAllCat = true;
+  bool _checkPlusCat = false;
+  bool _checkMinCat = false;
+  bool _checkProgressiveCat = false;
+
+  bool _checkAscBubble = false;
+  bool _checkDescBubble = false;
+  bool _checkAscQuick = false;
+  bool _checkDescQuick = false;
+
+  bool _itemAscBubble = true;
+  bool _itemDescBubble = true;
+  bool _itemAscQuick = true;
+  bool _itemDescQuick = true;
+
+  bool _itemSortClicked = false;
+
+  bool _clearSortClicked = false;
+
   bool _loading = false;
-  int btnSortClicked = 0;
+  bool btnCategoryClicked = false;
+  bool btnSortedClicked = false;
+  int _selectedProductList = 0;
+  int _selectedCatList = 0;
+  int _selectedSort = 0;
+  //int btnSortClicked = 0;
+
   List<ProductModel> _unSortedProduct = [];
   List<ProductModel> _productBubbleSort = [];
   List<ProductModel> _productQuickSort = [];
+  List<ProductModel> _productsCatPlus = [];
+  List<ProductModel> _productsCatMin = [];
+  List<ProductModel> _productsCatProgressive = [];
 
-  List<ProductModel> _priceQuickSort = [];
+  //List<ProductModel> _priceQuickSort = [];
 
   String _nameProductList = 'Recent Products';
 
@@ -71,7 +104,7 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _productBubbleSort = Provider
           .of<ProductProvider>(context, listen: false)
-          .productsBubbleSort;
+          .priceBubbleSort;
     });
     print('_productBubbleSort : ${_productBubbleSort.length}');
     return _productBubbleSort;
@@ -81,7 +114,7 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _productQuickSort = Provider
           .of<ProductProvider>(context, listen: false)
-          .productsQuickSort;
+          .priceQuickSort;
     });
     print('_productQuickSort : ${_productQuickSort.length}');
     return _productQuickSort;
@@ -97,6 +130,36 @@ class _HomePageState extends State<HomePage> {
     return _unSortedProduct;
   }
 
+  List<ProductModel> getProductCatPlusFromProvider() {
+    setState(() {
+      _productsCatPlus = Provider
+          .of<ProductProvider>(context, listen: false)
+          .productsCatPlus;
+    });
+    print('_productsCatPlus : ${_productsCatPlus.length}');
+    return _productsCatPlus;
+  }
+
+  List<ProductModel> getProductCatMinFromProvider() {
+    setState(() {
+      _productsCatMin = Provider
+          .of<ProductProvider>(context, listen: false)
+          .productsCatMin;
+    });
+    print('_productsCatMin : ${_productsCatMin.length}');
+    return _productsCatMin;
+  }
+
+  List<ProductModel> getProductCatProgressiveFromProvider() {
+    setState(() {
+      _productsCatProgressive = Provider
+          .of<ProductProvider>(context, listen: false)
+          .productsCatProgressive;
+    });
+    print('_productsCatProgressive : ${_productsCatProgressive.length}');
+    return _productsCatProgressive;
+  }
+
 
   //FUNGSINYA BUAT inisilalisasi nilai awal pas screen awal loagd
   @override
@@ -105,6 +168,9 @@ class _HomePageState extends State<HomePage> {
     getProductBubbleFromProvider();
     getProductQuickFromProvider();
     getUnSortedProductFromProvider();
+    getProductCatPlusFromProvider();
+    getProductCatMinFromProvider();
+    getProductCatProgressiveFromProvider();
   }
 
   @override
@@ -113,6 +179,7 @@ class _HomePageState extends State<HomePage> {
 
     final userProvider = Provider.of<UserProvider>(context);
     final productProvider = Provider.of<ProductProvider>(context);
+    final appProvider = Provider.of<AppProvider>(context);
 
     //  ====Implementation of pub carousel a.k.a slider pict====
     Widget img_carousel = new Container(
@@ -393,6 +460,8 @@ class _HomePageState extends State<HomePage> {
             FeaturedProducts(),
 
 //          recent products
+
+//          recent products
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
@@ -400,20 +469,10 @@ class _HomePageState extends State<HomePage> {
                   padding: const EdgeInsets.all(14.0),
                   child: Container(
                       alignment: Alignment.centerLeft,
-                      child: AnimatedSwitcher(
-                        duration: const Duration(milliseconds: 500),
-                        transitionBuilder: (Widget child,
-                            Animation<double> animation) {
-                          return ScaleTransition(
-                            child: child, scale: animation,);
-                        },
-                        child: Text(_nameProductList,
-                          key: ValueKey<String>(_nameProductList),
-                          style: TextStyle(color: black, fontSize: 16,),),
-                      )
-                    /*Text(_nameProductList)*/
+                      child: CustomText(text: _nameProductList,),
                   ),
                 ),
+                
                 /*Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: GestureDetector(
@@ -476,9 +535,9 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                   )*/
+                
               ],
             ),
-
 
 /*              Column(
 //              LOADING DATA in list product provider
@@ -489,17 +548,35 @@ class _HomePageState extends State<HomePage> {
                   ),
                   )).toList(),
                 )*/
-            ColumnBuilder(
-                itemCount: productProvider.unSortedProducts.length,
+            appProvider.isLoading
+            ? Loading()
+            : ColumnBuilder(
+                itemCount: _selectedProductList == 0
+                    ? productProvider.unSortedProducts.length
+                    : _selectedProductList == 1
+                    ? _productsCatPlus.length
+                    : _selectedProductList == 2
+                    ? _productsCatMin.length
+                    : _selectedProductList == 3
+                    ? _productsCatProgressive.length
+                    : _selectedProductList == 4
+                    ? _productBubbleSort.length
+                    : _productQuickSort.length,
                 itemBuilder: (context, index) {
 /*                    List<int> arr = [];
                     arr.add(productProvider.products[index].price);
                     print('array price : ${arr[4]}');
                     // bubbleSort(arr);*/
                   return ProductCard(
-                      product: btnSortClicked == 0
+                      product: _selectedProductList == 0
                           ? _unSortedProduct[index]
-                          : btnSortClicked == 1
+                          : _selectedProductList == 1
+                          ? _productsCatPlus[index]
+                          : _selectedProductList == 2
+                          ? _productsCatMin[index]
+                          : _selectedProductList == 3
+                          ? _productsCatProgressive[index]
+                          : _selectedProductList == 4
                           ? _productBubbleSort[index]
                           : _productQuickSort[index]
                   );
@@ -509,7 +586,7 @@ class _HomePageState extends State<HomePage> {
       ),
       floatingActionButton: Builder(
         builder: (context) =>
-            FabCircularMenu(
+            /*FabCircularMenu(
               key: fabKey,
               alignment: Alignment.bottomRight,
               ringColor: Colors.black.withAlpha(35),
@@ -625,9 +702,694 @@ class _HomePageState extends State<HomePage> {
                   )
                 ),
               ],
+            ),*/
+          Padding(
+            padding: const EdgeInsets.only(left: 130,top: 670, right: 110),
+            child: Center(
+              child: Container(
+                height: 40,
+                width: 200,
+                decoration: BoxDecoration(
+                  border: Border.all(color: blue),
+                  borderRadius: BorderRadius.circular(10),
+                    color: white,
+                ),
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: GestureDetector(
+                        child: Container(
+                          child: CustomText(
+                            text: 'Categories',
+                            color: blue,
+                            size: 15,
+                            align: TextAlign.center,
+                          ),
+                          ),
+                        onTap: () {
+                          categoryListProduct();
+                          setState(() {
+                            btnCategoryClicked = true;
+                          });
+                          print('btnCategoryClicked : $btnCategoryClicked');
+                        }),
+                    ),
+                    VerticalDivider(
+                      color: blue,
+                      thickness: 1,
+                    ),
+                    Expanded(
+                      child: GestureDetector(
+                        child: Container(
+                          child: CustomText(
+                            text: 'Sort',
+                            color: blue,
+                            size: 15,
+                            align: TextAlign.center,
+                            ),
+                          ),
+                        onTap: (){
+                          sortListProduct();
+                          setState(() {
+                            btnSortedClicked = true;
+                          });
+                          print('btnSortedClicked : $btnSortedClicked');
+                        },
+                        ),
+                    ),
+                  ],
+                ),
+              )
             ),
+          )
       ),
     );
+  }
+
+  void categoryListProduct(){
+    final productProvider = Provider.of<ProductProvider>(context, listen: false);
+    final appProvider = Provider.of<AppProvider>(context, listen: false);
+    var modal = Container(
+      //height: 300,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Wrap(
+          children: <Widget>[
+            Material(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      CustomText(text: 'Categories', weight: FontWeight.bold, size: 20,),
+                      IconButton(
+                          onPressed: (){
+                            Navigator.pop(context);
+                          }, icon: Icon(
+                        Icons.close,
+                        color: grey,)
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            Material(
+              child: GestureDetector(
+                onTap: (){
+                  setState(() {
+                    _checkAllCat = true;
+                    _checkPlusCat = false;
+                    _checkMinCat = false;
+                    _checkProgressiveCat = false;
+
+                    _nameProductList = "Recent Product";
+                    _selectedProductList = 0;
+                  });
+                  Navigator.pop(context);
+                },
+                child: ListTile(
+                  title: CustomText(text: 'All Product',),
+                  subtitle: CustomText(text: 'Recent Product',),
+                  trailing: _checkAllCat ? Icon(Icons.check_outlined, color: blue) : null,
+                ),
+              ),
+            ),
+            Divider(color: blue,),
+            Material(
+              child: GestureDetector(
+                onTap: ()async{
+                  await productProvider.loadProductPlus();
+                  appProvider.changeIsLoading();
+                  setState(() {
+                    getProductCatPlusFromProvider();
+                    _checkAllCat = false;
+                    _checkPlusCat = true;
+                    _checkMinCat = false;
+                    _checkProgressiveCat = false;
+
+                    _nameProductList = "Plus Glasses Category";
+                    _selectedProductList = 1;
+                  });
+                  //print('_productsCatPlus.length : ${_productsCatPlus.length}');
+                  Navigator.pop(context);
+                  appProvider.changeIsLoading();
+                },
+                child: ListTile(
+                  title: CustomText(text: 'Plus Products',),
+                  subtitle: CustomText(text: 'Plus Glasses Category',),
+                  trailing: _checkPlusCat ? Icon(Icons.check_outlined, color: blue) : null,
+                ),
+              ),
+            ),
+            Divider(color: blue,),
+            Material(
+              child: GestureDetector(
+                onTap: ()async{
+                  await productProvider.loadProductMin();
+                  appProvider.changeIsLoading();
+                  setState(() {
+                    getProductCatMinFromProvider();
+                    _checkAllCat = false;
+                    _checkPlusCat = false;
+                    _checkMinCat = true;
+                    _checkProgressiveCat = false;
+
+                    _nameProductList = "Min Glasses Category";
+                    _selectedProductList = 2;
+                  });
+                  Navigator.pop(context);
+                  appProvider.changeIsLoading();
+                },
+                child: ListTile(
+                  title: CustomText(text: 'Min Products',),
+                  subtitle: CustomText(text: 'Min Glasses Category',),
+                  trailing: _checkMinCat ? Icon(Icons.check_outlined, color: blue) : null,
+                ),
+              ),
+            ),
+            Divider(color: blue,),
+            Material(
+              child: GestureDetector(
+                onTap: ()async{
+                  await productProvider.loadProductProgressive();
+                  appProvider.changeIsLoading();
+                  setState(() {
+                    getProductCatProgressiveFromProvider();
+                    _checkAllCat = false;
+                    _checkPlusCat = false;
+                    _checkMinCat = false;
+                    _checkProgressiveCat = true;
+
+                    _nameProductList = "Progressive Glasses Category";
+                    _selectedProductList = 3;
+                  });
+                  Navigator.pop(context);
+                  appProvider.changeIsLoading();
+                },
+                child: ListTile(
+                  title: CustomText(text: 'Progressive Products',),
+                  subtitle: CustomText(text: 'Progressive Glasses Category',),
+                  trailing: _checkProgressiveCat ? Icon(Icons.check_outlined, color: blue) : null,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+   showModalBottomSheet(
+        context: context,
+        //topRadius: Radius.circular(10),
+       shape: const RoundedRectangleBorder(
+         borderRadius: BorderRadius.only(
+           topLeft: Radius.circular(10),
+           topRight: Radius.circular(10),
+         ),
+       ),
+        isScrollControlled: true,
+        builder: (_) => modal);
+  }
+
+  void sortListProduct(){
+    final productProvider = Provider.of<ProductProvider>(context, listen: false);
+    final appProvider = Provider.of<AppProvider>(context, listen: false);
+    var modal = Container(
+      //height: 300,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Wrap(
+          children: <Widget>[
+            Material(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: <Widget>[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          CustomText(text: 'Sort', weight: FontWeight.bold, size: 20,),
+                          IconButton(
+                              onPressed: (){
+                                Navigator.pop(context);
+                              }, icon: Icon(
+                            Icons.close,
+                            color: grey,)
+                          )
+                        ],
+                      ),
+                      Visibility(
+                        visible: _itemSortClicked ? true : false,
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 15),
+                          child: GestureDetector(
+                            onTap: ()async{
+                              _clearSortClicked = true;
+                              print('_clearClicked : $_clearSortClicked');
+                              print('_selectedCatList diClear sblm : $_selectedCatList');
+                              if(_selectedCatList == 0){
+                                await productProvider.loadProducts();
+                                setState(() {
+                                  getUnSortedProductFromProvider();
+                                  _nameProductList = 'Recent Products';
+                                  _selectedProductList = 0;
+                                });
+                              }else if(_selectedCatList == 1){
+                                await productProvider.loadProductPlus();
+                                setState(() {
+                                  getProductCatPlusFromProvider();
+                                  _nameProductList = "Plus Glasses Category";
+                                  _selectedProductList = 1;
+                                });
+                              }else if(_selectedCatList == 2){
+                                await productProvider.loadProductMin();
+                                setState(() {
+                                  getProductCatMinFromProvider();
+                                  _nameProductList = "Min Glasses Category";
+                                  _selectedProductList = 2;
+                                });
+                              }else if(_selectedCatList == 3){
+                                await productProvider.loadProductProgressive();
+                                setState(() {
+                                  getProductCatProgressiveFromProvider();
+                                  _nameProductList = "Progressive Glasses Category";
+                                  _selectedProductList = 3;
+                                });
+                              }
+                              print('_selectedCatList diClear ssdh : $_selectedCatList');
+                              productProvider.clearProductBubbleSort();
+                              productProvider.clearProductQuickSort();
+                              setState(() {
+                                _checkAscBubble = false;
+                                _checkDescBubble = false;
+                                _checkAscQuick = false;
+                                _checkDescQuick = false;
+
+                                _itemAscBubble = true;
+                                _itemDescBubble = true;
+                                _itemAscQuick = true;
+                                _itemDescQuick = true;
+
+                                _itemSortClicked = false;
+                              });
+                              Navigator.pop(context);
+                            },
+                            child: CustomText(
+                              text: 'Clear',
+                              weight: FontWeight.bold,
+                              color: blue,
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            Visibility(
+              visible: _itemAscBubble ? true : false,
+              child: Material(
+                child: GestureDetector(
+                  onTap: (){
+                    if(_selectedProductList == 0){
+                      setState((){
+                        _selectedCatList = 0;
+                        _nameProductList = 'Recent Products have been sorted low to high\nwith bubble algorithm';
+                        Stopwatch stopwatch = Stopwatch()..start();
+                        print('Time Start: ${dateFormat.format(DateTime.now())}');
+                        productProvider.bubbleSort(false, _unSortedProduct);
+                        print('Time End: ${dateFormat.format(DateTime.now())}');
+                        stopwatch.stop();
+                        print('Time elapsed Bubble Sort : ${stopwatch.elapsed}');
+                      });
+                      print('Sorted Price');
+                      for(int x =0; x < productProvider.priceBubbleSort.length; x++){
+                        print('${x+1}. ${productProvider.priceBubbleSort[x].price}');
+                      }
+                    }else if(_selectedProductList == 1){
+                      setState((){
+                        _selectedCatList = 1;
+                        _nameProductList = 'Plus Glasses Category have been sorted low to high\nwith bubble algorithm';
+                        Stopwatch stopwatch = Stopwatch()..start();
+                        print('Time Start: ${dateFormat.format(DateTime.now())}');
+                        productProvider.bubbleSort(false, _productsCatPlus);
+                        print('Time End: ${dateFormat.format(DateTime.now())}');
+                        stopwatch.stop();
+                        print('Time elapsed Bubble Sort : ${stopwatch.elapsed}');
+                      });
+                      print('Sorted Price');
+                      for(int x =0; x < productProvider.priceBubbleSort.length; x++){
+                        print('${x+1}. ${productProvider.priceBubbleSort[x].price}');
+                      }
+                    }else if(_selectedProductList == 2){
+                      setState((){
+                        _selectedCatList = 2;
+                        _nameProductList = 'Min Glasses Category have been sorted low to high\nwith bubble algorithm';
+                        Stopwatch stopwatch = Stopwatch()..start();
+                        print('Time Start: ${dateFormat.format(DateTime.now())}');
+                        productProvider.bubbleSort(false, _productsCatMin);
+                        print('Time End: ${dateFormat.format(DateTime.now())}');
+                        stopwatch.stop();
+                        print('Time elapsed Bubble Sort : ${stopwatch.elapsed}');
+                      });
+                      print('Sorted Price');
+                      for(int x =0; x < productProvider.priceBubbleSort.length; x++){
+                        print('${x+1}. ${productProvider.priceBubbleSort[x].price}');
+                      }
+                    }else if(_selectedProductList == 3){
+                      setState((){
+                        _selectedCatList = 3;
+                        _nameProductList = 'Progressive Glasses Category have been sorted\nlow to high with bubble algorithm';
+                        Stopwatch stopwatch = Stopwatch()..start();
+                        print('Time Start: ${dateFormat.format(DateTime.now())}');
+                        productProvider.bubbleSort(false, _productsCatProgressive);
+                        print('Time End: ${dateFormat.format(DateTime.now())}');
+                        stopwatch.stop();
+                        print('Time elapsed Bubble Sort : ${stopwatch.elapsed}');
+                      });
+                      print('Sorted Price');
+                      for(int x =0; x < productProvider.priceBubbleSort.length; x++){
+                        print('${x+1}. ${productProvider.priceBubbleSort[x].price}');
+                      }
+                    }
+                    setState(() {
+                      _itemSortClicked = true;
+                      _checkAscBubble = true;
+                      getProductBubbleFromProvider();
+                      _selectedProductList = 4;
+
+                      _itemDescBubble = false;
+                      _itemAscQuick = false;
+                      _itemDescQuick = false;
+                    });
+                    Navigator.pop(context);
+                  },
+                  child: ListTile(
+                    title: CustomText(text: 'Ascending Bubble',),
+                    subtitle: CustomText(
+                      text: 'Sort price from low to high with bubble algorithm',
+                      size: 14,
+                      color: grey,
+                    ),
+                    trailing: _checkAscBubble ? Icon(Icons.check_outlined, color: blue) : null,
+                  ),
+                ),
+              ),
+            ),
+            Visibility(visible: _itemDescBubble ? true : false,child: Divider(color: blue,)),
+            Visibility(
+              visible: _itemDescBubble ? true : false,
+              child: Material(
+                child: GestureDetector(
+                  onTap: ()async{
+                    if(_selectedProductList == 0){
+                      setState((){
+                        _selectedCatList = 0;
+                        _nameProductList = 'Recent Products have been sorted high to low\nwith bubble algorithm';
+                        Stopwatch stopwatch = Stopwatch()..start();
+                        print('Time Start: ${dateFormat.format(DateTime.now())}');
+                        productProvider.bubbleSort(true, _unSortedProduct);
+                        print('Time End: ${dateFormat.format(DateTime.now())}');
+                        stopwatch.stop();
+                        print('Time elapsed Bubble Sort : ${stopwatch.elapsed}');
+                      });
+                      print('Sorted Price');
+                      for(int x =0; x < productProvider.priceBubbleSort.length; x++){
+                        print('${x+1}. ${productProvider.priceBubbleSort[x].price}');
+                      }
+                    }else if(_selectedProductList == 1){
+                      setState((){
+                        _selectedCatList = 1;
+                        _nameProductList = 'Plus Glasses Category have been sorted high to low\nwith bubble algorithm';
+                        Stopwatch stopwatch = Stopwatch()..start();
+                        print('Time Start: ${dateFormat.format(DateTime.now())}');
+                        productProvider.bubbleSort(true, _productsCatPlus);
+                        print('Time End: ${dateFormat.format(DateTime.now())}');
+                        stopwatch.stop();
+                        print('Time elapsed Bubble Sort : ${stopwatch.elapsed}');
+                      });
+                      print('Sorted Price');
+                      for(int x =0; x < productProvider.priceBubbleSort.length; x++){
+                        print('${x+1}. ${productProvider.priceBubbleSort[x].price}');
+                      }
+                    }else if(_selectedProductList == 2){
+                      setState((){
+                        _selectedCatList = 2;
+                        _nameProductList = 'Min Glasses Category have been sorted high to low\nwith bubble algorithm';
+                        Stopwatch stopwatch = Stopwatch()..start();
+                        print('Time Start: ${dateFormat.format(DateTime.now())}');
+                        productProvider.bubbleSort(true, _productsCatMin);
+                        print('Time End: ${dateFormat.format(DateTime.now())}');
+                        stopwatch.stop();
+                        print('Time elapsed Bubble Sort : ${stopwatch.elapsed}');
+                      });
+                      print('Sorted Price');
+                      for(int x =0; x < productProvider.priceBubbleSort.length; x++){
+                        print('${x+1}. ${productProvider.priceBubbleSort[x].price}');
+                      }
+                    }else if(_selectedProductList == 3){
+                      setState((){
+                        _selectedCatList = 3;
+                        _nameProductList = 'Progressive Glasses Category have been sorted\nhigh to low with bubble algorithm';
+                        Stopwatch stopwatch = Stopwatch()..start();
+                        print('Time Start: ${dateFormat.format(DateTime.now())}');
+                        productProvider.bubbleSort(true, _productsCatProgressive);
+                        print('Time End: ${dateFormat.format(DateTime.now())}');
+                        stopwatch.stop();
+                        print('Time elapsed Bubble Sort : ${stopwatch.elapsed}');
+                      });
+                      print('Sorted Price');
+                      for(int x =0; x < productProvider.priceBubbleSort.length; x++){
+                        print('${x+1}. ${productProvider.priceBubbleSort[x].price}');
+                      }
+                    }
+                    setState(() {
+                      _itemSortClicked = true;
+                      _checkDescBubble = true;
+                      getProductBubbleFromProvider();
+                      _selectedProductList = 4;
+
+                      _itemAscBubble = false;
+                      _itemAscQuick = false;
+                      _itemDescQuick = false;
+                    });
+                    Navigator.pop(context);
+                  },
+                  child: ListTile(
+                    title: CustomText(text: 'Descending Bubble',),
+                    subtitle: CustomText(
+                      text: 'Sort price from high to low with bubble algorithm',
+                      size: 14,
+                      color: grey,
+                    ),
+                    trailing: _checkDescBubble ? Icon(Icons.check_outlined, color: blue) : null,
+                  ),
+                ),
+              ),
+            ),
+            Visibility(visible: _itemAscQuick  ? true : false,child: Divider(color: blue,)),
+            Visibility(
+              visible: _itemAscQuick  ? true : false,
+              child: Material(
+                child: GestureDetector(
+                  onTap: ()async{
+                    if(_selectedProductList == 0){
+                      setState((){
+                        _selectedCatList = 0;
+                        _nameProductList = 'Recent Products have been sorted low to high\nwith quick algorithm';
+                        Stopwatch stopwatch = Stopwatch()..start();
+                        print('Time Start: ${dateFormat.format(DateTime.now())}');
+                        productProvider.quickSortAsc(_unSortedProduct, 0, _unSortedProduct.length -1);
+                        print('Time End: ${dateFormat.format(DateTime.now())}');
+                        stopwatch.stop();
+                        print('Time elapsed Quick Sort : ${stopwatch.elapsed}');
+                      });
+                      print('Sorted Price : ');
+                      for(int x =0; x < productProvider.priceQuickSort.length; x++){
+                        print('${x+1}. ${productProvider.priceQuickSort[x].price}');
+                      }
+                    }else if(_selectedProductList == 1){
+                      setState((){
+                        _selectedCatList = 1;
+                        _nameProductList = 'Plus Glasses Category have been sorted low to high\nwith bubble algorithm';
+                        Stopwatch stopwatch = Stopwatch()..start();
+                        print('Time Start: ${dateFormat.format(DateTime.now())}');
+                        productProvider.quickSortAsc(_productsCatPlus, 0, _productsCatPlus.length -1);
+                        print('Time End: ${dateFormat.format(DateTime.now())}');
+                        stopwatch.stop();
+                        print('Time elapsed Quick Sort : ${stopwatch.elapsed}');
+                      });
+                      print('Sorted Price : ');
+                      for(int x =0; x < productProvider.priceQuickSort.length; x++){
+                        print('${x+1}. ${productProvider.priceQuickSort[x].price}');
+                      }
+                    }else if(_selectedProductList == 2){
+                      setState((){
+                        _selectedCatList = 2;
+                        _nameProductList = 'Min Glasses Category have been sorted low to high\nwith bubble algorithm';
+                        Stopwatch stopwatch = Stopwatch()..start();
+                        print('Time Start: ${dateFormat.format(DateTime.now())}');
+                        productProvider.quickSortAsc(_productsCatMin, 0, _productsCatMin.length -1);
+                        print('Time End: ${dateFormat.format(DateTime.now())}');
+                        stopwatch.stop();
+                        print('Time elapsed Quick Sort : ${stopwatch.elapsed}');
+                      });
+                      print('Sorted Price : ');
+                      for(int x =0; x < productProvider.priceQuickSort.length; x++){
+                        print('${x+1}. ${productProvider.priceQuickSort[x].price}');
+                      }
+                    }else if(_selectedProductList == 3){
+                      setState((){
+                        _selectedCatList = 3;
+                        _nameProductList = 'Progressive Glasses Category have been sorted\nlow to high with bubble algorithm';
+                        Stopwatch stopwatch = Stopwatch()..start();
+                        print('Time Start: ${dateFormat.format(DateTime.now())}');
+                        productProvider.quickSortAsc(_productsCatProgressive, 0, _productsCatProgressive.length -1);
+                        print('Time End: ${dateFormat.format(DateTime.now())}');
+                        stopwatch.stop();
+                        print('Time elapsed Quick Sort : ${stopwatch.elapsed}');
+                      });
+                      print('Sorted Price : ');
+                      for(int x =0; x < productProvider.priceQuickSort.length; x++){
+                        print('${x+1}. ${productProvider.priceQuickSort[x].price}');
+                      }
+                    }
+                    setState(() {
+                      _itemSortClicked = true;
+                      _checkAscQuick = true;
+                      getProductQuickFromProvider();
+                      _selectedProductList = 5;
+
+                      _itemAscBubble = false;
+                      _itemDescBubble = false;
+                      _itemDescQuick = false;
+                    });
+                    Navigator.pop(context);
+
+                  },
+                  child: ListTile(
+                    title: CustomText(text: 'Ascending Quick',),
+                    subtitle: CustomText(
+                      text: 'Sort price from low to high with quick algorithm',
+                      size: 14,
+                      color: grey,
+                    ),
+                    trailing: _checkAscQuick ? Icon(Icons.check_outlined, color: blue) : null,
+                  ),
+                ),
+              ),
+            ),
+            Visibility(visible: _itemDescQuick ? true : false,child: Divider(color: blue,)),
+            Visibility(
+              visible: _itemDescQuick ? true : false,
+              child: Material(
+                child: GestureDetector(
+                  onTap: ()async{
+                    if(_selectedProductList == 0){
+                      setState((){
+                        _selectedCatList = 0;
+                        _nameProductList = 'Recent Products have been sorted high to low\nwith quick algorithm';
+                        Stopwatch stopwatch = Stopwatch()..start();
+                        print('Time Start: ${dateFormat.format(DateTime.now())}');
+                        productProvider.quickSortDesc(_unSortedProduct, 0, _unSortedProduct.length -1);
+                        print('Time End: ${dateFormat.format(DateTime.now())}');
+                        stopwatch.stop();
+                        print('Time elapsed Quick Sort : ${stopwatch.elapsed}');
+                      });
+                      print('Sorted Price : ');
+                      for(int x =0; x < productProvider.priceQuickSort.length; x++){
+                        print('${x+1}. ${productProvider.priceQuickSort[x].price}');
+                      }
+                    }else if(_selectedProductList == 1){
+                      setState((){
+                        _selectedCatList = 1;
+                        _nameProductList = 'Plus Glasses Category have been sorted high to low\nwith bubble algorithm';
+                        Stopwatch stopwatch = Stopwatch()..start();
+                        print('Time Start: ${dateFormat.format(DateTime.now())}');
+                        productProvider.quickSortDesc(_productsCatPlus, 0, _productsCatPlus.length -1);
+                        print('Time End: ${dateFormat.format(DateTime.now())}');
+                        stopwatch.stop();
+                        print('Time elapsed Quick Sort : ${stopwatch.elapsed}');
+                      });
+                      print('Sorted Price : ');
+                      for(int x =0; x < productProvider.priceQuickSort.length; x++){
+                        print('${x+1}. ${productProvider.priceQuickSort[x].price}');
+                      }
+                    }else if(_selectedProductList == 2){
+                      setState((){
+                        _selectedCatList = 2;
+                        _nameProductList = 'Min Glasses Category have been sorted high to low\nwith bubble algorithm';
+                        Stopwatch stopwatch = Stopwatch()..start();
+                        print('Time Start: ${dateFormat.format(DateTime.now())}');
+                        productProvider.quickSortDesc(_productsCatMin, 0, _productsCatMin.length -1);
+                        print('Time End: ${dateFormat.format(DateTime.now())}');
+                        stopwatch.stop();
+                        print('Time elapsed Quick Sort : ${stopwatch.elapsed}');
+                      });
+                      print('Sorted Price : ');
+                      for(int x =0; x < productProvider.priceQuickSort.length; x++){
+                        print('${x+1}. ${productProvider.priceQuickSort[x].price}');
+                      }
+                    }else if(_selectedProductList == 3){
+                      setState((){
+                        _selectedCatList = 3;
+                        _nameProductList = 'Progressive Glasses Category have been sorted\nhigh to low with bubble algorithm';
+                        Stopwatch stopwatch = Stopwatch()..start();
+                        print('Time Start: ${dateFormat.format(DateTime.now())}');
+                        productProvider.quickSortDesc(_productsCatProgressive, 0, _productsCatProgressive.length -1);
+                        print('Time End: ${dateFormat.format(DateTime.now())}');
+                        stopwatch.stop();
+                        print('Time elapsed Quick Sort : ${stopwatch.elapsed}');
+                      });
+                      print('Sorted Price : ');
+                      for(int x =0; x < productProvider.priceQuickSort.length; x++){
+                        print('${x+1}. ${productProvider.priceQuickSort[x].price}');
+                      }
+                    }
+                    setState(() {
+                      _itemSortClicked = true;
+                      _checkDescQuick = true;
+                      getProductQuickFromProvider();
+                      _selectedProductList = 5;
+
+                      _itemAscBubble = false;
+                      _itemDescBubble = false;
+                      _itemAscQuick = false;
+                    });
+                    Navigator.pop(context);
+                  },
+                  child: ListTile(
+                    title: CustomText(text: 'Descending Quick',),
+                    subtitle: CustomText(
+                      text: 'Sort price from high to low with quick algorithm',
+                      size: 14,
+                      color: grey,
+                    ),
+                    trailing: _checkDescQuick ? Icon(Icons.check_outlined, color: blue) : null,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+    showModalBottomSheet(
+        context: context,
+        //topRadius: Radius.circular(10),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(10),
+            topRight: Radius.circular(10),
+          ),
+        ),
+        isScrollControlled: true,
+        builder: (_) => modal);
   }
 
   void detailAlgorithmDialog(){

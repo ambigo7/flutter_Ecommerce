@@ -8,6 +8,7 @@ class ProductModel{
   static const BRAND = 'brand';
   static const DESCRIPTION = "description";
   static const COLOR = 'color';
+  static const CATEGORY = 'category';
   static const FEATURED = 'featured';
   static const IMAGES = 'images';
   static const IMAGES_REF = 'imagesref';
@@ -21,6 +22,7 @@ class ProductModel{
   String _imageUrl;
   String _imageRef;
   String _color;
+  String _category;
   int _oldPrice;
   int _price;
   bool _featured;
@@ -36,6 +38,7 @@ class ProductModel{
   int get oldPrice => _oldPrice;
   int get price => _price;
   String get color => _color;
+  String get category => _category;
   bool get featured => _featured;
   bool get sale => _sale;
 
@@ -50,6 +53,7 @@ class ProductModel{
     _oldPrice = snapshot.data()[OLD_PRICE].floor() ?? 0;
     _price = snapshot.data()[PRICE].floor();
     _color = snapshot.data()[COLOR];
+    _category = snapshot.data()[CATEGORY];
     _featured = snapshot.data()[FEATURED];
     _sale = snapshot.data()[SALE];
   }

@@ -50,6 +50,7 @@ dependencies:
   editable: ^2.0.0
   fab_circular_menu: ^1.0.2
   cached_network_image: ^3.2.0
+  category_picker: ^1.0.1
 
 
 
