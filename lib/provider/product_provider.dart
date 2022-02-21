@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:lets_shop/service/product.dart';
 import 'package:lets_shop/models/product.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+
 
 import 'package:intl/intl.dart';
 
@@ -147,10 +149,10 @@ class ProductProvider with ChangeNotifier{
 
   loadProducts() async{
     unSortedProducts = await _productService.getProducts();
-    print('Unsorted Category : ');
+    print('Unsorted all price : ');
     //unSortedProducts.removeWhere((item) => item.category == 'Casual');
     for(int x =0; x < unSortedProducts.length; x++){
-      print('${x+1}. ${unSortedProducts[x].category}');
+      print('${x+1}. ${unSortedProducts[x].price}');
     }
     /*productsBubbleSort = await _productService.getProducts();
     productsQuickSort = unSortedProducts;
@@ -172,36 +174,42 @@ class ProductProvider with ChangeNotifier{
 
   Future loadProductPlus()async {
     productsCatPlus = await _productService.getProducts();
-    /*dynamic res = productsCatPlus.remove(productsCatPlus[i]);
-    print('The value of the element $res');*/
+
     productsCatPlus.removeWhere((item) => item.category == 'Minus');
     productsCatPlus.removeWhere((item) => item.category == 'Progressive');
     productsCatPlus.removeWhere((item) => item.category == 'Casual');
+    productsCatPlus.removeDuplicates(by: (item) => item.name);
+
     for(int x =0; x < productsCatPlus.length; x++){
-      print('${x+1}. ${productsCatPlus[x].category}');
+      print('${x+1}. ${productsCatPlus[x].price}');
     }
     notifyListeners();
 }
 
   Future loadProductMin()async {
     productsCatMin = await _productService.getProducts();
+
     productsCatMin.removeWhere((item) => item.category == 'Plus');
     productsCatMin.removeWhere((item) => item.category == 'Progressive');
     productsCatMin.removeWhere((item) => item.category == 'Casual');
+    productsCatMin.removeDuplicates(by: (item) => item.name);
+
     for(int x =0; x < productsCatMin.length; x++){
-      print('${x+1}. ${productsCatMin[x].category}');
+      print('${x+1}. ${productsCatMin[x].price}');
     }
     notifyListeners();
   }
 
   Future loadProductProgressive()async {
     productsCatProgressive = await _productService.getProducts();
-    //productsCatPlus.removeRange(0, 1);
+
     productsCatProgressive.removeWhere((item) => item.category == 'Plus');
     productsCatProgressive.removeWhere((item) => item.category == 'Minus');
     productsCatProgressive.removeWhere((item) => item.category == 'Casual');
+    productsCatProgressive.removeDuplicates(by: (item) => item.name);
+
     for(int x =0; x < productsCatProgressive.length; x++){
-      print('${x+1}. ${productsCatProgressive[x].category}');
+      print('${x+1}. ${productsCatProgressive[x].price}');
     }
     notifyListeners();
   }

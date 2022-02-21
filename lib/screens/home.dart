@@ -453,90 +453,36 @@ class _HomePageState extends State<HomePage> {
                   padding: const EdgeInsets.all(14.0),
                   child: Container(
                       alignment: Alignment.centerLeft,
-                      child: new Text('Featured products')),
+                      child: Text(
+                          'Featured products',
+                          style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold),
+                      )
+                  ),
                 ),
               ],
             ),
             FeaturedProducts(),
 
 //          recent products
-
-//          recent products
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.all(14.0),
-                  child: Container(
-                      alignment: Alignment.centerLeft,
-                      child: CustomText(text: _nameProductList,),
-                  ),
-                ),
-                
-                /*Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: GestureDetector(
-                      onTap: () async{
-                        if(_productBubbleSort.isEmpty){
-                          await productProvider.loadProductBubble();
-                          setState(() {
-                            getProductBubbleFromProvider();
-                          });
-                        }
-                        _loading = true;
-                        setState((){
-                          _nameProductList = 'Sorted by Bubble Sort Algorithm';
-                          btnSortClicked = 1;
-                          Stopwatch stopwatch = Stopwatch()..start();
-                          print('Time Start: ${dateFormat.format(DateTime.now())}');
-                          productProvider.bubbleSort(_productBubbleSort);
-                          print('Time End: ${dateFormat.format(DateTime.now())}');
-                          stopwatch.stop();
-                          print('Time elapsed : ${stopwatch.elapsed}');
-                        });
-                        _loading = false;
-                      },
-                      onDoubleTap: () async{
-                        if(_productBubbleSort.isEmpty){
-                          await productProvider.loadProductQuick();
-                          setState(() {
-                            getProductQuickFromProvider();
-                          });
-                        }
-                        _loading = true;
-                        setState(() {
-                          _nameProductList = 'Sorted by Quick Sort Algorithm';
-                          btnSortClicked = 2;
-                          Stopwatch stopwatch = Stopwatch()..start();
-                          print('Time Start: ${dateFormat.format(DateTime.now())}');
-                          productProvider.quickSort(_productQuickSort, 0, _productQuickSort.length -1);
-                          print('Time End: ${dateFormat.format(DateTime.now())}');
-                          stopwatch.stop();
-                          print('Time elapsed : ${stopwatch.elapsed}');
-                        });
-                        _loading = false;
-                      },
-                      onLongPress: (){
-                        _loading = true;
-                        setState((){
-                          _nameProductList = 'Recent Products';
-                          btnSortClicked = 0;
-                        });
-                        _loading = false;
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(color: blue)
-                        ),
-                        height: 30,
-                        width: 30,
-                        child: Icon(Icons.filter_list_outlined),
-                      ),
+            Padding(
+              padding: const EdgeInsets.all(14.0),
+              child: Flex(
+                direction: Axis.horizontal,
+                children: <Widget>[
+                  Flexible(
+                    child: Text(
+                      _nameProductList,
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold),
+                      maxLines: 2,
+                      softWrap: true,
                     ),
-                  )*/
-                
-              ],
+                  ),
+                ],
+              ),
             ),
 
 /*              Column(
@@ -703,66 +649,62 @@ class _HomePageState extends State<HomePage> {
                 ),
               ],
             ),*/
-          Padding(
-            padding: const EdgeInsets.only(left: 130,top: 670, right: 110),
-            child: Center(
-              child: Container(
-                height: 40,
-                width: 200,
-                decoration: BoxDecoration(
-                  border: Border.all(color: blue),
-                  borderRadius: BorderRadius.circular(10),
-                    color: white,
+          Container(
+            height: 40,
+            width: 200,
+            decoration: BoxDecoration(
+              border: Border.all(color: blue),
+              borderRadius: BorderRadius.circular(10),
+                color: white,
+            ),
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  child: GestureDetector(
+                    child: Container(
+                      child: CustomText(
+                        text: 'Categories',
+                        color: blue,
+                        size: 15,
+                        align: TextAlign.center,
+                      ),
+                      ),
+                    onTap: () {
+                      categoryListProduct();
+                      setState(() {
+                        btnCategoryClicked = true;
+                      });
+                      print('btnCategoryClicked : $btnCategoryClicked');
+                    }),
                 ),
-                child: Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: GestureDetector(
-                        child: Container(
-                          child: CustomText(
-                            text: 'Categories',
-                            color: blue,
-                            size: 15,
-                            align: TextAlign.center,
-                          ),
-                          ),
-                        onTap: () {
-                          categoryListProduct();
-                          setState(() {
-                            btnCategoryClicked = true;
-                          });
-                          print('btnCategoryClicked : $btnCategoryClicked');
-                        }),
-                    ),
-                    VerticalDivider(
-                      color: blue,
-                      thickness: 1,
-                    ),
-                    Expanded(
-                      child: GestureDetector(
-                        child: Container(
-                          child: CustomText(
-                            text: 'Sort',
-                            color: blue,
-                            size: 15,
-                            align: TextAlign.center,
-                            ),
-                          ),
-                        onTap: (){
-                          sortListProduct();
-                          setState(() {
-                            btnSortedClicked = true;
-                          });
-                          print('btnSortedClicked : $btnSortedClicked');
-                        },
+                VerticalDivider(
+                  color: blue,
+                  thickness: 1,
+                ),
+                Expanded(
+                  child: GestureDetector(
+                    child: Container(
+                      child: CustomText(
+                        text: 'Sort',
+                        color: blue,
+                        size: 15,
+                        align: TextAlign.center,
                         ),
+                      ),
+                    onTap: (){
+                      sortListProduct();
+                      setState(() {
+                        btnSortedClicked = true;
+                      });
+                      print('btnSortedClicked : $btnSortedClicked');
+                    },
                     ),
-                  ],
                 ),
-              )
+              ],
             ),
           )
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 
@@ -1019,7 +961,7 @@ class _HomePageState extends State<HomePage> {
                     if(_selectedProductList == 0){
                       setState((){
                         _selectedCatList = 0;
-                        _nameProductList = 'Recent Products have been sorted low to high\nwith bubble algorithm';
+                        _nameProductList = 'Recent Products have been sorted low to high with bubble algorithm';
                         Stopwatch stopwatch = Stopwatch()..start();
                         print('Time Start: ${dateFormat.format(DateTime.now())}');
                         productProvider.bubbleSort(false, _unSortedProduct);
@@ -1034,7 +976,7 @@ class _HomePageState extends State<HomePage> {
                     }else if(_selectedProductList == 1){
                       setState((){
                         _selectedCatList = 1;
-                        _nameProductList = 'Plus Glasses Category have been sorted low to high\nwith bubble algorithm';
+                        _nameProductList = 'Plus Glasses Category have been sorted low to high with bubble algorithm';
                         Stopwatch stopwatch = Stopwatch()..start();
                         print('Time Start: ${dateFormat.format(DateTime.now())}');
                         productProvider.bubbleSort(false, _productsCatPlus);
@@ -1049,7 +991,7 @@ class _HomePageState extends State<HomePage> {
                     }else if(_selectedProductList == 2){
                       setState((){
                         _selectedCatList = 2;
-                        _nameProductList = 'Min Glasses Category have been sorted low to high\nwith bubble algorithm';
+                        _nameProductList = 'Min Glasses Category have been sorted low to high with bubble algorithm';
                         Stopwatch stopwatch = Stopwatch()..start();
                         print('Time Start: ${dateFormat.format(DateTime.now())}');
                         productProvider.bubbleSort(false, _productsCatMin);
@@ -1064,7 +1006,7 @@ class _HomePageState extends State<HomePage> {
                     }else if(_selectedProductList == 3){
                       setState((){
                         _selectedCatList = 3;
-                        _nameProductList = 'Progressive Glasses Category have been sorted\nlow to high with bubble algorithm';
+                        _nameProductList = 'Progressive Glasses Category have been sorted low to high with bubble algorithm';
                         Stopwatch stopwatch = Stopwatch()..start();
                         print('Time Start: ${dateFormat.format(DateTime.now())}');
                         productProvider.bubbleSort(false, _productsCatProgressive);
@@ -1110,7 +1052,7 @@ class _HomePageState extends State<HomePage> {
                     if(_selectedProductList == 0){
                       setState((){
                         _selectedCatList = 0;
-                        _nameProductList = 'Recent Products have been sorted high to low\nwith bubble algorithm';
+                        _nameProductList = 'Recent Products have been sorted high to low with bubble algorithm';
                         Stopwatch stopwatch = Stopwatch()..start();
                         print('Time Start: ${dateFormat.format(DateTime.now())}');
                         productProvider.bubbleSort(true, _unSortedProduct);
@@ -1125,7 +1067,7 @@ class _HomePageState extends State<HomePage> {
                     }else if(_selectedProductList == 1){
                       setState((){
                         _selectedCatList = 1;
-                        _nameProductList = 'Plus Glasses Category have been sorted high to low\nwith bubble algorithm';
+                        _nameProductList = 'Plus Glasses Category have been sorted high to low with bubble algorithm';
                         Stopwatch stopwatch = Stopwatch()..start();
                         print('Time Start: ${dateFormat.format(DateTime.now())}');
                         productProvider.bubbleSort(true, _productsCatPlus);
@@ -1140,7 +1082,7 @@ class _HomePageState extends State<HomePage> {
                     }else if(_selectedProductList == 2){
                       setState((){
                         _selectedCatList = 2;
-                        _nameProductList = 'Min Glasses Category have been sorted high to low\nwith bubble algorithm';
+                        _nameProductList = 'Min Glasses Category have been sorted high to low with bubble algorithm';
                         Stopwatch stopwatch = Stopwatch()..start();
                         print('Time Start: ${dateFormat.format(DateTime.now())}');
                         productProvider.bubbleSort(true, _productsCatMin);
@@ -1155,7 +1097,7 @@ class _HomePageState extends State<HomePage> {
                     }else if(_selectedProductList == 3){
                       setState((){
                         _selectedCatList = 3;
-                        _nameProductList = 'Progressive Glasses Category have been sorted\nhigh to low with bubble algorithm';
+                        _nameProductList = 'Progressive Glasses Category have been sorted high to low with bubble algorithm';
                         Stopwatch stopwatch = Stopwatch()..start();
                         print('Time Start: ${dateFormat.format(DateTime.now())}');
                         productProvider.bubbleSort(true, _productsCatProgressive);
@@ -1201,7 +1143,7 @@ class _HomePageState extends State<HomePage> {
                     if(_selectedProductList == 0){
                       setState((){
                         _selectedCatList = 0;
-                        _nameProductList = 'Recent Products have been sorted low to high\nwith quick algorithm';
+                        _nameProductList = 'Recent Products have been sorted low to high with quick algorithm';
                         Stopwatch stopwatch = Stopwatch()..start();
                         print('Time Start: ${dateFormat.format(DateTime.now())}');
                         productProvider.quickSortAsc(_unSortedProduct, 0, _unSortedProduct.length -1);
@@ -1216,7 +1158,7 @@ class _HomePageState extends State<HomePage> {
                     }else if(_selectedProductList == 1){
                       setState((){
                         _selectedCatList = 1;
-                        _nameProductList = 'Plus Glasses Category have been sorted low to high\nwith bubble algorithm';
+                        _nameProductList = 'Plus Glasses Category have been sorted low to high with bubble algorithm';
                         Stopwatch stopwatch = Stopwatch()..start();
                         print('Time Start: ${dateFormat.format(DateTime.now())}');
                         productProvider.quickSortAsc(_productsCatPlus, 0, _productsCatPlus.length -1);
@@ -1231,7 +1173,7 @@ class _HomePageState extends State<HomePage> {
                     }else if(_selectedProductList == 2){
                       setState((){
                         _selectedCatList = 2;
-                        _nameProductList = 'Min Glasses Category have been sorted low to high\nwith bubble algorithm';
+                        _nameProductList = 'Min Glasses Category have been sorted low to high with bubble algorithm';
                         Stopwatch stopwatch = Stopwatch()..start();
                         print('Time Start: ${dateFormat.format(DateTime.now())}');
                         productProvider.quickSortAsc(_productsCatMin, 0, _productsCatMin.length -1);
@@ -1246,7 +1188,7 @@ class _HomePageState extends State<HomePage> {
                     }else if(_selectedProductList == 3){
                       setState((){
                         _selectedCatList = 3;
-                        _nameProductList = 'Progressive Glasses Category have been sorted\nlow to high with bubble algorithm';
+                        _nameProductList = 'Progressive Glasses Category have been sorted low to high with bubble algorithm';
                         Stopwatch stopwatch = Stopwatch()..start();
                         print('Time Start: ${dateFormat.format(DateTime.now())}');
                         productProvider.quickSortAsc(_productsCatProgressive, 0, _productsCatProgressive.length -1);
@@ -1293,7 +1235,7 @@ class _HomePageState extends State<HomePage> {
                     if(_selectedProductList == 0){
                       setState((){
                         _selectedCatList = 0;
-                        _nameProductList = 'Recent Products have been sorted high to low\nwith quick algorithm';
+                        _nameProductList = 'Recent Products have been sorted high to low with quick algorithm';
                         Stopwatch stopwatch = Stopwatch()..start();
                         print('Time Start: ${dateFormat.format(DateTime.now())}');
                         productProvider.quickSortDesc(_unSortedProduct, 0, _unSortedProduct.length -1);
@@ -1308,7 +1250,7 @@ class _HomePageState extends State<HomePage> {
                     }else if(_selectedProductList == 1){
                       setState((){
                         _selectedCatList = 1;
-                        _nameProductList = 'Plus Glasses Category have been sorted high to low\nwith bubble algorithm';
+                        _nameProductList = 'Plus Glasses Category have been sorted high to low with bubble algorithm';
                         Stopwatch stopwatch = Stopwatch()..start();
                         print('Time Start: ${dateFormat.format(DateTime.now())}');
                         productProvider.quickSortDesc(_productsCatPlus, 0, _productsCatPlus.length -1);
@@ -1323,7 +1265,7 @@ class _HomePageState extends State<HomePage> {
                     }else if(_selectedProductList == 2){
                       setState((){
                         _selectedCatList = 2;
-                        _nameProductList = 'Min Glasses Category have been sorted high to low\nwith bubble algorithm';
+                        _nameProductList = 'Min Glasses Category have been sorted high to low with bubble algorithm';
                         Stopwatch stopwatch = Stopwatch()..start();
                         print('Time Start: ${dateFormat.format(DateTime.now())}');
                         productProvider.quickSortDesc(_productsCatMin, 0, _productsCatMin.length -1);
@@ -1338,7 +1280,7 @@ class _HomePageState extends State<HomePage> {
                     }else if(_selectedProductList == 3){
                       setState((){
                         _selectedCatList = 3;
-                        _nameProductList = 'Progressive Glasses Category have been sorted\nhigh to low with bubble algorithm';
+                        _nameProductList = 'Progressive Glasses Category have been sorted high to low with bubble algorithm';
                         Stopwatch stopwatch = Stopwatch()..start();
                         print('Time Start: ${dateFormat.format(DateTime.now())}');
                         productProvider.quickSortDesc(_productsCatProgressive, 0, _productsCatProgressive.length -1);
